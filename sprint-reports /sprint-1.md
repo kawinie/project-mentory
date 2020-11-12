@@ -1,6 +1,6 @@
 # Sprint 1 (Nov 2 - Nov 9)
 
-**Scrum Master:** @kawinie
+**Scrum Master:** Kawin
 
 ## Sprint Goal
 
@@ -18,7 +18,7 @@ As a basic training, all team members should complete NextJS walkthrough and con
 
 ## Member Task
 
-**Assigned To:** @kawinie, @jettseale
+**Assigned To:** Kawin, Jetts, Ats, Toshiki
 
 - Entire product log
 
