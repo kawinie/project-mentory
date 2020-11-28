@@ -13,8 +13,8 @@ As a basic training, all team members should complete NextJS walkthrough and con
 
 ## Product log
 
-- [x] :rocket: Complete [NextJS](https://nextjs.org/learn/basics/create-nextjs-app?utm_source=next-site&utm_medium=nav-cta&utm_campaign=next-website) walk-through.
-- [x] :rocket: Get familiar with [TypeScript](https://www.typescriptlang.org)
+- [x] 🚀 Complete [NextJS](https://nextjs.org/learn/basics/create-nextjs-app?utm_source=next-site&utm_medium=nav-cta&utm_campaign=next-website) walk-through.
+- [x] 🚀 Get familiar with [TypeScript](https://www.typescriptlang.org)
 
 ## Member Task
 
