@@ -12,6 +12,7 @@
 		"storybook-tailwind": "npm run tailwind-storybook && start-storybook -p 6006"
 	},
 	"dependencies": {
+		"@reduxjs/toolkit": "^1.5.0",
 		"classnames": "^2.2.6",
 		"next": "10.0.3",
 		"react": "17.0.1",
