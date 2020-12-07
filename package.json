@@ -1,38 +1,48 @@
 {
-	"name": "project-mentory",
-	"version": "0.1.0",
-	"private": true,
-	"scripts": {
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook",
-		"tailwind-storybook": "tailwind build ./styles/globals.css -o ./storybook/tailwind.storybook.css",
-		"storybook-tailwind": "npm run tailwind-storybook && start-storybook -p 6006"
-	},
-	"dependencies": {
-		"@reduxjs/toolkit": "^1.5.0",
-		"classnames": "^2.2.6",
-		"next": "10.0.3",
-		"react": "17.0.1",
-		"react-dom": "17.0.1",
-		"tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.12.9",
-		"@storybook/addon-actions": "^6.1.9",
-		"@storybook/addon-essentials": "^6.1.9",
-		"@storybook/addon-links": "^6.1.9",
-		"@storybook/react": "^6.1.9",
-		"@types/classnames": "^2.2.11",
-		"@types/node": "^14.14.10",
-		"@types/react": "^17.0.0",
-		"babel-loader": "^8.2.2",
-		"postcss": "^7.0.35",
-		"postcss-import": "^12.0.1",
-		"postcss-preset-env": "^6.7.0",
-		"sb": "^6.1.9",
-		"typescript": "^4.1.2"
-	}
+    "name": "project-mentory",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "storybook": "start-storybook -p 6006",
+        "build-storybook": "build-storybook",
+        "tailwind-storybook": "tailwind build ./styles/globals.css -o ./storybook/tailwind.storybook.css",
+        "storybook-tailwind": "npm run tailwind-storybook && start-storybook -p 6006"
+    },
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.5.0",
+        "classnames": "^2.2.6",
+        "next": "10.0.3",
+        "react": "17.0.1",
+        "react-dom": "17.0.1",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.9",
+        "@storybook/addon-actions": "^6.1.9",
+        "@storybook/addon-essentials": "^6.1.9",
+        "@storybook/addon-links": "^6.1.9",
+        "@storybook/react": "^6.1.9",
+        "@types/classnames": "^2.2.11",
+        "@types/node": "^14.14.10",
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
+        "@typescript-eslint/eslint-plugin": "^4.9.0",
+        "@typescript-eslint/parser": "^4.9.0",
+        "babel-loader": "^8.2.2",
+        "eslint": "^7.15.0",
+        "eslint-config-prettier": "^6.15.0",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-prettier": "^3.2.0",
+        "eslint-plugin-react": "^7.21.5",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "postcss": "^7.0.35",
+        "postcss-import": "^12.0.1",
+        "postcss-preset-env": "^6.7.0",
+        "prettier": "^2.2.1",
+        "sb": "^6.1.9",
+        "typescript": "^4.1.2"
+    }
 }

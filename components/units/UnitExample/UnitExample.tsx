@@ -1,11 +1,7 @@
 interface Props {
-	title: string;
+    title?: string;
 }
 
-export const UnitExample = ({ title = "UNTITLED" }: Props) => {
-	return (
-		<div>
-			<div></div>
-		</div>
-	);
+export const UnitExample: React.FC<Props> = ({ title = "UNTITLED" }) => {
+    return <div>{title}</div>;
 };
