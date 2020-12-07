@@ -8,7 +8,7 @@ import * as actions from "redux/actions";
 //
 
 function ifElse<B extends boolean, T, K>(c: B, a: T, b: K) {
-	return c ? a : b;
+    return c ? a : b;
 }
 
 //
