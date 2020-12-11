@@ -33,7 +33,7 @@ module.exports = {
     parser: "@typescript-eslint/parser",
 
     // Ignore generated files like node_modules
-    ignorePatterns: ["node_modules/*", ".next/*", ".out/*"],
+    ignorePatterns: ["node_modules/*", ".next/*", ".out/*", "!.lintstagedrc.js"],
 
     // Enable global variables for browser, node, and ES6
     env: {

@@ -6,13 +6,9 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
+        "lint": "eslint --fix '*.{ts,tsx,js,jsx}'",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook"
-    },
-    "//": "lint-staged: Only pass staged filenames to commands on the right-hand side",
-    "lint-staged": {
-        ".{ts, tsx}": "tsc --project tsconig.json --pretty",
-        ".{ts, tsx, js, jsx}": "eslint --fix"
     },
     "husky": {
         "hooks": {
