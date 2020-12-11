@@ -7,12 +7,25 @@
         "build": "next build",
         "start": "next start",
         "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook",
-        "tailwind-storybook": "tailwind build ./styles/globals.css -o ./storybook/tailwind.storybook.css",
-        "storybook-tailwind": "npm run tailwind-storybook && start-storybook -p 6006"
+        "build-storybook": "build-storybook"
+    },
+    "//": "lint-staged: Only pass staged filenames to commands on the right-hand side",
+    "lint-staged": {
+        ".{ts, tsx}": "tsc --project tsconig.json --pretty",
+        ".{ts, tsx, js, jsx}": "eslint --fix"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.5.0",
+        "@types/classnames": "^2.2.11",
+        "@types/node": "^14.14.10",
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
+        "@types/react-redux": "^7.1.12",
         "classnames": "^2.2.6",
         "next": "10.0.3",
         "react": "17.0.1",
@@ -25,10 +38,6 @@
         "@storybook/addon-essentials": "^6.1.9",
         "@storybook/addon-links": "^6.1.9",
         "@storybook/react": "^6.1.9",
-        "@types/classnames": "^2.2.11",
-        "@types/node": "^14.14.10",
-        "@types/react": "^17.0.0",
-        "@types/react-dom": "^17.0.0",
         "@typescript-eslint/eslint-plugin": "^4.9.0",
         "@typescript-eslint/parser": "^4.9.0",
         "babel-loader": "^8.2.2",
@@ -38,6 +47,8 @@
         "eslint-plugin-prettier": "^3.2.0",
         "eslint-plugin-react": "^7.21.5",
         "eslint-plugin-react-hooks": "^4.2.0",
+        "husky": "^4.3.5",
+        "lint-staged": "^10.5.3",
         "postcss": "^7.0.35",
         "postcss-import": "^12.0.1",
         "postcss-preset-env": "^6.7.0",
