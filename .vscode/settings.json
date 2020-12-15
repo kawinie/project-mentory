@@ -25,5 +25,6 @@
         "tw\\.\\w+`([^`]*)",
         ["classnames\\(([^)]*)\\)", "'([^']*)'"]
     ],
+    "tailwindCSS.lint.cssConflict": "ignore",
     "explorerExclude.backup": null
 }
