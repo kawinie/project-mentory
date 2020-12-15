@@ -16,5 +16,3 @@ function ifElse<B extends boolean, T, K>(c: B, a: T, b: K) {
 //   :::::: R E D U C E R S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────────
 //
-
-export {};

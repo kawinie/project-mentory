@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 
 import { UnitExample } from "components/units/UnitExample";
 import { ReactElement } from "react";
@@ -15,6 +16,9 @@ export default function Home(): ReactElement {
             </Head>
             <HomeContainer>
                 <UnitExample title="Mentory" />
+                <Link href="CreateAccount" as="create-account">
+                    Create Account
+                </Link>
             </HomeContainer>
         </>
     );

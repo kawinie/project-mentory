@@ -59,8 +59,6 @@ module.exports = {
         },
     },
     rules: {
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/no-var-requires": "off",
         "class-methods-use-this": "off",
         "comma-dangle": "off",
         "function-paren-newline": "off",
@@ -81,5 +79,8 @@ module.exports = {
         // Use Record<string, unknown> instead of object
         "@typescript-eslint/ban-types": "error",
         "@typescript-eslint/explicit-module-boundary-type": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-var-requires": "off",
     },
 };

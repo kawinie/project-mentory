@@ -1,7 +1,10 @@
-interface Props {
-    title?: string;
-}
+import { AnchorHTMLAttributes, FC, HTMLProps } from "react";
+import { useSelector } from "react-redux";
 
-export const UnitExample: React.FC<Props> = ({ title = "UNTITLED" }) => {
-    return <div>{title}</div>;
+type Props = {
+    title?: string;
+};
+
+export const UnitExample: FC<Props & HTMLProps<HTMLDivElement>> = ({ title = "UNTITLED" }) => {
+    return <div className="text-gray-500 bg-teal-500 border">{title}</div>;
 };
