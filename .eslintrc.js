@@ -80,5 +80,6 @@ module.exports = {
         // See https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/ban-types.md
         // Use Record<string, unknown> instead of object
         "@typescript-eslint/ban-types": "error",
+        "@typescript-eslint/explicit-module-boundary-type": "off",
     },
 };

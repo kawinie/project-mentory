@@ -1,17 +1,10 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-    purge: {
-        content: [
-            "./pages/**/*.tsx",
-            "./pages/**/*.html",
-            "./components/**/*.tsx",
-            "./layouts/**/*.tsx",
-        ],
-    },
     darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
+            // Enable all Tailwind color utilities
             colors: colors,
         },
     },
