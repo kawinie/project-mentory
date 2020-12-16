@@ -1,12 +1,15 @@
-import { GlobalStyles } from "twin.macro";
+import { GlobalStyles, theme } from "twin.macro";
 import { AppProps } from "next/app";
 import { ReactElement } from "react";
+import { MinScreenProvider } from "hooks";
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
     return (
-        <div>
+        <MinScreenProvider screens={theme`screens`}>
             <GlobalStyles />
-            <Component {...pageProps} />
-        </div>
+            <div tw="debug-screens">
+                <Component {...pageProps} />
+            </div>
+        </MinScreenProvider>
     );
 }
