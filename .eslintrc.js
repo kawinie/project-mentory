@@ -78,7 +78,7 @@ module.exports = {
         // See https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/ban-types.md
         // Use Record<string, unknown> instead of object
         "@typescript-eslint/ban-types": "error",
-        "@typescript-eslint/explicit-module-boundary-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-var-requires": "off",

@@ -1,4 +1,4 @@
-import "twin.macro";
+import tw from "twin.macro";
 
 type TButtonProps = React.ComponentPropsWithoutRef<"button"> & {
     icon?: () => JSX.Element;
@@ -9,12 +9,15 @@ type TButtonProps = React.ComponentPropsWithoutRef<"button"> & {
 export const Button = ({ icon, iconPosition = "left", text, ...props }: TButtonProps) => {
     return (
         <button
-            tw="flex items-center p-4 rounded text-white text-sm w-full bg-gray-700"
+            css={[
+                tw`flex items-center p-4 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
+                !text && tw`justify-center`,
+            ]}
             type="button"
             {...props}>
-            {iconPosition == "left" && icon && <span tw="mr-2">{icon()}</span>}
-            {text && <div tw="text-center flex-grow">{text}</div>}
-            {iconPosition == "right" && icon && <span tw="ml-2">{icon()}</span>}
+            {icon && iconPosition == "left" && <span tw="mr-2">{icon()}</span>}
+            {text && <div tw="text-center flex-grow whitespace-nowrap">{text}</div>}
+            {icon && iconPosition == "right" && <span tw="ml-2">{icon()}</span>}
         </button>
     );
 };
