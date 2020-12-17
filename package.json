@@ -16,14 +16,19 @@
         }
     },
     "browserslist": [
-        ">0.3%",
-        "not ie <= 11",
+        ">0.5%",
+        "last 2 versions",
         "not dead",
+        "not ie <= 11",
         "not op_mini all"
     ],
     "babelMacros": {
         "twin": {
-            "preset": "styled-components"
+            "preset": "styled-components",
+            "css": {
+                "from": "styled-components",
+                "import": "css"
+            }
         }
     },
     "dependencies": {
@@ -46,10 +51,10 @@
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
-        "@storybook/addon-actions": "^6.1.9",
-        "@storybook/addon-essentials": "^6.1.9",
-        "@storybook/addon-links": "^6.1.9",
-        "@storybook/react": "^6.1.9",
+        "@storybook/addon-actions": "^6.1.11",
+        "@storybook/addon-essentials": "^6.1.11",
+        "@storybook/addon-links": "^6.1.11",
+        "@storybook/react": "^6.1.11",
         "@tailwindcss/custom-forms": "0.0.0-0be3175",
         "@typescript-eslint/eslint-plugin": "^4.9.0",
         "@typescript-eslint/parser": "^4.9.0",
