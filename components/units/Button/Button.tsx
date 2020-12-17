@@ -1,23 +1,33 @@
+import { ComponentPropsWithoutRef } from "react";
 import tw from "twin.macro";
 
-type TButtonProps = React.ComponentPropsWithoutRef<"button"> & {
-    icon?: () => JSX.Element;
-    iconPosition?: "left" | "right";
+export type TButtonProps = ComponentPropsWithoutRef<"button"> & {
+    icon?: JSX.Element;
+    iconRight?: boolean;
     text?: string;
 };
 
-export const Button = ({ icon, iconPosition = "left", text, ...props }: TButtonProps) => {
+const TextContainer = tw.div`flex-grow hidden text-center whitespace-nowrap sm:block`;
+
+export const Button: React.FC<TButtonProps> = ({ icon, iconRight, text, ...props }) => {
     return (
         <button
-            css={[
-                tw`flex items-center p-4 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
-                !text && tw`justify-center`,
-            ]}
             type="button"
+            css={[
+                tw`flex items-center p-2 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
+            ]}
             {...props}>
-            {icon && iconPosition == "left" && <span tw="mr-2">{icon()}</span>}
-            {text && <div tw="text-center flex-grow whitespace-nowrap">{text}</div>}
-            {icon && iconPosition == "right" && <span tw="ml-2">{icon()}</span>}
+            {icon && !iconRight && (
+                <span css={text && tw`mr-2`} className="icon">
+                    {icon}
+                </span>
+            )}
+            {text && <TextContainer>{text}</TextContainer>}
+            {icon && iconRight && (
+                <span css={text && tw`ml-2`} className="icon">
+                    {icon}
+                </span>
+            )}
         </button>
     );
 };
