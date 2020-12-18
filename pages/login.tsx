@@ -1,62 +1,39 @@
+import Link from "next/link";
 import tw, { theme, styled } from "twin.macro";
 
 import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
-import { Button } from "components/units/Button";
+import { FaSignInAlt } from "react-icons/fa";
 
-import Link from "next/link";
+import { Button, InputField } from "components/units";
 import { useMinScreen } from "hooks";
 
-const PageContainer = tw.div`flex items-center justify-center h-screen`;
-
-type TInputFieldProps = {
-    name: string;
-    label: string;
-    helperText?: string;
-    type?: string;
-    placeholder?: string;
-    required?: boolean;
-};
-
-const InputField = ({ label, name, helperText, ...props }: TInputFieldProps) => (
-    <label htmlFor={name} css={[tw`grid gap-1`]}>
-        <span css={[tw`text-sm`]}>{label}</span>
-        <input tw="w-full form-input" name={name} {...props} />
-        {helperText && <span tw="text-xs text-gray-500 justify-start flex">Ex: {helperText}</span>}
-    </label>
-);
-
-const SocialIcons = () => {
+const SocialSection = () => {
     const { min } = useMinScreen();
-
     return (
-        <ul tw="grid gap-4 grid-flow-col sm:grid-flow-row w-full">
-            {[
-                { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
-                { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
-                { name: "LinkedIn", Icon: ImLinkedin, color: "#0e76a8" },
-            ].map(({ name, color, Icon }) => (
-                <li key={name}>
-                    <Button
-                        tw="w-full"
-                        icon={<Icon size="20px" />}
-                        text={min`sm` ? `Sign in with ${name}` : undefined}
-                        css={{ backgroundColor: color }}
-                    />
-                </li>
-            ))}
-        </ul>
+        <div tw="grid gap-8 items-start">
+            <ul tw="grid gap-4 grid-flow-col sm:grid-flow-row w-full">
+                {[
+                    { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
+                    { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
+                    { name: "LinkedIn", Icon: ImLinkedin, color: "#0e76a8" },
+                ].map(({ name, color, Icon }) => (
+                    <li key={name}>
+                        <Button
+                            tw="w-full"
+                            icon={<Icon size="20px" />}
+                            text={min`sm` ? `Sign in with ${name}` : undefined}
+                            css={{ backgroundColor: color }}
+                        />
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 };
 
-const SocialSection = () => (
-    <div tw="grid gap-8 items-start">
-        <SocialIcons />
-    </div>
-);
-
 const ManualSection = () => (
     <form tw="grid gap-8 max-w-sm">
-        <InputField name="email" label="Email" helperText="jane.doe@domain.com" required />
+        <InputField name="username" label="Username" helperText="johndoe123" required />
         <InputField name="password" label="Password" type="password" required />
         <label htmlFor="term" tw="flex items-center">
             <input type="checkbox" name="term" tw="form-checkbox" required />
@@ -68,7 +45,13 @@ const ManualSection = () => (
             </span>
         </label>
         <div tw="grid gap-8">
-            <Button tw="bg-teal-500" text="Sign In" type="submit" />
+            <Button
+                tw="bg-teal-500"
+                text="Sign In"
+                type="submit"
+                icon={<FaSignInAlt />}
+                iconRight
+            />
             <div tw="text-sm">
                 Don‘t have an account?{" "}
                 <Link href="/signup" passHref>
@@ -87,19 +70,22 @@ const GridContainer = styled.div`
     }
 `;
 
+const Heading = tw.h1`text-5xl pb-4`;
+const PageContainer = tw.div`flex items-center justify-center h-screen`;
+
 export default function Login() {
     return (
         <PageContainer>
             <GridContainer>
-                <div tw="col-span-full border-b pb-4">
-                    <div tw="text-5xl pb-4">Sign In</div>
+                <div tw="col-span-full">
+                    <Heading>Sign In</Heading>
                     <div tw="text-sm text-gray-500 max-w-sm">
                         With one of your connected social media account below or with your email and
                         password.
                     </div>
                 </div>
                 <SocialSection />
-                <div tw="border-b sm:(border-l)"></div>
+                <div tw="border-b sm:(border-l)" />
                 <ManualSection />
             </GridContainer>
         </PageContainer>

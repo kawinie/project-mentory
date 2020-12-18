@@ -1,7 +1,7 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithRef, forwardRef } from "react";
 import tw from "twin.macro";
 
-export type TButtonProps = ComponentPropsWithoutRef<"button"> & {
+export type TButtonProps = ComponentPropsWithRef<"button"> & {
     icon?: JSX.Element;
     iconRight?: boolean;
     text?: string;
@@ -9,10 +9,12 @@ export type TButtonProps = ComponentPropsWithoutRef<"button"> & {
 
 const TextContainer = tw.div`flex-grow text-center whitespace-nowrap`;
 
-export const Button: React.FC<TButtonProps> = ({ icon, iconRight, text, ...props }) => {
+export const Button = forwardRef<HTMLButtonElement, TButtonProps>((bigProps, ref) => {
+    const { icon, iconRight, text, ...props } = bigProps;
     return (
         <button
             type="button"
+            ref={ref}
             css={[
                 tw`flex items-center justify-center p-3 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
             ]}
@@ -30,4 +32,6 @@ export const Button: React.FC<TButtonProps> = ({ icon, iconRight, text, ...props
             )}
         </button>
     );
-};
+});
+
+Button.displayName = "Button";
