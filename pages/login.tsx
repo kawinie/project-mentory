@@ -42,7 +42,7 @@ type FormData = {
 const MaunalFormSignIn = () => {
     const { register, handleSubmit } = useForm<FormData>();
     const onSubmit = handleSubmit((data) => {
-        console.log(data);
+        alert(JSON.stringify(data, null, 4) + "\n DON'T forget to send this to API!");
     });
     return (
         <form tw="grid gap-8 max-w-sm" onSubmit={onSubmit}>

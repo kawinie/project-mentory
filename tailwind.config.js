@@ -1,3 +1,7 @@
+const colors = require("tailwindcss/colors");
+colors.primary = colors.black;
+colors.secondary = colors.gray[500];
+
 module.exports = {
     purgecss: {
         content: [
@@ -11,7 +15,7 @@ module.exports = {
     theme: {
         extend: {
             // Enable all Tailwind color utilities
-            colors: require("tailwindcss/colors"),
+            colors: colors,
         },
     },
     variants: {
