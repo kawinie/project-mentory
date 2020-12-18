@@ -3,20 +3,18 @@ import { Button, TButtonProps } from "../components/units/Button";
 
 import { theme } from "twin.macro";
 
+import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
+
 export default {
     title: "Units/MyButton",
     component: Button,
-    argTypes: {
-        color: {
-            control: { type: "select", options: Object.keys(theme`colors.red`) },
-        },
-    },
+    argTypes: {},
 } as Meta;
 
 // This basically disables typechecking to make this work with storybook
-const StyledButton: React.ElementType = Button;
+const ButtonElement: React.ElementType = Button;
 const Template: Story<TButtonProps> = ({ style, ...args }) => {
-    return <StyledButton {...args} style={style} />;
+    return <ButtonElement {...args} style={style} />;
 };
 
 export const Primary = Template.bind({});
@@ -25,4 +23,5 @@ Primary.args = {
     style: {
         background: "teal",
     },
+    icon: <ImFacebook />,
 };

@@ -7,14 +7,14 @@ export type TButtonProps = ComponentPropsWithoutRef<"button"> & {
     text?: string;
 };
 
-const TextContainer = tw.div`flex-grow hidden text-center whitespace-nowrap sm:block`;
+const TextContainer = tw.div`flex-grow text-center whitespace-nowrap`;
 
 export const Button: React.FC<TButtonProps> = ({ icon, iconRight, text, ...props }) => {
     return (
         <button
             type="button"
             css={[
-                tw`flex items-center p-2 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
+                tw`flex items-center justify-center p-3 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
             ]}
             {...props}>
             {icon && !iconRight && (

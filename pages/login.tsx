@@ -1,9 +1,10 @@
 import tw, { theme, styled } from "twin.macro";
 
-import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/Im";
+import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
 import { Button } from "components/units/Button";
 
 import Link from "next/link";
+import { useMinScreen } from "hooks";
 
 const PageContainer = tw.div`flex items-center justify-center h-screen`;
 
@@ -24,27 +25,31 @@ const InputField = ({ label, name, helperText, ...props }: TInputFieldProps) => 
     </label>
 );
 
-const SocialIcons = () => (
-    <ul tw="grid gap-4 grid-flow-col sm:grid-flow-row justify-center">
-        {[
-            { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
-            { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
-            { name: "LinkedIn", Icon: ImLinkedin, color: "#0e76a8" },
-        ].map(({ name, color, Icon }) => (
-            <li key={name}>
-                <Button
-                    tw="p-3 w-full"
-                    icon={<Icon size="20px" />}
-                    text={`Sign in with ${name}`}
-                    css={{ backgroundColor: color }}
-                />
-            </li>
-        ))}
-    </ul>
-);
+const SocialIcons = () => {
+    const { min } = useMinScreen();
+
+    return (
+        <ul tw="grid gap-4 grid-flow-col sm:grid-flow-row w-full">
+            {[
+                { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
+                { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
+                { name: "LinkedIn", Icon: ImLinkedin, color: "#0e76a8" },
+            ].map(({ name, color, Icon }) => (
+                <li key={name}>
+                    <Button
+                        tw="w-full"
+                        icon={<Icon size="20px" />}
+                        text={min`sm` ? `Sign in with ${name}` : undefined}
+                        css={{ backgroundColor: color }}
+                    />
+                </li>
+            ))}
+        </ul>
+    );
+};
 
 const SocialSection = () => (
-    <div tw="grid gap-8 content-center justify-center self-start">
+    <div tw="grid gap-8 items-start">
         <SocialIcons />
     </div>
 );
@@ -76,7 +81,7 @@ const ManualSection = () => (
 
 const GridContainer = styled.div`
     ${tw`grid max-w-screen-lg gap-8 p-4 mx-auto place-content-center`};
-    @media (min-width: ${theme`screens.sm`!}) {
+    @media (min-width: ${theme`screens.sm` as string}) {
         ${tw`gap-12`}
         grid-template-columns: 1fr auto 1fr;
     }
@@ -89,8 +94,8 @@ export default function Login() {
                 <div tw="col-span-full border-b pb-4">
                     <div tw="text-5xl pb-4">Sign In</div>
                     <div tw="text-sm text-gray-500 max-w-sm">
-                        With one of your connected social media account below <br /> or with your
-                        email and password.
+                        With one of your connected social media account below or with your email and
+                        password.
                     </div>
                 </div>
                 <SocialSection />

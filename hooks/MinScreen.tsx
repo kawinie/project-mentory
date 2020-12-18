@@ -75,7 +75,10 @@ const useMinScreen = () => {
         throw new Error("useMinScreen must be used within a MinScreenProvider");
     }
 
-    return { min: (size: string) => context[size] };
+    return {
+        min: (size: TemplateStringsArray | string) =>
+            typeof size === "string" ? context[size] : context[size[0]],
+    };
 };
 
 export { useMinScreen, MinScreenProvider };
