@@ -1,6 +1,7 @@
+import { ComponentPropsWithRef, forwardRef } from "react";
 import tw from "twin.macro";
 
-type TInputFieldProps = {
+type TInputFieldProps = ComponentPropsWithRef<"input"> & {
     name: string;
     label: string;
     helperText?: string;
@@ -9,10 +10,16 @@ type TInputFieldProps = {
     required?: boolean;
 };
 
-export const InputField = ({ label, name, helperText, ...props }: TInputFieldProps) => (
-    <label htmlFor={name} css={[tw`grid gap-1`]}>
-        <span tw="text-sm">{label}</span>
-        <input tw="w-full form-input" name={name} {...props} />
-        {helperText && <span tw="text-xs text-gray-500 justify-start flex">Ex: {helperText}</span>}
-    </label>
+export const InputField = forwardRef<HTMLInputElement, TInputFieldProps>(
+    ({ label, name, helperText, ...props }, ref) => (
+        <label htmlFor={name} css={[tw`grid gap-1`]}>
+            <span tw="text-sm">{label}</span>
+            <input tw="w-full form-input" name={name} ref={ref} {...props} />
+            {helperText && (
+                <span tw="text-xs text-gray-500 justify-start flex">Ex: {helperText}</span>
+            )}
+        </label>
+    )
 );
+
+InputField.displayName = "InputField";

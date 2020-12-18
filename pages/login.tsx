@@ -6,9 +6,11 @@ import { FaSignInAlt } from "react-icons/fa";
 
 import { Button, InputField } from "components/units";
 import { useMinScreen } from "hooks";
+import { useForm } from "react-hook-form";
 
 const SocialSection = () => {
     const { min } = useMinScreen();
+
     return (
         <div tw="grid gap-8 items-start">
             <ul tw="grid gap-4 grid-flow-col sm:grid-flow-row w-full">
@@ -31,36 +33,54 @@ const SocialSection = () => {
     );
 };
 
-const ManualSection = () => (
-    <form tw="grid gap-8 max-w-sm">
-        <InputField name="username" label="Username" helperText="johndoe123" required />
-        <InputField name="password" label="Password" type="password" required />
-        <label htmlFor="term" tw="flex items-center">
-            <input type="checkbox" name="term" tw="form-checkbox" required />
-            <span tw="ml-2 text-sm">
-                I agree to the{" "}
-                <a href="" tw="underline text-teal-500">
-                    privacy policy
-                </a>
-            </span>
-        </label>
-        <div tw="grid gap-8">
-            <Button
-                tw="bg-teal-500"
-                text="Sign In"
-                type="submit"
-                icon={<FaSignInAlt />}
-                iconRight
+type FormData = {
+    username: string;
+    password: string;
+    term: boolean;
+};
+
+const MaunalFormSignIn = () => {
+    const { register, handleSubmit } = useForm<FormData>();
+    const onSubmit = handleSubmit((data) => {
+        console.log(data);
+    });
+    return (
+        <form tw="grid gap-8 max-w-sm" onSubmit={onSubmit}>
+            <InputField
+                name="username"
+                label="Username"
+                helperText="johndoe123"
+                ref={register}
+                required
             />
-            <div tw="text-sm">
-                Don‘t have an account?{" "}
-                <Link href="/signup" passHref>
-                    <a tw="text-teal-500 underline">Click here to register</a>
-                </Link>
+            <InputField name="password" label="Password" type="password" ref={register} required />
+            <label htmlFor="term" tw="flex items-center">
+                <input type="checkbox" name="term" tw="form-checkbox" ref={register} required />
+                <span tw="ml-2 text-sm">
+                    I agree to the{" "}
+                    <a href="" tw="underline text-teal-500">
+                        privacy policy
+                    </a>
+                </span>
+            </label>
+            <div tw="grid gap-8">
+                <Button
+                    tw="bg-teal-500"
+                    text="Sign In"
+                    type="submit"
+                    icon={<FaSignInAlt />}
+                    iconRight
+                />
+                <div tw="text-sm">
+                    Don‘t have an account?{" "}
+                    <Link href="/signup" passHref>
+                        <a tw="text-teal-500 underline">Click here to register</a>
+                    </Link>
+                </div>
             </div>
-        </div>
-    </form>
-);
+        </form>
+    );
+};
 
 const GridContainer = styled.div`
     ${tw`grid max-w-screen-lg gap-8 p-4 mx-auto place-content-center`};
@@ -86,7 +106,7 @@ export default function Login() {
                 </div>
                 <SocialSection />
                 <div tw="border-b sm:(border-l)" />
-                <ManualSection />
+                <MaunalFormSignIn />
             </GridContainer>
         </PageContainer>
     );
