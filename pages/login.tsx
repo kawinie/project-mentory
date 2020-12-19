@@ -8,7 +8,7 @@ import { Button, InputField } from "components/units";
 import { useMinScreen } from "hooks";
 import { useForm } from "react-hook-form";
 
-const SocialSection = () => {
+const SocialSignIn = () => {
     const { min } = useMinScreen();
 
     return (
@@ -22,7 +22,7 @@ const SocialSection = () => {
                     <li key={name}>
                         <Button
                             tw="w-full"
-                            icon={<Icon size="20px" />}
+                            icon={() => <Icon size="20px" />}
                             text={min`sm` ? `Sign in with ${name}` : undefined}
                             css={{ backgroundColor: color }}
                         />
@@ -44,6 +44,7 @@ const MaunalFormSignIn = () => {
     const onSubmit = handleSubmit((data) => {
         alert(JSON.stringify(data, null, 4) + "\n DON'T forget to send this to API!");
     });
+
     return (
         <form tw="grid gap-8 max-w-sm" onSubmit={onSubmit}>
             <InputField
@@ -68,7 +69,7 @@ const MaunalFormSignIn = () => {
                     tw="bg-teal-500"
                     text="Sign In"
                     type="submit"
-                    icon={<FaSignInAlt />}
+                    icon={() => <FaSignInAlt />}
                     iconRight
                 />
                 <div tw="text-sm">
@@ -104,7 +105,7 @@ export default function Login() {
                         password.
                     </div>
                 </div>
-                <SocialSection />
+                <SocialSignIn />
                 <div tw="border-b sm:(border-l)" />
                 <MaunalFormSignIn />
             </GridContainer>

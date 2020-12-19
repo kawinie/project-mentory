@@ -2,7 +2,7 @@ import { ComponentPropsWithRef, forwardRef } from "react";
 import tw from "twin.macro";
 
 export type TButtonProps = ComponentPropsWithRef<"button"> & {
-    icon?: JSX.Element;
+    icon?: () => React.ReactElement;
     iconRight?: boolean;
     text?: string;
 };
@@ -11,6 +11,7 @@ const TextContainer = tw.div`flex-grow text-center whitespace-nowrap`;
 
 export const Button = forwardRef<HTMLButtonElement, TButtonProps>((bigProps, ref) => {
     const { icon, iconRight, text, ...props } = bigProps;
+    const _a = "";
     return (
         <button
             type="button"
@@ -21,13 +22,13 @@ export const Button = forwardRef<HTMLButtonElement, TButtonProps>((bigProps, ref
             {...props}>
             {icon && !iconRight && (
                 <span css={text && tw`mr-2`} className="icon">
-                    {icon}
+                    {icon()}
                 </span>
             )}
             {text && <TextContainer>{text}</TextContainer>}
             {icon && iconRight && (
                 <span css={text && tw`ml-2`} className="icon">
-                    {icon}
+                    {icon()}
                 </span>
             )}
         </button>
