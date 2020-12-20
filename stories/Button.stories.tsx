@@ -23,8 +23,8 @@ export default {
 // This basically disables typechecking to make this work with storybook
 const ButtonElement: React.ElementType = Button;
 const Template: Story<TButtonProps> = ({ icon, ...args }) => {
-    const Icon = iconList[(icon as unknown) as string];
-    return <ButtonElement icon={<ImFacebook />} {...args} />;
+    const Icon = iconList[(icon || ("ImFacebook" as unknown)) as string];
+    return <ButtonElement icon={<Icon />} {...args} />;
 };
 
 export const Primary = Template.bind({});
