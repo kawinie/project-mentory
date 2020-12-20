@@ -74,6 +74,7 @@ module.exports = {
 
         "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
+        "react/display-name": "off",
 
         // See https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/ban-types.md
         // Use Record<string, unknown> instead of object
