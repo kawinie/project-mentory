@@ -22,7 +22,7 @@ const SocialSignIn = () => {
                     <li key={name}>
                         <Button
                             tw="w-full"
-                            icon={() => <Icon size="20px" />}
+                            icon={<Icon size="20px" />}
                             text={min`sm` ? `Sign in with ${name}` : undefined}
                             css={{ backgroundColor: color }}
                         />
@@ -69,7 +69,7 @@ const MaunalFormSignIn = () => {
                     tw="bg-teal-500"
                     text="Sign In"
                     type="submit"
-                    icon={() => <FaSignInAlt />}
+                    icon={<FaSignInAlt />}
                     iconRight
                 />
                 <div tw="text-sm">
