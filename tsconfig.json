@@ -6,14 +6,15 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "lib": ["dom", "dom.iterable", "es2020"],
-        "module": "esnext",
+        "module": "es2020",
         "moduleResolution": "node",
         "noEmit": true,
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
-        "target": "es5"
+        "target": "es5",
+        "allowJs": false
     },
     "exclude": ["node_modules"],
-    "include": ["types/next-env.d.ts", "**/*.ts", "**/*.tsx"]
+    "include": ["**/*.ts", "**/*.tsx"]
 }
