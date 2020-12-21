@@ -1,21 +1,22 @@
 import Head from "next/head";
-
-import { UnitExample } from "components/units/UnitExample";
-import { ReactElement } from "react";
-
+import Link from "next/link";
 import tw from "twin.macro";
 
-const HomeContainer = tw.div`flex items-center justify-center w-full h-screen text-5xl text-gray-700 bg-gray-200`;
+import { Button } from "components/units/Button";
 
-export default function Home(): ReactElement {
+const HomeContainer = tw.div`flex flex-col items-center justify-center w-full h-screen text-5xl text-gray-700`;
+
+export default function Home() {
+    const title = `Mentory ${process.env.NODE_ENV == "development" ? "(development)" : ""}`;
     return (
-        <>
+        <HomeContainer>
             <Head>
-                <title>Mentory ({process.env.NODE_ENV == "development" && "development"})</title>
+                <title>{title}</title>
             </Head>
-            <HomeContainer>
-                <UnitExample title="Mentory" />
-            </HomeContainer>
-        </>
+            <h1>Mentory</h1>
+            <Link href="/login" passHref>
+                <Button text="Login Here" tw="mt-8" />
+            </Link>
+        </HomeContainer>
     );
 }

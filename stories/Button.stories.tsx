@@ -1,38 +1,41 @@
-import React from "react";
-// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { Story, Meta } from "@storybook/react/types-6-0";
+import { Meta, Story } from "@storybook/react/types-6-0";
+import { Button, TButtonProps } from "components/units/Button";
+import tw from "twin.macro";
 
-import { Button, ButtonProps } from "./Button";
+import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
+import { IconType } from "react-icons/lib";
+
+const iconList: Record<string, IconType> = { ImFacebook, ImGoogle, ImLinkedin };
 
 export default {
-    title: "Example/Button",
+    title: "Units/Button",
     component: Button,
     argTypes: {
-        backgroundColor: { control: "color" },
+        icon: {
+            control: {
+                type: "select",
+                options: Object.keys(iconList),
+            },
+        },
     },
 } as Meta;
 
-const Template: Story<ButtonProps> = (args) => <Button {...args} />;
+// This basically disables typechecking to make this work with storybook
+const ButtonElement: React.ElementType = Button;
+const Template: Story<TButtonProps> = ({ icon, ...args }) => {
+    const Icon = iconList[(icon || ("ImFacebook" as unknown)) as string];
+    return <ButtonElement icon={<Icon />} {...args} />;
+};
 
 export const Primary = Template.bind({});
 Primary.args = {
-    primary: true,
-    label: "Button",
+    text: "My Button",
+    style: tw`bg-teal-500`,
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-    label: "Button",
-};
-
-export const Large = Template.bind({});
-Large.args = {
-    size: "large",
-    label: "Button",
-};
-
-export const Small = Template.bind({});
-Small.args = {
-    size: "small",
-    label: "Button",
+    tw: "text-xl font-bold bg-teal-500",
+    css: tw`text-xl font-bold bg-teal-500`,
+    text: "My Button",
 };

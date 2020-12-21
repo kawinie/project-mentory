@@ -16,14 +16,19 @@
         }
     },
     "browserslist": [
-        ">0.3%",
-        "not ie <= 11",
+        ">0.5%",
+        "last 2 versions",
         "not dead",
+        "not ie <= 11",
         "not op_mini all"
     ],
     "babelMacros": {
         "twin": {
-            "preset": "styled-components"
+            "preset": "styled-components",
+            "css": {
+                "from": "styled-components",
+                "import": "css"
+            }
         }
     },
     "dependencies": {
@@ -38,16 +43,19 @@
         "next": "10.0.3",
         "react": "17.0.1",
         "react-dom": "17.0.1",
+        "react-hook-form": "^6.13.1",
+        "react-icons": "^4.1.0",
         "styled-components": "^5.2.1",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1",
         "twin.macro": "^2.0.7"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
-        "@storybook/addon-actions": "^6.1.9",
-        "@storybook/addon-essentials": "^6.1.9",
-        "@storybook/addon-links": "^6.1.9",
-        "@storybook/react": "^6.1.9",
+        "@storybook/addon-actions": "^6.1.11",
+        "@storybook/addon-essentials": "^6.1.11",
+        "@storybook/addon-links": "^6.1.11",
+        "@storybook/react": "^6.1.11",
+        "@tailwindcss/custom-forms": "0.0.0-0be3175",
         "@typescript-eslint/eslint-plugin": "^4.9.0",
         "@typescript-eslint/parser": "^4.9.0",
         "babel-loader": "^8.2.2",
@@ -64,6 +72,7 @@
         "postcss-preset-env": "^6.7.0",
         "prettier": "^2.2.1",
         "sb": "^6.1.9",
+        "tailwindcss-debug-screens": "^2.0.0",
         "typescript": "^4.1.2"
     }
 }
