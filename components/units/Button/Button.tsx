@@ -15,7 +15,7 @@ export const Button = forwardRef<HTMLButtonElement, TButtonProps>(
                 ref={ref}
                 type="button"
                 css={[
-                    tw`flex items-center justify-center p-3 text-sm text-white bg-gray-700 rounded shadow transform transition duration-200 hover:(-translate-y-1 shadow-xl)`,
+                    tw`flex items-center justify-center p-3 text-sm text-white transition duration-200 transform bg-gray-700 rounded shadow hover:(-translate-y-1 shadow-xl)`,
                 ]}
                 {...props}>
                 {icon && !iconRight && (

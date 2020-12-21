@@ -1,30 +1,22 @@
 {
     "editor.insertSpaces": true,
+    "explorerExclude.backup": null,
     "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
         "**/.DS_Store": true,
+        "**/.git": true,
+        "**/.hg": true,
         "**/.next": true,
+        "**/.svn": true,
+        "**/CVS": true,
         "**/node_modules": true
+    },
+    "headwind.classRegex": {
+        "css": "\\B@apply\\s+([_a-zA-Z0-9\\s\\-\\:\\/]+);",
+        "javascriptreact": "(?:tw)\\.?\\w*=?{?[`\"]?(\\S[^'\"`}=]+)",
+        "typescriptreact": "(?:tw)\\.?\\w*=?{?[`\"]?(\\S[^'\"`}=]+)"
     },
     "prettier.disableLanguages": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     "prettier.tabWidth": 4,
-    "tailwindCSS.experimental.classRegex": [
-        // tw`...`
-        "tw`([^`]*)",
-
-        // <div tw="..." />
-        "tw=\"([^\"]*)",
-
-        // <div tw={"..."} />
-        "tw={\"([^\"}]*)",
-
-        // tw.xxx`...`
-        "tw\\.\\w+`([^`]*)",
-        ["classnames\\(([^)]*)\\)", "'([^']*)'"]
-    ],
-    "tailwindCSS.lint.cssConflict": "ignore",
-    "explorerExclude.backup": null
+    "tailwindCSS.experimental.classRegex": ["(?:tw)\\.?\\w*=?{?[`\"]?(\\S[^'\"`}=]+)"],
+    "tailwindCSS.lint.cssConflict": "ignore"
 }

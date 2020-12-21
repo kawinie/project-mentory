@@ -12,8 +12,8 @@ const SocialSignIn = () => {
     const { min } = useMinScreen();
 
     return (
-        <div tw="grid gap-8 items-start">
-            <ul tw="grid gap-4 grid-flow-col sm:grid-flow-row w-full">
+        <div tw="grid items-start gap-8">
+            <ul tw="grid w-full grid-flow-col gap-4 sm:grid-flow-row">
                 {[
                     { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
                     { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
@@ -46,7 +46,7 @@ const MaunalFormSignIn = () => {
     });
 
     return (
-        <form tw="grid gap-8 max-w-sm" onSubmit={onSubmit}>
+        <form tw="grid max-w-sm gap-8" onSubmit={onSubmit}>
             <InputField
                 name="username"
                 label="Username"
@@ -59,7 +59,7 @@ const MaunalFormSignIn = () => {
                 <input type="checkbox" name="term" tw="form-checkbox" ref={register} required />
                 <span tw="ml-2 text-sm">
                     I agree to the{" "}
-                    <a href="" tw="underline text-teal-500">
+                    <a href="" tw="text-teal-500 underline">
                         privacy policy
                     </a>
                 </span>
@@ -91,7 +91,7 @@ const GridContainer = styled.div`
     }
 `;
 
-const Heading = tw.h1`text-5xl pb-4`;
+const Heading = tw.h1`pb-4 text-5xl`;
 const PageContainer = tw.div`flex items-center justify-center h-screen`;
 
 export default function Login() {
@@ -100,7 +100,7 @@ export default function Login() {
             <GridContainer>
                 <div tw="col-span-full">
                     <Heading>Sign In</Heading>
-                    <div tw="text-sm text-gray-500 max-w-sm">
+                    <div tw="max-w-sm text-sm text-gray-500">
                         With one of your connected social media account below or with your email and
                         password.
                     </div>
