@@ -10,13 +10,8 @@
         "**/CVS": true,
         "**/node_modules": true
     },
-    "headwind.classRegex": {
-        "css": "\\B@apply\\s+([_a-zA-Z0-9\\s\\-\\:\\/]+);",
-        "javascriptreact": "(?:tw)\\.?\\w*=?{?[`\"]?(\\S[^'\"`}=]+)",
-        "typescriptreact": "(?:tw)\\.?\\w*=?{?[`\"]?(\\S[^'\"`}=]+)"
-    },
     "prettier.disableLanguages": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     "prettier.tabWidth": 4,
-    "tailwindCSS.experimental.classRegex": ["(?:tw)\\.?\\w*=?{?[`\"]?(\\S[^'\"`}=]+)"],
+    "tailwindCSS.experimental.classRegex": ["tw(?:(?:\\.\\w+)|=|={)?[`\"]([^`\"}=]+)"],
     "tailwindCSS.lint.cssConflict": "ignore"
 }
