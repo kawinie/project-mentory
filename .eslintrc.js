@@ -25,6 +25,13 @@ module.exports = {
         // Recommneded rules from eslint-plugin-prettier
         // Modify the final formatting rules based on prettier
         "plugin:prettier/recommended",
+
+        // eslint-plugin-import presets
+        // See https://github.com/benmosher/eslint-plugin-import/tree/master/config
+        // Also see https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
     ],
 
     // Allows eslint to parse Typescript code.
@@ -57,6 +64,11 @@ module.exports = {
         react: {
             version: "detect",
         },
+        "import/resolver": {
+            typescript: {
+                project: ".",
+            },
+        },
     },
     rules: {
         "class-methods-use-this": "off",
@@ -83,5 +95,14 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-var-requires": "off",
+
+        // Import ordering
+        "import/order": [
+            "error",
+            {
+                "newlines-between": "always-and-inside-groups",
+                groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+            },
+        ],
     },
 };

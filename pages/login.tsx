@@ -1,14 +1,13 @@
 import Link from "next/link";
 import Head from "next/head";
-
 import tw, { theme, styled } from "twin.macro";
+import { useForm } from "react-hook-form";
 
 import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
 import { FaSignInAlt } from "react-icons/fa";
 
 import { Button, InputField } from "components/units";
 import { useMinScreen } from "hooks";
-import { useForm } from "react-hook-form";
 
 const SocialSignIn = () => {
     const { min } = useMinScreen();
