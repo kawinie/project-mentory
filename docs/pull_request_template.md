@@ -14,12 +14,12 @@ Closes (issue)
 - [] I have not introduced new linting errors and warnings
 - [] I have commented part of the code that might be confusing or hard to understand
 - [] I have cleaned up WIP commits using Interactive Rebasing
-- [] I have rebase new changes from master and resolved conflicts
+- [] I have rebased new changes into master and resolved any conflicts
 
 # List of changes
 
-- Added change 1
-- Added change 2
-- Integrated change 3
-- Fixed change 4
-- Removed change 4
+- Added
+- Changed
+- Integrated
+- Fixed
+- Removed
