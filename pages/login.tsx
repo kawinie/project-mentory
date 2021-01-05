@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Head from "next/head";
+
 import tw, { theme, styled } from "twin.macro";
 
 import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
@@ -59,7 +61,7 @@ const MaunalFormSignIn = () => {
                 <input type="checkbox" name="term" tw="form-checkbox" ref={register} required />
                 <span tw="ml-2 text-sm">
                     I agree to the{" "}
-                    <a href="" tw="text-teal-500 underline">
+                    <a href="" tw="text-teal-500 underline" onClick={() => alert("Add link!!")}>
                         privacy policy
                     </a>
                 </span>
@@ -97,6 +99,9 @@ const PageContainer = tw.div`flex items-center justify-center h-screen`;
 export default function Login() {
     return (
         <PageContainer>
+            <Head>
+                <title>Login – Mentory</title>
+            </Head>
             <GridContainer>
                 <div tw="col-span-full">
                     <Heading>Sign In</Heading>

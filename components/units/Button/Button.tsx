@@ -7,7 +7,8 @@ export type TButtonProps = ComponentPropsWithoutRef<"button"> & {
     text?: string;
 };
 
-const TextContainer = tw.div`flex-grow text-center whitespace-nowrap`;
+const TextContainer = tw.span`flex-grow text-center whitespace-nowrap`;
+
 export const Button = forwardRef<HTMLButtonElement, TButtonProps>(
     ({ icon, iconRight, text, ...props }, ref) => {
         return (
