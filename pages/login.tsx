@@ -1,12 +1,13 @@
 import Link from "next/link";
+import Head from "next/head";
 import tw, { theme, styled } from "twin.macro";
+import { useForm } from "react-hook-form";
 
 import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
 import { FaSignInAlt } from "react-icons/fa";
 
 import { Button, InputField } from "components/units";
 import { useMinScreen } from "hooks";
-import { useForm } from "react-hook-form";
 
 const SocialSignIn = () => {
     const { min } = useMinScreen();
@@ -59,7 +60,7 @@ const MaunalFormSignIn = () => {
                 <input type="checkbox" name="term" tw="form-checkbox" ref={register} required />
                 <span tw="ml-2 text-sm">
                     I agree to the{" "}
-                    <a href="" tw="text-teal-500 underline">
+                    <a href="" tw="text-teal-500 underline" onClick={() => alert("Add link!!")}>
                         privacy policy
                     </a>
                 </span>
@@ -97,6 +98,9 @@ const PageContainer = tw.div`flex items-center justify-center h-screen`;
 export default function Login() {
     return (
         <PageContainer>
+            <Head>
+                <title>Login – Mentory</title>
+            </Head>
             <GridContainer>
                 <div tw="col-span-full">
                     <Heading>Sign In</Heading>

@@ -1,9 +1,10 @@
 import { Meta, Story } from "@storybook/react/types-6-0";
-import { Button, TButtonProps } from "components/units/Button";
 import tw from "twin.macro";
 
 import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
 import { IconType } from "react-icons/lib";
+
+import { Button, TButtonProps } from "components/units/Button";
 
 const iconList: Record<string, IconType> = { ImFacebook, ImGoogle, ImLinkedin };
 

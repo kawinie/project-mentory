@@ -14,7 +14,7 @@ export const InputField = forwardRef<HTMLInputElement, TInputFieldProps>(
     ({ label, name, helperText, ...props }, ref) => (
         <label htmlFor={name} css={[tw`grid gap-1`]}>
             <span tw="text-sm">{label}</span>
-            <input tw="w-full form-input" name={name} ref={ref} {...props} />
+            <input tw="form-input w-full" name={name} ref={ref} {...props} />
             {helperText && (
                 <span tw="flex justify-start text-xs text-gray-500">Ex: {helperText}</span>
             )}
