@@ -1,5 +1,4 @@
 import React from "react";
-
 import { GlobalStyles } from "twin.macro";
 
 // Global decorator to apply the styles to all stories

@@ -2,42 +2,34 @@ import Link from "next/link";
 import Head from "next/head";
 import tw, { theme, styled } from "twin.macro";
 import { useForm } from "react-hook-form";
+import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 
-import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
-import { FaSignInAlt } from "react-icons/fa";
-
-import {
-    Avatar,
-    Box,
-    ScaleFade,
-    useDisclosure,
-    Text,
-    Flex,
-    Spacer,
-    ButtonProps,
-} from "@chakra-ui/react";
-
-import { useMinScreen } from "hooks";
-
+import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
-import { Button } from "components/units";
-const SocialSignIn = () => {
-    const { min } = useMinScreen();
-    const { isOpen, onToggle } = useDisclosure();
 
+const SignInButton = ({ children, ...props }: ButtonProps) => {
+    return (
+        <Button w="full" size="lg" fontSize="sm" {...props}>
+            {children}
+        </Button>
+    );
+};
+
+const SocialSignIn = () => {
+    const { min } = useScreen();
     return (
         <div tw="grid items-start gap-8">
             <ul tw="grid w-full grid-flow-col gap-4 mobile-ls:(grid-flow-row)">
                 {([
-                    { name: "Facebook", Icon: ImFacebook, color: "facebook" },
-                    { name: "Google", Icon: ImGoogle, color: "google-plus" },
-                    { name: "LinkedIn", Icon: ImLinkedin, color: "linkedin" },
+                    { name: "Facebook", Icon: FacebookLogo, color: "facebook" },
+                    { name: "Twitter", Icon: TwitterLogo, color: "twitter" },
+                    { name: "LinkedIn", Icon: LinkedinLogo, color: "linkedin" },
                 ] as const).map(({ name, color, Icon }) => (
                     <li key={name}>
-                        <Button
-                            tw="w-full"
-                            icon={<Icon size={20} />}
-                            text={min`mobile` ? `Sign in with ${name}` : undefined}></Button>
+                        <SignInButton leftIcon={<Icon size={24} weight="fill" />}>
+                            {min`mobile-ls` ? `Sign in with ${name}` : null}
+                        </SignInButton>
                     </li>
                 ))}
             </ul>
@@ -77,13 +69,13 @@ const MaunalFormSignIn = () => {
                 </span>
             </label>
             <div tw="grid gap-8">
-                <Button tw="bg-red-500" type="submit" icon={<FaSignInAlt />}>
+                <SignInButton fontSize="sm" size="lg" type="submit" leftIcon={<SignIn size={24} />}>
                     Sign In
-                </Button>
+                </SignInButton>
                 <div tw="text-sm">
                     Don‘t have an account?{" "}
                     <Link href="/signup" passHref>
-                        <a tw="text-teal-500 underline">Click here to register</a>
+                        <a tw="text-purple-500 underline">Click here to register</a>
                     </Link>
                 </div>
             </div>
@@ -93,7 +85,7 @@ const MaunalFormSignIn = () => {
 
 const GridContainer = styled.div`
     ${tw`grid max-w-screen-laptop gap-8 p-4 mx-auto place-content-center`};
-    @media (min-width: ${theme`screens.mobile` as string}) {
+    @media (min-width: ${theme`screens.mobile-ls` as string}) {
         ${tw`gap-12`}
         grid-template-columns: 1fr auto 1fr;
     }

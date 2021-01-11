@@ -1,8 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import tw from "twin.macro";
-
-import { Button } from "components/units/Button";
+import { Button } from "@chakra-ui/react";
 
 const HomeContainer = tw.div`flex flex-col items-center justify-center w-full h-screen text-5xl text-gray-700`;
 
@@ -15,7 +14,7 @@ export default function Home() {
             </Head>
             <h1>Mentory</h1>
             <Link href="/login" passHref>
-                <Button text="Login Here" tw="mt-8" />
+                <Button tw="mt-8">Log in</Button>
             </Link>
         </HomeContainer>
     );

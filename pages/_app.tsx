@@ -1,10 +1,9 @@
 import { AppProps } from "next/app";
 import { ReactElement } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
-
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-import { MinScreenProvider } from "hooks";
+import { ScreenProvider } from "hooks";
 
 const theme = extendTheme({
     colors: {
@@ -26,10 +25,10 @@ const theme = extendTheme({
 export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
     return (
         <ChakraProvider theme={theme} resetCSS={true}>
-            <MinScreenProvider screens={tailwindTheme`screens`}>
+            <ScreenProvider screens={tailwindTheme`screens`}>
                 <GlobalStyles />
                 <Component tw="debug-screens" {...pageProps} />
-            </MinScreenProvider>
+            </ScreenProvider>
         </ChakraProvider>
     );
 }
