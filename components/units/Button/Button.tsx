@@ -1,4 +1,5 @@
-import { ComponentPropsWithoutRef, forwardRef, ReactElement } from "react";
+import { Box, Button as CKButton, ButtonProps, propNames } from "@chakra-ui/react";
+import { ComponentPropsWithoutRef, forwardRef, ReactElement, ReactNode } from "react";
 import tw from "twin.macro";
 
 export type TButtonProps = ComponentPropsWithoutRef<"button"> & {
@@ -15,9 +16,7 @@ export const Button = forwardRef<HTMLButtonElement, TButtonProps>(
             <button
                 ref={ref}
                 type="button"
-                css={[
-                    tw`flex items-center justify-center p-3 text-sm text-white transition duration-200 transform bg-gray-700 rounded shadow hover:(-translate-y-1 shadow-xl)`,
-                ]}
+                tw="flex items-center justify-center p-3 text-sm text-white transition duration-200 transform bg-gray-700 rounded shadow hover:(-translate-y-1 shadow-xl)"
                 {...props}>
                 {icon && !iconRight && (
                     <span css={text && tw`mr-2`} className="icon">
@@ -35,4 +34,10 @@ export const Button = forwardRef<HTMLButtonElement, TButtonProps>(
     }
 );
 
-Button.displayName = "Button";
+// export const Button = ({ children, ...props }: ButtonProps) => {
+//     return (
+//         <CKButton display="flex" {...props}>
+//             <Box flexGrow={1}>{children}</Box>
+//         </CKButton>
+//     );
+// };

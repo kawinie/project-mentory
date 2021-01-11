@@ -6,27 +6,38 @@ import { useForm } from "react-hook-form";
 import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
 import { FaSignInAlt } from "react-icons/fa";
 
-import { Button, InputField } from "components/units";
+import {
+    Avatar,
+    Box,
+    ScaleFade,
+    useDisclosure,
+    Text,
+    Flex,
+    Spacer,
+    ButtonProps,
+} from "@chakra-ui/react";
+
 import { useMinScreen } from "hooks";
 
+import { InputField } from "components/units/InputField";
+import { Button } from "components/units";
 const SocialSignIn = () => {
     const { min } = useMinScreen();
+    const { isOpen, onToggle } = useDisclosure();
 
     return (
         <div tw="grid items-start gap-8">
-            <ul tw="grid w-full grid-flow-col gap-4 sm:grid-flow-row">
-                {[
-                    { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
-                    { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
-                    { name: "LinkedIn", Icon: ImLinkedin, color: "#0e76a8" },
-                ].map(({ name, color, Icon }) => (
+            <ul tw="grid w-full grid-flow-col gap-4 mobile-ls:(grid-flow-row)">
+                {([
+                    { name: "Facebook", Icon: ImFacebook, color: "facebook" },
+                    { name: "Google", Icon: ImGoogle, color: "google-plus" },
+                    { name: "LinkedIn", Icon: ImLinkedin, color: "linkedin" },
+                ] as const).map(({ name, color, Icon }) => (
                     <li key={name}>
                         <Button
                             tw="w-full"
-                            icon={<Icon size="20px" />}
-                            text={min`sm` ? `Sign in with ${name}` : undefined}
-                            css={{ backgroundColor: color }}
-                        />
+                            icon={<Icon size={20} />}
+                            text={min`mobile` ? `Sign in with ${name}` : undefined}></Button>
                     </li>
                 ))}
             </ul>
@@ -66,13 +77,9 @@ const MaunalFormSignIn = () => {
                 </span>
             </label>
             <div tw="grid gap-8">
-                <Button
-                    tw="bg-teal-500"
-                    text="Sign In"
-                    type="submit"
-                    icon={<FaSignInAlt />}
-                    iconRight
-                />
+                <Button tw="bg-red-500" type="submit" icon={<FaSignInAlt />}>
+                    Sign In
+                </Button>
                 <div tw="text-sm">
                     Don‘t have an account?{" "}
                     <Link href="/signup" passHref>
@@ -85,8 +92,8 @@ const MaunalFormSignIn = () => {
 };
 
 const GridContainer = styled.div`
-    ${tw`grid max-w-screen-lg gap-8 p-4 mx-auto place-content-center`};
-    @media (min-width: ${theme`screens.sm` as string}) {
+    ${tw`grid max-w-screen-laptop gap-8 p-4 mx-auto place-content-center`};
+    @media (min-width: ${theme`screens.mobile` as string}) {
         ${tw`gap-12`}
         grid-template-columns: 1fr auto 1fr;
     }
@@ -110,7 +117,7 @@ export default function Login() {
                     </div>
                 </div>
                 <SocialSignIn />
-                <div tw="border-b sm:(border-l)" />
+                <div tw="border-b mobile-ls:(border-l)" />
                 <MaunalFormSignIn />
             </GridContainer>
         </PageContainer>
