@@ -10,19 +10,19 @@ module.exports = {
             colors: colors,
         },
         screens: {
-            mobile: "0px",
+            base: "0px",
             // => @media (min-width: 0px) { ... }
 
-            "mobile-ls": "640px",
+            sm: "640px",
             // => @media (min-width: 640px) { ... }
 
-            tablet: "768px",
+            md: "768px",
             // => @media (min-width: 768px) { ... }
 
-            "tablet-ls": "1024px",
+            lg: "1024px",
             // => @media (min-width: 1024px) { ... }
 
-            laptop: "1280px",
+            xl: "1280px",
             // => @media (min-width: 1280px) { ... }
         },
     },
