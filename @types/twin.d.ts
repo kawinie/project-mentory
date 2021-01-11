@@ -21,12 +21,3 @@ declare module "twin.macro" {
     const styled: typeof styledImport;
     const css: typeof cssImport;
 }
-
-// // The 'as' prop on styled components
-// declare global {
-//     namespace JSX {
-//         interface IntrinsicAttributes<T> extends DOMAttributes<T> {
-//             as?: string;
-//         }
-//     }
-// }
