@@ -1,7 +1,8 @@
 import { Meta, Story } from "@storybook/react/types-6-0";
 import "twin.macro";
+import { Button } from "@chakra-ui/react";
 
-import { Button, List, TListProps } from "components/units";
+import { List, TListProps } from "components/units";
 
 //
 // ──────────────────────────────────────────────── I ──────────

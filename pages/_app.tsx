@@ -1,16 +1,18 @@
 import { AppProps } from "next/app";
 import { ReactElement } from "react";
-import { GlobalStyles, theme } from "twin.macro";
+import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
+import { ChakraProvider } from "@chakra-ui/react";
 
-import { MinScreenProvider } from "hooks";
+import { ScreenProvider } from "hooks";
+import theme from "theme";
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
     return (
-        <MinScreenProvider screens={theme`screens`}>
+        <ScreenProvider screens={tailwindTheme`screens`}>
             <GlobalStyles />
-            <div tw="debug-screens">
-                <Component {...pageProps} />
-            </div>
-        </MinScreenProvider>
+            <ChakraProvider theme={theme}>
+                <Component tw="debug-screens" {...pageProps} />
+            </ChakraProvider>
+        </ScreenProvider>
     );
 }

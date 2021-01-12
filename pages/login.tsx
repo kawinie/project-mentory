@@ -1,36 +1,59 @@
 import Link from "next/link";
 import Head from "next/head";
-import tw, { theme, styled } from "twin.macro";
+import "twin.macro";
 import { useForm } from "react-hook-form";
+import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
+import {
+    Button,
+    ButtonProps,
+    Container,
+    Grid,
+    Text,
+    Heading,
+    Divider,
+    IconButton,
+    VStack,
+} from "@chakra-ui/react";
 
-import { ImFacebook, ImGoogle, ImLinkedin } from "react-icons/im";
-import { FaSignInAlt } from "react-icons/fa";
+import { useScreen } from "hooks";
+import { InputField } from "components/units/InputField";
 
-import { Button, InputField } from "components/units";
-import { useMinScreen } from "hooks";
+const data = [
+    { name: "Facebook", Icon: FacebookLogo, color: "facebook" },
+    { name: "Twitter", Icon: TwitterLogo, color: "twitter" },
+    { name: "LinkedIn", Icon: LinkedinLogo, color: "linkedin" },
+] as const;
 
 const SocialSignIn = () => {
-    const { min } = useMinScreen();
+    const { min, max } = useScreen();
+
+    const buttonProps: ButtonProps = {
+        w: "full",
+        size: "lg",
+        fontSize: "sm",
+    } as const;
 
     return (
-        <div tw="grid items-start gap-8">
-            <ul tw="grid w-full grid-flow-col gap-4 sm:grid-flow-row">
-                {[
-                    { name: "Facebook", Icon: ImFacebook, color: "#3b5998" },
-                    { name: "Google", Icon: ImGoogle, color: "#DC4B3C" },
-                    { name: "LinkedIn", Icon: ImLinkedin, color: "#0e76a8" },
-                ].map(({ name, color, Icon }) => (
+        <VStack justify="start" spacing={8}>
+            <Grid tw="w-full gap-4" autoFlow={["column", "row"]} as="ul">
+                {data.map(({ name, Icon }) => (
                     <li key={name}>
-                        <Button
-                            tw="w-full"
-                            icon={<Icon size="20px" />}
-                            text={min`sm` ? `Sign in with ${name}` : undefined}
-                            css={{ backgroundColor: color }}
-                        />
+                        {max`sm` && (
+                            <IconButton
+                                {...buttonProps}
+                                aria-label={name}
+                                icon={<Icon size={28} weight="fill" />}
+                            />
+                        )}
+                        {min`sm` && (
+                            <Button {...buttonProps} leftIcon={<Icon size={28} />}>
+                                Sign In with {name}
+                            </Button>
+                        )}
                     </li>
                 ))}
-            </ul>
-        </div>
+            </Grid>
+        </VStack>
     );
 };
 
@@ -47,7 +70,7 @@ const MaunalFormSignIn = () => {
     });
 
     return (
-        <form tw="grid max-w-sm gap-8" onSubmit={onSubmit}>
+        <form tw="grid gap-8" onSubmit={onSubmit}>
             <InputField
                 name="username"
                 label="Username"
@@ -56,63 +79,44 @@ const MaunalFormSignIn = () => {
                 required
             />
             <InputField name="password" label="Password" type="password" ref={register} required />
-            <label htmlFor="term" tw="flex items-center">
-                <input type="checkbox" name="term" tw="form-checkbox" ref={register} required />
-                <span tw="ml-2 text-sm">
-                    I agree to the{" "}
-                    <a href="" tw="text-teal-500 underline" onClick={() => alert("Add link!!")}>
-                        privacy policy
-                    </a>
-                </span>
+            <label tw="inline-grid gap-2 grid-flow-col justify-start items-center text-sm">
+                <input type="checkbox" name="term" tw="form-checkbox" ref={register} required />I
+                agree to the{" "}
+                <a href="" onClick={() => alert("Add link!!")}>
+                    privacy policy
+                </a>
             </label>
-            <div tw="grid gap-8">
-                <Button
-                    tw="bg-teal-500"
-                    text="Sign In"
-                    type="submit"
-                    icon={<FaSignInAlt />}
-                    iconRight
-                />
-                <div tw="text-sm">
-                    Don‘t have an account?{" "}
-                    <Link href="/signup" passHref>
-                        <a tw="text-teal-500 underline">Click here to register</a>
-                    </Link>
-                </div>
-            </div>
+            <Button w="full" fontSize="sm" size="lg" type="submit" leftIcon={<SignIn size={24} />}>
+                Sign In
+            </Button>
+            <Text fontSize="sm" justifySelf="right">
+                Don‘t have an account?{" "}
+                <Link href="/signup">
+                    <a>register</a>
+                </Link>
+            </Text>
         </form>
     );
 };
 
-const GridContainer = styled.div`
-    ${tw`grid max-w-screen-lg gap-8 p-4 mx-auto place-content-center`};
-    @media (min-width: ${theme`screens.sm` as string}) {
-        ${tw`gap-12`}
-        grid-template-columns: 1fr auto 1fr;
-    }
-`;
-
-const Heading = tw.h1`pb-4 text-5xl`;
-const PageContainer = tw.div`flex items-center justify-center h-screen`;
-
 export default function Login() {
     return (
-        <PageContainer>
+        <Container tw="grid place-items-center h-screen max-w-screen-md">
             <Head>
                 <title>Login – Mentory</title>
             </Head>
-            <GridContainer>
-                <div tw="col-span-full">
-                    <Heading>Sign In</Heading>
-                    <div tw="max-w-sm text-sm text-gray-500">
+            <Grid w="100%" gap={[8, 12]} templateColumns={[null, "1fr auto 1fr"]}>
+                <VStack tw="col-span-full" spacing={4} align="start">
+                    <Heading fontSize="5xl">Sign In</Heading>
+                    <Text maxW="sm" fontSize="sm" color="gray.500">
                         With one of your connected social media account below or with your email and
                         password.
-                    </div>
-                </div>
+                    </Text>
+                </VStack>
                 <SocialSignIn />
-                <div tw="border-b sm:(border-l)" />
+                <Divider orientation="vertical" />
                 <MaunalFormSignIn />
-            </GridContainer>
-        </PageContainer>
+            </Grid>
+        </Container>
     );
 }

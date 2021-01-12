@@ -12,7 +12,7 @@ type TScreen = {
 };
 const defaultValue: Record<string, boolean> = {};
 const ScreensContext = createContext(defaultValue);
-const MinScreenProvider = ({ children, screens }: { children: ReactNode; screens: TScreen[] }) => {
+const ScreenProvider = ({ children, screens }: { children: ReactNode; screens: TScreen[] }) => {
     const [queryMatch, setQueryMatch] = useState({});
 
     useEffect(() => {
@@ -69,16 +69,19 @@ const MinScreenProvider = ({ children, screens }: { children: ReactNode; screens
     return <ScreensContext.Provider value={queryMatch}>{children}</ScreensContext.Provider>;
 };
 
-const useMinScreen = () => {
+const useScreen = () => {
     const context = useContext(ScreensContext);
     if (context === defaultValue) {
-        throw new Error("useMinScreen must be used within a MinScreenProvider");
+        throw new Error("useScreen must be used within a ScreenProvider");
     }
 
+    const min = (size: TemplateStringsArray | string) =>
+        typeof size === "string" ? context[size] : context[size[0]];
+
     return {
-        min: (size: TemplateStringsArray | string) =>
-            typeof size === "string" ? context[size] : context[size[0]],
+        min,
+        max: (size: TemplateStringsArray | string) => !min(size),
     };
 };
 
-export { useMinScreen, MinScreenProvider };
+export { useScreen, ScreenProvider };

@@ -1,1 +1,1 @@
-export * from "./MinScreen";
+export * from "./useScreen";
