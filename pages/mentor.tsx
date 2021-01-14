@@ -10,9 +10,11 @@ import {
     Badge,
     AspectRatio,
     Button,
+    Skeleton,
 } from "@chakra-ui/react";
 import { shuffle, times } from "lodash";
 import { Star } from "phosphor-react";
+import { useState } from "react";
 
 function avatarPath(i: number) {
     return `/svg/avatar-${i}.svg`;
@@ -56,21 +58,31 @@ function Attributes({ title, badges }: AttributesProps) {
 }
 
 function ImageDisplay({ image }: { image: string }) {
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const loaded = () => {
+        setIsImageLoaded(true);
+    };
+
+    return (
+        <Skeleton tw="relative" isLoaded={isImageLoaded}>
+            <AspectRatio tw="relative w-full" ratio={1.2} bgColor="gray.100">
+                <Image src={image} sizes="100%" layout="fill" objectFit="cover" onLoad={loaded} />
+            </AspectRatio>
+            <Button
+                tw="absolute top-4 right-4 bg-trueGray-100"
+                boxShadow="1px 4px 8px 0 rgba(0,0,0,0.1)"
+                rightIcon={<Star tw="text-yellow-500" weight="fill" size={20} />}>
+                4.4
+            </Button>
+        </Skeleton>
+    );
+}
+
+function ImageSection({ image }: { image: string }) {
     return (
         <Flex direction="column">
             {/* sizes=100% is needed here to make next/image work properly */}
-            <Box tw="relative">
-                <AspectRatio tw="relative w-full" ratio={1.2} bgColor="gray.100">
-                    <Image src={image} sizes="100%" layout="fill" objectFit="cover" />
-                </AspectRatio>
-                <Button
-                    tw="absolute top-4 right-4 bg-trueGray-100"
-                    boxShadow="1px 4px 8px 0 rgba(0,0,0,0.1)"
-                    rightIcon={<Star tw="text-yellow-500" weight="fill" size={20} />}>
-                    4.4
-                </Button>
-            </Box>
-
+            <ImageDisplay image={image} />
             <HStack tw="border border-t-0 border-b-0" p={4} pb={0} spacing={2}>
                 <TabButton isActive />
                 <TabButton />
@@ -88,7 +100,7 @@ function Card({ image }: { image: string }) {
             tw="rounded-xl overflow-hidden transition transform hover:(-translate-y-4)"
             maxW="400px"
             boxShadow="1px 4px 16px 0 rgba(0,0,0,0.1)">
-            <ImageDisplay image={image} />
+            <ImageSection image={image} />
 
             <VStack tw="border border-t-0" px={4} py={6} align="start" spacing={4}>
                 <Text tw="w-full text-xs" color="gray.500" mb={-2}>
