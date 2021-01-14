@@ -1,19 +1,25 @@
 import "twin.macro";
 import Image from "next/image";
 import { Box, Flex, VStack, HStack, Grid, Text, Badge, AspectRatio } from "@chakra-ui/react";
-import { times } from "lodash";
+import { shuffle, times } from "lodash";
+
+function avatarPath(i: number) {
+    return `/svg/avatar-${i}.svg`;
+}
 
 type TabButtonProps = {
     isActive?: boolean;
 };
 
 function TabButton({ isActive }: TabButtonProps) {
+    const color = isActive ? "#DC6450" : "gray.400";
     return (
         <Flex
-            tw="border rounded-full w-3 h-3 items-center justify-center"
-            borderColor={isActive ? "#DC6450" : "gray.400"}
-            color={isActive ? "#DC6450" : "gray.400"}>
-            <Box bgColor="currentcolor" rounded="full" w={2} h={2}></Box>
+            tw="border rounded-full w-4 h-4 items-center justify-center"
+            borderColor={color}
+            color={color}
+            _hover={{ cursor: "pointer" }}>
+            <Box bgColor="currentcolor" rounded="full" w={"0.625rem"} h={"0.625rem"}></Box>
         </Flex>
     );
 }
@@ -38,50 +44,46 @@ function Attributes({ title, badges }: AttributesProps) {
     );
 }
 
-function ImageDisplay() {
+function ImageDisplay({ image }: { image: string }) {
     return (
-        <VStack w="full" align="start" spacing={4}>
+        <Flex direction="column">
+            {/* sizes=100% is needed here to make next/image work properly */}
             <AspectRatio tw="relative w-full" ratio={1} bgColor="gray.100">
-                {/* sizes=100% is needed here to make next/image work properly */}
-                <Image src="/svg/avatar.svg" sizes="100%" layout="fill" objectFit="contain" />
+                <Image src={image} sizes="100%" layout="fill" objectFit="contain" />
             </AspectRatio>
-            <HStack px={4} spacing={2}>
+
+            <HStack tw="border border-t-0 border-b-0" p={4} pb={0} spacing={2}>
                 <TabButton isActive />
                 <TabButton />
                 <TabButton />
                 <TabButton />
                 <TabButton />
             </HStack>
-        </VStack>
+        </Flex>
     );
 }
 
-function Card() {
+function Card({ image }: { image: string }) {
     return (
-        <Box tw="border rounded-xl overflow-hidden" maxW="500px">
-            <VStack align="start">
-                <ImageDisplay />
+        <Box tw="rounded-xl overflow-hidden" maxW="400px">
+            <ImageDisplay image={image} />
 
-                <VStack p={4} align="start" spacing={4}>
-                    <Text fontSize="xs" color="gray.500" mb={-2}>
-                        <span tw="text-teal-500">SOFTWARE ENGINEER</span> (OR, USA)
-                    </Text>
-                    <Text tw="leading-none" fontSize="3xl" fontFamily="Raleway" fontWeight="bold">
-                        Norman Gordon
-                    </Text>
-                    <Text noOfLines={5} fontSize="sm" color="gray.500" mb={4} isTruncated>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Congue quisque egestas
-                        diam in arcu. At volutpat diam ut venenatis tellus in metus vulputate eu.
-                        Feugiat pretium nibh ipsum consequat.
-                    </Text>
+            <VStack tw="border border-t-0" px={4} py={6} align="start" spacing={4}>
+                <Text tw="w-full text-xs" color="gray.500" mb={-2}>
+                    <span tw="text-teal-500">SOFTWARE ENGINEER</span> (OR, USA)
+                </Text>
+                <Text tw="leading-none" fontSize="3xl" fontFamily="Raleway" fontWeight="bold">
+                    Norman Gordon
+                </Text>
+                <Text noOfLines={5} fontSize="sm" color="gray.500" mb={4} isTruncated>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua. Congue quisque egestas diam in
+                    arcu. At volutpat diam ut venenatis tellus in metus vulputate eu. Feugiat
+                    pretium nibh ipsum consequat.
+                </Text>
 
-                    <Attributes title="Availability" badges={["40 hours"]} />
-                    <Attributes
-                        title="Focus/skills"
-                        badges={["frontend", "ui/ux", "aws", "react"]}
-                    />
-                </VStack>
+                <Attributes title="Availability" badges={["40 hours"]} />
+                <Attributes title="Focus/skills" badges={["frontend", "ui/ux", "aws", "react"]} />
             </VStack>
         </Box>
     );
@@ -92,7 +94,7 @@ export default function Mentor() {
         <Flex alignItems="stretch">
             <Box
                 display={["none", "block"]}
-                minH={"100vh"}
+                minH="100vh"
                 bgColor="gray.100"
                 w="300px"
                 flexShrink={0}
@@ -101,10 +103,14 @@ export default function Mentor() {
                 tw="gap-8 w-full items-center"
                 p={[4, 8]}
                 justifyItems="center"
+                justifyContent="center"
                 templateColumns="repeat(auto-fit, minmax(320px, 1fr))">
-                {times(3).map((i) => (
-                    <Card key={i} />
-                ))}
+                {shuffle(times(16))
+                    .slice(0, 12)
+                    .map((i) => avatarPath(i))
+                    .map((image) => (
+                        <Card key={image} image={image} />
+                    ))}
             </Grid>
         </Flex>
     );
