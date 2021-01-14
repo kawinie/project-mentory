@@ -1,6 +1,10 @@
-const colors = require("tailwindcss/colors");
-colors.primary = colors.black;
-colors.secondary = colors.gray[500];
+const colorPalette = require("tailwindcss/colors");
+
+const colors = {
+    ...colorPalette,
+    primary: colorPalette.black,
+    secondary: colorPalette.gray[500],
+};
 
 module.exports = {
     darkMode: false, // or 'media' or 'class'

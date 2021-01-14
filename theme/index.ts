@@ -6,6 +6,7 @@ const { base: _, ...breakpointValues } = twconfig.theme.screens;
 
 export default extendTheme({
     breakpoints: createBreakpoints({ ...breakpointValues } as const),
+    colors: { ...twconfig.theme.extend.colors },
     styles: {
         global: {
             a: {
