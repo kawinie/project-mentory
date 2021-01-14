@@ -82,7 +82,10 @@ module.exports = {
 
         // Turn off default no-unused-vars rule and use Typescript version instead
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+        ],
 
         "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
