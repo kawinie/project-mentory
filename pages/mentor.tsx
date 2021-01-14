@@ -1,7 +1,18 @@
 import "twin.macro";
 import Image from "next/image";
-import { Box, Flex, VStack, HStack, Grid, Text, Badge, AspectRatio } from "@chakra-ui/react";
+import {
+    Box,
+    Flex,
+    VStack,
+    HStack,
+    Grid,
+    Text,
+    Badge,
+    AspectRatio,
+    Button,
+} from "@chakra-ui/react";
 import { shuffle, times } from "lodash";
+import { Star } from "phosphor-react";
 
 function avatarPath(i: number) {
     return `/svg/avatar-${i}.svg`;
@@ -48,9 +59,17 @@ function ImageDisplay({ image }: { image: string }) {
     return (
         <Flex direction="column">
             {/* sizes=100% is needed here to make next/image work properly */}
-            <AspectRatio tw="relative w-full" ratio={1} bgColor="gray.100">
-                <Image src={image} sizes="100%" layout="fill" objectFit="contain" />
-            </AspectRatio>
+            <Box tw="relative">
+                <AspectRatio tw="relative w-full" ratio={1.2} bgColor="gray.100">
+                    <Image src={image} sizes="100%" layout="fill" objectFit="cover" />
+                </AspectRatio>
+                <Button
+                    tw="absolute top-4 right-4 bg-trueGray-100"
+                    boxShadow="1px 4px 8px 0 rgba(0,0,0,0.1)"
+                    rightIcon={<Star tw="text-yellow-500" weight="fill" size={20} />}>
+                    4.4
+                </Button>
+            </Box>
 
             <HStack tw="border border-t-0 border-b-0" p={4} pb={0} spacing={2}>
                 <TabButton isActive />
@@ -65,7 +84,10 @@ function ImageDisplay({ image }: { image: string }) {
 
 function Card({ image }: { image: string }) {
     return (
-        <Box tw="rounded-xl overflow-hidden" maxW="400px">
+        <Box
+            tw="rounded-xl overflow-hidden transition transform hover:(-translate-y-4)"
+            maxW="400px"
+            boxShadow="1px 4px 16px 0 rgba(0,0,0,0.1)">
             <ImageDisplay image={image} />
 
             <VStack tw="border border-t-0" px={4} py={6} align="start" spacing={4}>
@@ -91,11 +113,11 @@ function Card({ image }: { image: string }) {
 
 export default function Mentor() {
     return (
-        <Flex alignItems="stretch">
+        <Flex alignItems="stretch" bgColor="trueGray.50">
             <Box
                 display={["none", "block"]}
                 minH="100vh"
-                bgColor="gray.100"
+                bgColor="trueGray.50"
                 w="300px"
                 flexShrink={0}
             />
