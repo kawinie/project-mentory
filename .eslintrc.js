@@ -71,6 +71,10 @@ module.exports = {
         },
     },
     rules: {
+        // Editor
+        "linebreak-style": ["error", "unix"],
+
+        // Code
         "class-methods-use-this": "off",
         "comma-dangle": "off",
         "function-paren-newline": "off",
