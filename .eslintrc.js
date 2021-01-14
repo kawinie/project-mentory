@@ -100,7 +100,7 @@ module.exports = {
         "@typescript-eslint/ban-types": "error",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-empty-interface": "off", // We need this to augment TS interface
         "@typescript-eslint/no-var-requires": "off",
 
         // Import ordering
