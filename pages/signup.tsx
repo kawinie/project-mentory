@@ -65,8 +65,8 @@ type FormData = {
 
 const ManualFormSignUp = () => {
     const { register, handleSubmit, errors } = useForm<FormData>();
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = (userData: any) => {
+        console.log(userData);
     };
 
     return (
