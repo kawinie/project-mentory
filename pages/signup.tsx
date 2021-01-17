@@ -41,8 +41,15 @@ const SocialSignUp = () => {
                         {(max`sm` || min`sm`) && (
                             <IconButton
                                 aria-label={name}
-                                variant="ghost"
-                                icon={<Icon size={38} weight="fill" color={color} />}
+                                variant="link"
+                                icon={
+                                    <Icon
+                                        tw="transform duration-300 transform hover:scale-125"
+                                        size={38}
+                                        weight="fill"
+                                        color={color}
+                                    />
+                                }
                             />
                         )}
                     </li>
