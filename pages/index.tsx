@@ -20,6 +20,11 @@ export default function Home() {
                     Log in
                 </Button>
             </Link>
+            <Link href="/signup" passHref>
+                <Button mt={8} w={32} as="a" _hover={{ textDecor: "none" }}>
+                    Sign up
+                </Button>
+            </Link>
         </Container>
     );
 }
