@@ -10,11 +10,9 @@ import {
     Badge,
     AspectRatio,
     Button,
-    Skeleton,
 } from "@chakra-ui/react";
 import { shuffle, times } from "lodash";
 import { Star } from "phosphor-react";
-import { useState } from "react";
 
 function avatarPath(i: number) {
     return `/svg/avatar-${i}.svg`;
@@ -25,15 +23,13 @@ type TabButtonProps = {
 };
 
 function TabButton({ isActive }: TabButtonProps) {
-    const color = isActive ? "#DC6450" : "gray.400";
     return (
-        <Flex
-            tw="border rounded-full w-4 h-4 items-center justify-center"
-            borderColor={color}
-            color={color}
-            _hover={{ cursor: "pointer" }}>
-            <Box bgColor="currentcolor" rounded="full" w={"0.625rem"} h={"0.625rem"}></Box>
-        </Flex>
+        <Box
+            tw="hover:(cursor-pointer bg-gray-200) active:(bg-white)"
+            rounded="full"
+            w={8}
+            h={2}
+            bgColor={isActive ? "white" : "gray.400"}></Box>
     );
 }
 
@@ -48,7 +44,7 @@ function Attributes({ title, badges }: AttributesProps) {
             <Text tw="uppercase text-xs font-bold">{title}</Text>
             <HStack>
                 {badges.map((text) => (
-                    <Badge key={text} tw="rounded-md px-2 py-1 font-medium" color="gray.500">
+                    <Badge key={text} rounded="full" px={2} py={1} color="gray.500">
                         {text}
                     </Badge>
                 ))}
@@ -58,23 +54,34 @@ function Attributes({ title, badges }: AttributesProps) {
 }
 
 function ImageDisplay({ image }: { image: string }) {
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const loaded = () => {
-        setIsImageLoaded(true);
-    };
-
     return (
-        <Skeleton tw="relative" isLoaded={isImageLoaded}>
-            <AspectRatio tw="relative w-full" ratio={1.2} bgColor="gray.100">
-                <Image src={image} sizes="100%" layout="fill" objectFit="cover" onLoad={loaded} />
+        <Box tw="relative overflow-hidden" className="group">
+            <AspectRatio tw="relative w-full" ratio={4 / 3} bgColor="gray.100">
+                <Image src={image} sizes="100%" layout="fill" objectFit="cover" />
             </AspectRatio>
             <Button
-                tw="absolute top-4 right-4 bg-trueGray-100"
+                tw="absolute top-0 right-0 text-gray-200 rounded-none rounded-bl-xl"
+                bgColor="rgba(0,0,0,0.5)"
                 boxShadow="1px 4px 8px 0 rgba(0,0,0,0.1)"
-                rightIcon={<Star tw="text-yellow-500" weight="fill" size={20} />}>
-                4.4
+                leftIcon={<Star tw="text-yellow-500" weight="fill" size={16} />}
+                fontSize="sm"
+                _hover={{ cursor: "default" }}
+                _active={{}}>
+                4.4 (125)
             </Button>
-        </Skeleton>
+            <HStack
+                tw="absolute bottom-0 w-full border-none transition delay-200 transform opacity-0 translate-y-full group-hover:(translate-y-0 opacity-100)"
+                bgColor="rgba(0,0,0,0.50)"
+                p={4}
+                justify="center"
+                spacing={2}>
+                <TabButton isActive />
+                <TabButton />
+                <TabButton />
+                <TabButton />
+                <TabButton />
+            </HStack>
+        </Box>
     );
 }
 
@@ -83,13 +90,6 @@ function ImageSection({ image }: { image: string }) {
         <Flex direction="column">
             {/* sizes=100% is needed here to make next/image work properly */}
             <ImageDisplay image={image} />
-            <HStack tw="border border-t-0 border-b-0" p={4} pb={0} spacing={2}>
-                <TabButton isActive />
-                <TabButton />
-                <TabButton />
-                <TabButton />
-                <TabButton />
-            </HStack>
         </Flex>
     );
 }
@@ -97,8 +97,8 @@ function ImageSection({ image }: { image: string }) {
 function Card({ image }: { image: string }) {
     return (
         <Box
-            tw="rounded-xl overflow-hidden transition transform hover:(-translate-y-4)"
-            maxW="400px"
+            tw="rounded-xl overflow-hidden"
+            maxW="375px"
             boxShadow="1px 4px 16px 0 rgba(0,0,0,0.1)">
             <ImageSection image={image} />
 
@@ -106,7 +106,7 @@ function Card({ image }: { image: string }) {
                 <Text tw="w-full text-xs" color="gray.500" mb={-2}>
                     <span tw="text-teal-500">SOFTWARE ENGINEER</span> (OR, USA)
                 </Text>
-                <Text tw="leading-none" fontSize="3xl" fontFamily="Raleway" fontWeight="bold">
+                <Text tw="leading-none" fontSize="2xl" fontFamily="Raleway" fontWeight="bold">
                     Norman Gordon
                 </Text>
                 <Text noOfLines={5} fontSize="sm" color="gray.500" mb={4} isTruncated>
