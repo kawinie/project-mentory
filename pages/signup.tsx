@@ -1,7 +1,8 @@
+import Link from "next/link";
 import Head from "next/head";
 import "twin.macro";
 import { useForm } from "react-hook-form";
-import { TwitterLogo, FacebookLogo, LinkedinLogo, UserPlus } from "phosphor-react";
+import { UserPlus } from "phosphor-react";
 import {
     Button,
     ButtonProps,
@@ -12,15 +13,19 @@ import {
     Divider,
     IconButton,
     VStack,
+    HStack,
+    Image,
+    Box,
 } from "@chakra-ui/react";
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
 const data = [
-    { name: "Facebook", Icon: FacebookLogo, color: "facebook" },
-    { name: "Twitter", Icon: TwitterLogo, color: "twitter" },
-    { name: "LinkedIn", Icon: LinkedinLogo, color: "linkedin" },
+    { name: "Google", Icon: Image, source: "/images/google.png" },
+    { name: "Facebook", Icon: Image, source: "/images/facebook.png" },
+    { name: "Twitter", Icon: Image, source: "/images/twitter.png" },
+    { name: "LinkedIn", Icon: Image, source: "/images/linkedin.png" },
 ] as const;
 
 const SocialSignUp = () => {
@@ -35,18 +40,23 @@ const SocialSignUp = () => {
     return (
         <VStack justify="start" spacing={8}>
             <Grid tw="w-full gap-4" autoFlow={["column", "row"]} as="ul">
-                {data.map(({ name, Icon }) => (
+                {data.map(({ name, Icon, source }) => (
                     <li key={name}>
                         {max`sm` && (
                             <IconButton
                                 {...buttonProps}
                                 aria-label={name}
-                                icon={<Icon size={28} weight="fill" />}
+                                icon={
+                                    <Image src={source} style={{ height: "35px", width: "auto" }} />
+                                }
                             />
                         )}
                         {min`sm` && (
-                            <Button {...buttonProps} leftIcon={<Icon size={28} weight="fill" />}>
-                                Sign Up with {name}
+                            <Button {...buttonProps} aria-label={name}>
+                                <HStack justify="start" spacing={8}>
+                                    <Image src={source} style={{ height: "35px", width: "auto" }} />
+                                    <Text>Sign Up with {name}</Text>
+                                </HStack>
                             </Button>
                         )}
                     </li>
@@ -109,31 +119,45 @@ const ManualFormSignUp = () => {
                 fontSize="sm"
                 size="lg"
                 type="submit"
+                colorScheme="purple"
+                // variant="outline"
                 leftIcon={<UserPlus size={24} />}>
                 Sign Up
             </Button>
+            <Text fontSize="sm" justifySelf="right">
+                Do you have an account?{" "}
+                <Link href="/login">
+                    <a>login</a>
+                </Link>
+            </Text>
         </form>
     );
 };
 
 export default function Signup() {
     return (
-        <Container tw="grid place-items-center h-screen max-w-screen-md">
-            <Head>
-                <title>Signup - Mentory</title>
-            </Head>
-            <Grid w="100%" gap={[8, 12]} templateColumns={[null, "1fr auto 1fr"]}>
-                <VStack tw="col-span-full" spacing={4} align="start">
-                    <Heading fontSize="5xl">Sign Up</Heading>
-                    <Text maxw="sm" fontSize="sm" color="gray.500">
-                        With one of your connected social media account below or with your email and
-                        password.
-                    </Text>
-                </VStack>
-                <SocialSignUp />
-                <Divider orientation="vertical" />
-                <ManualFormSignUp />
-            </Grid>
-        </Container>
+        <Box
+            backgroundImage="url('/images/back.png')"
+            backgroundPosition="center"
+            backgroundRepeat="no-repeat"
+            backgroundAttachment="fixed">
+            <Container tw="grid place-items-center h-screen max-w-screen-md">
+                <Head>
+                    <title>Signup - Mentory</title>
+                </Head>
+                <Grid w="100%" gap={[8, 12]} templateColumns={[null, "1fr auto 1fr"]}>
+                    <VStack tw="col-span-full" spacing={4} align="center">
+                        <Heading fontSize="5xl">Welcome to Mentory!</Heading>
+                        <Text maxw="sm" fontSize="sm" color="gray.500">
+                            With one of your connected social media account below or with your email
+                            and password.
+                        </Text>
+                    </VStack>
+                    <SocialSignUp />
+                    <Divider orientation="vertical" />
+                    <ManualFormSignUp />
+                </Grid>
+            </Container>
+        </Box>
     );
 }
