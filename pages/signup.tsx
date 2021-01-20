@@ -15,6 +15,7 @@ import {
 import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
 import { useForm } from "react-hook-form";
 
+import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
 const socialMediaData = [
@@ -91,24 +92,41 @@ const ManualFormSignUp = () => {
 };
 
 export default function Signup() {
+    const { min, max } = useScreen();
     return (
-        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-            <Container tw="grid place-items-center h-screen max-w-screen-md bg-gray-200	">
-                <Image
-                    src="https://ideas.ted.com/wp-content/uploads/sites/3/2018/09/featured_art_mentor_istock.jpg"
-                    alt="Mentory"
-                />
-            </Container>
-            <Container tw="grid place-items-center h-screen max-w-screen-md">
-                <Head>
-                    <title>Sign Up – Mentory</title>
-                </Head>
-                <Heading>Create an Account</Heading>
-                <SocialSignUp />
-                <Text>OR</Text>
-                <Divider orientation="horizontal" />
-                <ManualFormSignUp />
-            </Container>
-        </Grid>
+        <div>
+            {max`sm` && (
+                <Container tw="grid place-items-center h-screen max-w-screen-md">
+                    <Head>
+                        <title>Sign Up – Mentory</title>
+                    </Head>
+                    <Heading>Create an Account</Heading>
+                    <SocialSignUp />
+                    <Text>OR</Text>
+                    <Divider orientation="horizontal" />
+                    <ManualFormSignUp />
+                </Container>
+            )}
+            {min`sm` && (
+                <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+                    <Image
+                        tw="h-full"
+                        src="https://cdn.sanity.io/images/0vv8moc6/neurolive/888fc79ce09841ce925491db217304f536a9bd5d-1200x1200.jpg?auto=format"
+                        objectFit="fill"
+                        alt="Mentory"
+                    />
+                    <Container tw="grid place-items-center h-screen max-w-screen-md">
+                        <Head>
+                            <title>Sign Up – Mentory</title>
+                        </Head>
+                        <Heading>Create an Account</Heading>
+                        <SocialSignUp />
+                        <Text>OR</Text>
+                        <Divider orientation="horizontal" />
+                        <ManualFormSignUp />
+                    </Container>
+                </Grid>
+            )}
+        </div>
     );
 }
