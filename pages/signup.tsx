@@ -117,14 +117,22 @@ const ManualFormSignUp = () => {
 
 export default function Signup() {
     return (
-        <Flex minHeight="100vh" width="full" align="center" justifyContent="center">
+        <Flex
+            minHeight="100vh"
+            width="full"
+            align="center"
+            justifyContent="center"
+            backgroundImage="url('/images/background.png')"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="center">
             <Box
                 borderWidth={1}
                 px={10}
                 width="full"
                 maxWidth="500px"
                 borderRadius={8}
-                boxShadow="lg">
+                boxShadow="lg"
+                bg="white">
                 <Box textAlign="center" my={4}>
                     <Heading>Create Account</Heading>
                     <Text maxW="md" fontSize="sm" color="gray.500" mt={4}>
