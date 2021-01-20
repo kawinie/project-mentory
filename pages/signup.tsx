@@ -33,8 +33,8 @@ const SocialSignUp = () => {
     } as const;
 
     return (
-        <VStack>
-            <Grid tw="w-full gap-8" autoFlow={["column", "row"]} as="ul">
+        <VStack justify="start" spacing={8}>
+            <Grid tw="w-full gap-4" autoFlow={["column", "row"]} as="ul">
                 {data.map(({ name, Icon }) => (
                     <li key={name}>
                         {max`sm` && (
@@ -45,7 +45,7 @@ const SocialSignUp = () => {
                             />
                         )}
                         {min`sm` && (
-                            <Button {...buttonProps} leftIcon={<Icon size={28} />}>
+                            <Button {...buttonProps} leftIcon={<Icon size={28} weight="fill" />}>
                                 Sign Up with {name}
                             </Button>
                         )}
@@ -122,9 +122,9 @@ export default function Signup() {
             <Head>
                 <title>Signup - Mentory</title>
             </Head>
-            <Grid w="100%" gap={[8, 12]} templateColumns="1fr auto 1fr">
+            <Grid w="100%" gap={[8, 12]} templateColumns={[null, "1fr auto 1fr"]}>
                 <VStack tw="col-span-full" spacing={4} align="start">
-                    <Heading>Sign Up</Heading>
+                    <Heading fontSize="5xl">Sign Up</Heading>
                     <Text maxw="sm" fontSize="sm" color="gray.500">
                         With one of your connected social media account below or with your email and
                         password.
