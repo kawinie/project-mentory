@@ -14,17 +14,20 @@ import {
 } from "@chakra-ui/react";
 import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
 const socialMediaData = [
-    { name: "Facebook", Icon: FacebookLogo, color: "facebook" },
-    { name: "Twitter", Icon: TwitterLogo, color: "twitter" },
-    { name: "LinkedIn", Icon: LinkedinLogo, color: "linkedin" },
+    { name: "Facebook", Icon: FacebookLogo, color: "facebook", index: 0 },
+    { name: "Twitter", Icon: TwitterLogo, color: "twitter", index: 1 },
+    { name: "LinkedIn", Icon: LinkedinLogo, color: "linkedin", index: 2 },
 ] as const;
 
 const SocialSignUp = () => {
+    const [hover, setHover] = useState([false, false, false]);
+
     const buttonProps: ButtonProps = {
         w: "full",
         size: "lg",
@@ -33,13 +36,23 @@ const SocialSignUp = () => {
 
     return (
         <Grid templateColumns="repeat(3, 1fr)" gap={6} as="ul">
-            {socialMediaData.map(({ name, Icon, color }) => (
+            {socialMediaData.map(({ name, Icon, color, index }) => (
                 <li key={name}>
                     <IconButton
                         {...buttonProps}
                         aria-label={name}
                         icon={<Icon size={35} weight="fill" />}
-                        colorScheme={color}
+                        onMouseOver={() => {
+                            const newHover = [...hover];
+                            newHover[index] = true;
+                            setHover(newHover);
+                        }}
+                        onMouseOut={() => {
+                            const newHover = [...hover];
+                            newHover[index] = false;
+                            setHover(newHover);
+                        }}
+                        colorScheme={hover[index] ? color : "gray"}
                         isRound={true}
                     />
                 </li>
