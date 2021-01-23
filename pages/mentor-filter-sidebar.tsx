@@ -120,10 +120,11 @@ const MentorFilterSidebar = (props: MentorFilterSidebarProps) => {
             spacing={8}
             h="85vh"
             w="260px"
-            tw="border-gray-200 border-2 bottom-0"
+            tw="border-gray-200 border-2 bottom-0 break-words"
             position="fixed"
             align="start"
-            overflow="auto">
+            overflowY="auto"
+            overflowX="hidden">
             <FilterTitle />
             <FilterComponent title="Categories" icon={DotsNine} elements={categories} />
             <FilterComponent title="Tags" icon={Tag} elements={tags} />
