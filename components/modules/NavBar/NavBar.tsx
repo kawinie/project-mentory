@@ -12,8 +12,10 @@ import {
     MenuDivider,
     MenuGroup,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import SearchBar from "material-ui-search-bar";
+
+import { useScreen } from "hooks";
 
 type TNavBarProps = {
     name: string;
@@ -21,6 +23,7 @@ type TNavBarProps = {
 
 export function NavBar(props: TNavBarProps) {
     const [value, setValue] = useState("");
+    const { min, max } = useScreen();
 
     return (
         <Flex
@@ -42,31 +45,61 @@ export function NavBar(props: TNavBarProps) {
                 onChange={(newValue) => setValue(newValue)}
                 onRequestSearch={() => alert(value)}
             />
-            <Box>
-                <Link px={4} color="black">
-                    Be Mentor
-                </Link>
-                <Menu>
-                    <MenuButton
-                        tw="m-2"
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                        colorScheme="purple">
-                        Hi, {props.name}!
-                    </MenuButton>
-                    <MenuList>
-                        <MenuGroup title="Profile">
-                            <MenuItem>My Account</MenuItem>
-                            <MenuItem>Payments </MenuItem>
-                        </MenuGroup>
-                        <MenuDivider />
-                        <MenuGroup title="Help">
-                            <MenuItem>Docs</MenuItem>
-                            <MenuItem>FAQ</MenuItem>
-                        </MenuGroup>
-                    </MenuList>
-                </Menu>
-            </Box>
+            {max`sm` && (
+                <Box>
+                    <Menu>
+                        <MenuButton tw="m-2" as={Button} colorScheme="purple">
+                            <HamburgerIcon />
+                        </MenuButton>
+                        <MenuList>
+                            <MenuGroup title="Profile">
+                                <MenuItem>My Account</MenuItem>
+                                <MenuItem>Payments </MenuItem>
+                            </MenuGroup>
+                            <MenuDivider />
+                            <MenuGroup title="Join">
+                                <MenuItem>Be a Mentor</MenuItem>
+                            </MenuGroup>
+                            <MenuDivider />
+                            <MenuGroup title="Help">
+                                <MenuItem>Docs</MenuItem>
+                                <MenuItem>FAQ</MenuItem>
+                            </MenuGroup>
+                        </MenuList>
+                    </Menu>
+                </Box>
+            )}
+            {min`sm` && (
+                <Box>
+                    <Link px={4} color="black">
+                        Be a Mentor
+                    </Link>
+                    <Menu>
+                        <MenuButton
+                            tw="m-2"
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}
+                            colorScheme="purple">
+                            Hi, {props.name}!
+                        </MenuButton>
+                        <MenuList>
+                            <MenuGroup title="Profile">
+                                <MenuItem>My Account</MenuItem>
+                                <MenuItem>Payments </MenuItem>
+                            </MenuGroup>
+                            <MenuDivider />
+                            <MenuGroup title="Join">
+                                <MenuItem>Be a Mentor</MenuItem>
+                            </MenuGroup>
+                            <MenuDivider />
+                            <MenuGroup title="Help">
+                                <MenuItem>Docs</MenuItem>
+                                <MenuItem>FAQ</MenuItem>
+                            </MenuGroup>
+                        </MenuList>
+                    </Menu>
+                </Box>
+            )}
         </Flex>
     );
 }
