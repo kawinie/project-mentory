@@ -44,6 +44,7 @@ export function NavBar(props: TNavBarProps) {
                 value={value}
                 onChange={(newValue) => setValue(newValue)}
                 onRequestSearch={() => alert(value)}
+                onCancelSearch={() => setValue("")}
             />
             {max`sm` && (
                 <Box>
@@ -86,10 +87,6 @@ export function NavBar(props: TNavBarProps) {
                             <MenuGroup title="Profile">
                                 <MenuItem>My Account</MenuItem>
                                 <MenuItem>Payments </MenuItem>
-                            </MenuGroup>
-                            <MenuDivider />
-                            <MenuGroup title="Join">
-                                <MenuItem>Be a Mentor</MenuItem>
                             </MenuGroup>
                             <MenuDivider />
                             <MenuGroup title="Help">
