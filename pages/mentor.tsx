@@ -7,12 +7,16 @@ import {
     HStack,
     Grid,
     Text,
+    Link,
     Badge,
     AspectRatio,
     Button,
 } from "@chakra-ui/react";
 import { shuffle, times } from "lodash";
 import { Star } from "phosphor-react";
+
+import { NavBar } from "components/modules/NavBar";
+import { MentorFilterSidebar } from "components/modules/MentorFilterSidebar";
 
 function avatarPath(i: number) {
     return `/svg/avatar-${i}.svg`;
@@ -98,7 +102,7 @@ function Card({ image }: { image: string }) {
     return (
         <Box
             tw="rounded-xl overflow-hidden"
-            maxW="375px"
+            maxW="300px"
             boxShadow="1px 4px 16px 0 rgba(0,0,0,0.1)">
             <ImageSection image={image} />
 
@@ -126,26 +130,45 @@ function Card({ image }: { image: string }) {
 export default function Mentor() {
     return (
         <Flex alignItems="stretch" bgColor="trueGray.50">
-            <Box
-                display={["none", "block"]}
-                minH="100vh"
-                bgColor="trueGray.50"
-                w="300px"
-                flexShrink={0}
-            />
-            <Grid
-                tw="gap-8 w-full items-center"
-                p={[4, 8]}
-                justifyItems="center"
-                justifyContent="center"
-                templateColumns="repeat(auto-fit, minmax(320px, 1fr))">
-                {shuffle(times(16))
-                    .slice(0, 12)
-                    .map((i) => avatarPath(i))
-                    .map((image) => (
-                        <Card key={image} image={image} />
-                    ))}
-            </Grid>
+            <VStack>
+                <NavBar name="John" />
+                <HStack w="100vw" pt="80px">
+                    <Box
+                        display={["none", "block"]}
+                        minH="100vh"
+                        bgColor="trueGray.50"
+                        w="300px"
+                        flexShrink={0}>
+                        <MentorFilterSidebar />
+                    </Box>
+                    <VStack tw="w-full">
+                        <HStack tw="w-full">
+                            <Text tw="text-2xl" color="primary">
+                                Search Results For &quot;programming&quot;
+                            </Text>
+                            <Link href="/mentor" color="purple" tw="pl-4 text-sm underline">
+                                x Clear All Fileters
+                            </Link>
+                        </HStack>
+                        <Text tw="w-full text-xs" color="primary">
+                            32 RESULTS
+                        </Text>
+                        <Grid
+                            tw="gap-4 w-full items-center"
+                            p={[4, 8]}
+                            justifyItems="center"
+                            justifyContent="center"
+                            templateColumns="repeat(auto-fit, minmax(300px, 1fr))">
+                            {shuffle(times(16))
+                                .slice(0, 12)
+                                .map((i) => avatarPath(i))
+                                .map((image) => (
+                                    <Card key={image} image={image} />
+                                ))}
+                        </Grid>
+                    </VStack>
+                </HStack>
+            </VStack>
         </Flex>
     );
 }

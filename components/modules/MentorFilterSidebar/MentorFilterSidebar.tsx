@@ -86,14 +86,14 @@ const FilterComponent = (props: FilterComponentProps) => {
     );
 };
 
-type MentorFilterSidebarProps = {
-    categories: { category: string; numCats: number }[];
-    tags: { tag: string; numTags: number }[];
-    availabilities: { availability: string; numAvails: number }[];
-    stars: number[];
-};
+// type MentorFilterSidebarProps = {
+//     categories: { category: string; numCats: number }[];
+//     tags: { tag: string; numTags: number }[];
+//     availabilities: { availability: string; numAvails: number }[];
+//     stars: number[];
+// };
 
-const MentorFilterSidebar = (props: MentorFilterSidebarProps) => {
+export const MentorFilterSidebar = () => {
     // Dummy data:
     const categories = [
         { name: "Software Engineering", num: 32 },
@@ -118,7 +118,7 @@ const MentorFilterSidebar = (props: MentorFilterSidebarProps) => {
     return (
         <VStack
             spacing={8}
-            h="85vh"
+            h="93vh"
             w="260px"
             tw="border-gray-200 border-2 bottom-0 break-words"
             position="fixed"
@@ -133,5 +133,3 @@ const MentorFilterSidebar = (props: MentorFilterSidebarProps) => {
         </VStack>
     );
 };
-
-export default MentorFilterSidebar;
