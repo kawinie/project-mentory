@@ -134,7 +134,7 @@ export default function Mentor() {
                 <NavBar name="John" />
                 <HStack w="100vw" pt="80px">
                     <Box
-                        display={["none", "block"]}
+                        display="block"
                         minH="100vh"
                         bgColor="trueGray.50"
                         w="300px"
@@ -147,7 +147,7 @@ export default function Mentor() {
                                 Search Results For &quot;programming&quot;
                             </Text>
                             <Link href="/mentor" color="purple" tw="pl-4 text-sm underline">
-                                x Clear All Fileters
+                                x Clear All Filters
                             </Link>
                         </HStack>
                         <Text tw="w-full text-xs" color="primary">

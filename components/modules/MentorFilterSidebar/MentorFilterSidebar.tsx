@@ -1,5 +1,20 @@
 import "twin.macro";
-import { HStack, VStack, Text, Divider, Icon, Checkbox, Tag as Bubble } from "@chakra-ui/react";
+import {
+    HStack,
+    VStack,
+    Text,
+    Divider,
+    Icon,
+    IconButton,
+    Checkbox,
+    Tag as Bubble,
+    Drawer,
+    DrawerContent,
+    useDisclosure,
+    Tab,
+    Tabs,
+    TabList,
+} from "@chakra-ui/react";
 import {
     Sliders,
     DotsNine,
@@ -8,8 +23,11 @@ import {
     HourglassHigh,
     IconProps,
     Star,
+    ArrowLeft,
 } from "phosphor-react";
 import React from "react";
+
+import { useScreen } from "hooks";
 
 const FilterTitle = () => {
     return (
@@ -93,7 +111,12 @@ const FilterComponent = (props: FilterComponentProps) => {
 //     stars: number[];
 // };
 
+// Will use props type above once we stop using dummy data
+
 export const MentorFilterSidebar = () => {
+    const { min, max } = useScreen();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
     // Dummy data:
     const categories = [
         { name: "Software Engineering", num: 32 },
@@ -116,20 +139,76 @@ export const MentorFilterSidebar = () => {
     const stars = [13, 24, 21, 45, 32];
 
     return (
-        <VStack
-            spacing={8}
-            h="93vh"
-            w="260px"
-            tw="border-gray-200 border-2 bottom-0 break-words"
-            position="fixed"
-            align="start"
-            overflowY="auto"
-            overflowX="hidden">
-            <FilterTitle />
-            <FilterComponent title="Categories" icon={DotsNine} elements={categories} />
-            <FilterComponent title="Tags" icon={Tag} elements={tags} />
-            <FilterComponent title="Availability" icon={HourglassHigh} elements={availabilities} />
-            <AverageReviews stars={stars} />
-        </VStack>
+        <>
+            {max`sm` && (
+                <>
+                    <Tabs
+                        orientation="vertical"
+                        isFitted={true}
+                        variant="enclosed-colored"
+                        colorScheme="purple"
+                        tw="top-80 left-0 fixed">
+                        <TabList>
+                            <Tab onClick={onOpen}>Filters</Tab>
+                        </TabList>
+                    </Tabs>
+                    <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+                        <DrawerContent>
+                            <VStack
+                                spacing={8}
+                                h="100vh"
+                                w="100vh"
+                                tw="border-gray-200 border-2 bottom-0 break-words"
+                                position="fixed"
+                                align="start"
+                                overflowY="auto"
+                                overflowX="hidden">
+                                <HStack paddingTop="20px" paddingLeft="10px">
+                                    <IconButton
+                                        onClick={onClose}
+                                        aria-label="Left"
+                                        icon={<Icon as={ArrowLeft} />}
+                                    />
+                                    <FilterTitle />
+                                </HStack>
+                                <FilterComponent
+                                    title="Categories"
+                                    icon={DotsNine}
+                                    elements={categories}
+                                />
+                                <FilterComponent title="Tags" icon={Tag} elements={tags} />
+                                <FilterComponent
+                                    title="Availability"
+                                    icon={HourglassHigh}
+                                    elements={availabilities}
+                                />
+                                <AverageReviews stars={stars} />
+                            </VStack>
+                        </DrawerContent>
+                    </Drawer>
+                </>
+            )}
+            {min`sm` && (
+                <VStack
+                    spacing={8}
+                    h="88vh"
+                    w="260px"
+                    tw="border-gray-200 border-2 bottom-0 break-words"
+                    position="fixed"
+                    align="start"
+                    overflowY="auto"
+                    overflowX="hidden">
+                    <FilterTitle />
+                    <FilterComponent title="Categories" icon={DotsNine} elements={categories} />
+                    <FilterComponent title="Tags" icon={Tag} elements={tags} />
+                    <FilterComponent
+                        title="Availability"
+                        icon={HourglassHigh}
+                        elements={availabilities}
+                    />
+                    <AverageReviews stars={stars} />
+                </VStack>
+            )}
+        </>
     );
 };
