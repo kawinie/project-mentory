@@ -17,15 +17,17 @@ import {
     Image,
     Box,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
 const data = [
-    { name: "Google", Icon: Image, source: "/images/google.png" },
-    { name: "Facebook", Icon: Image, source: "/images/facebook.png" },
-    { name: "Twitter", Icon: Image, source: "/images/twitter.png" },
-    { name: "LinkedIn", Icon: Image, source: "/images/linkedin.png" },
+    { name: "Google", source: "/svg/google.svg" },
+    { name: "Facebook", source: "/svg/facebook.svg" },
+    { name: "Twitter", source: "/svg/twitter.svg" },
+    { name: "LinkedIn", source: "/svg/linkedin.svg" },
 ] as const;
 
 const SocialSignUp = () => {
@@ -40,7 +42,7 @@ const SocialSignUp = () => {
     return (
         <VStack justify="start" spacing={8}>
             <Grid tw="w-full gap-4" autoFlow={["column", "row"]} as="ul">
-                {data.map(({ name, Icon, source }) => (
+                {data.map(({ name, source }) => (
                     <li key={name}>
                         {max`sm` && (
                             <IconButton
@@ -73,10 +75,28 @@ type FormData = {
     term: boolean;
 };
 
+const schema = z.object({
+    email: z
+        .string()
+        .nonempty({ message: "Required" })
+        .email({ message: "This has to be an email address" }),
+    username: z.string().nonempty({ message: "Required" }),
+    password: z
+        .string()
+        .nonempty({ message: "Required" })
+        .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
+            message:
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character",
+        }),
+});
+
 const ManualFormSignUp = () => {
-    const { register, handleSubmit, errors } = useForm<FormData>();
-    const onSubmit = (userData: any) => {
-        console.log(userData);
+    const { register, handleSubmit, errors } = useForm({
+        resolver: zodResolver(schema),
+    });
+
+    const onSubmit = (userData: FormData) => {
+        alert(userData);
     };
 
     return (
@@ -86,25 +106,25 @@ const ManualFormSignUp = () => {
                 label="Email address"
                 helperText="foobar@abc.com"
                 ref={register}
-                required
             />
-            <InputField
-                name="username"
-                label="Username"
-                helperText="johndoe123"
-                ref={register}
-                required
-            />
+            {errors.email?.message && (
+                <span tw="flex justify-start text-xs text-purple-500">{errors.email?.message}</span>
+            )}
+            <InputField name="username" label="Username" helperText="johndoe123" ref={register} />
+            {errors.username?.message && (
+                <span tw="flex justify-start text-xs text-purple-500">
+                    {errors.username?.message}
+                </span>
+            )}
             <InputField
                 name="password"
                 label="Password"
                 type="password"
                 ref={register({ minLength: 8 })}
-                required
             />
             {errors.password && (
-                <span tw="flex justify-start text-xs text-gray-500">
-                    Password must be at least 8 chracters long
+                <span tw="flex justify-start text-xs text-purple-500">
+                    {errors.password?.message}
                 </span>
             )}
             <label tw="inline-grid gap-2 grid-flow-col justify-start items-center text-sm">
