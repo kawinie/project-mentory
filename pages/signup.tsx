@@ -1,23 +1,17 @@
 import Link from "next/link";
-import Head from "next/head";
 import "twin.macro";
 import { useForm } from "react-hook-form";
 import { TwitterLogo, FacebookLogo, LinkedinLogo, UserPlus } from "phosphor-react";
 import {
     Box,
     Button,
-    ButtonProps,
-    Container,
     Flex,
     FormControl,
-    FormLabel,
     Grid,
     Text,
     Heading,
     Divider,
     IconButton,
-    Input,
-    Stack,
     VStack,
 } from "@chakra-ui/react";
 
@@ -34,7 +28,7 @@ const SocialSignUp = () => {
     const { min, max } = useScreen();
 
     return (
-        <VStack justify="start" mt={8}>
+        <VStack justify="start" mt={6}>
             <Grid tw="w-full gap-10" autoFlow={["column"]} as="ul" justifyContent="center">
                 {data.map(({ name, Icon, color }) => (
                     <li key={name}>
@@ -66,7 +60,7 @@ const ManualFormSignUp = () => {
     });
 
     return (
-        <Box my={2}>
+        <Box>
             <form tw="grid gap-8" onSubmit={onSubmit}>
                 <FormControl>
                     <InputField
@@ -104,7 +98,7 @@ const ManualFormSignUp = () => {
                     leftIcon={<UserPlus size={24} />}>
                     Create Account
                 </Button>
-                <Text fontSize="sm" justifySelf="right">
+                <Text fontSize="sm" justifySelf="right" mb={8}>
                     Already have an account?{" "}
                     <Link href="/login">
                         <a>login</a>
