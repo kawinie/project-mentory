@@ -1,30 +1,23 @@
-import Link from "next/link";
-import Head from "next/head";
 import "twin.macro";
-import { useForm } from "react-hook-form";
-import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
-import { css, jsx, keyframes } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import {
     Box,
-    Button,
-    ButtonProps,
-    Container,
     Flex,
     Grid,
     Text,
-    Heading,
-    Divider,
-    IconButton,
-    VStack,
+    Image,
     UnorderedList,
     ListItem,
 } from "@chakra-ui/react";
 
-import { useScreen } from "hooks";
-import { InputField } from "components/units/InputField";
 import { NavBar } from "components/modules/NavBar";
 
-const colors = require("tailwindcss/colors");
+const categories = [
+    { name: "Coding", picture: "/images/coding.png", color: "#2f323b" },
+    { name: "Coding", picture: "/images/coding.png", color: "#2f323b" },
+    { name: "Coding", picture: "/images/coding.png", color: "#2f323b" },
+    { name: "Coding", picture: "/images/coding.png", color: "#2f323b" },
+] as const;
 
 const animate = keyframes`
     0%{
@@ -69,21 +62,22 @@ export default function Landing() {
     return (
         <Flex tw="p-0 h-screen" direction="column">
             <NavBar name="Toshiki" />
-            <Box h="100%" w="100%">
+            <Box h="100%" w="100%" color="#2f323b">
                 <Grid
                     top="50%"
-                    tw="absolute h-auto w-4/5 m-auto left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-7xl text-center overflow-hidden">
-                    <Text tw="relative flex w-full text-center justify-center overflow-hidden">
+                    fontSize="3.5vw"
+                    tw="absolute h-auto w-4/5 m-auto left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                    <Text tw="relative flex w-full text-center justify-center">
                         Get Quality Mentorship For Your
                         <div
                             css={css`
                                 position: relative;
-                                height: 85px;
+                                height: 100px;
                                 width: auto;
                                 overflow: hidden;
                             `}>
-                            <ul
-                                tw="relative ml-5 p-0 text-left overflow-hidden"
+                            <UnorderedList
+                                tw="relative p-0 w-full ml-5 text-left flex-wrap align-top justify-center items-center"
                                 css={css`
                                     animation: ${animate} 15s linear infinite;
                                 `}>
@@ -94,15 +88,39 @@ export default function Landing() {
                                 <li tw="list-none h-28 text-green-500">Self</li>
                                 <li tw="list-none h-28 text-purple-500">Business</li>
                                 <li tw="list-none h-28 text-red-500">Team</li>
-                            </ul>
+                            </UnorderedList>
                         </div>
                     </Text>
                 </Grid>
             </Box>
-            <Box backgroundColor="F8FAFC">
-                <Grid backgroundColor="F8FAFC">
-                    <Text tw="absolute left-1/4 text-4xl">Categories</Text>
-                </Grid>
+            <Box backgroundColor="F8FAFC" tw="m-0 p-0">
+                <Text tw="relative w-full text-center justify-center items-center text-5xl top-full h-full">
+                    Categories
+                </Text>
+                <Box tw="absolute w-full top-full bg-white flex flex-wrap justify-around items-center mt-16 h-1/2">
+                    {categories.map(({ name, picture, color }) => (
+                        <Box
+                            key={name}
+                            css={css`
+                                min-width: 350px;
+                                max-width: 350px;
+                                height: 350px;
+                                border-radius: 10px;
+                                box-shadow: 2px 10px 12px rgba(0, 0, 0, 0.5);
+                                justify-content: center;
+                                align-items: center;
+                                display: flex;
+                                flex-direction: column;
+                                :hover {
+                                    transform: scale(1.03);
+                                }
+                            `}
+                            bg={color}>
+                            <Image src={picture} tw="align-top" />
+                            <Text tw="text-2xl text-white mt-5">{name}</Text>
+                        </Box>
+                    ))}
+                </Box>
             </Box>
         </Flex>
     );

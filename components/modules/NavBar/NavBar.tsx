@@ -72,6 +72,21 @@ export function NavBar(props: TNavBarProps) {
             )}
             {min`sm` && (
                 <Box>
+                    <Menu>
+                        <MenuButton
+                            tw="w-24 text-sm mr-64"
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}>
+                            Category
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem>Design</MenuItem>
+                            <MenuItem>Programming</MenuItem>
+                            <MenuItem>Business</MenuItem>
+                            <MenuItem>Makeup</MenuItem>
+                            <MenuItem>Life</MenuItem>
+                        </MenuList>
+                    </Menu>
                     <Link px={4} color="black">
                         Be a Mentor
                     </Link>
