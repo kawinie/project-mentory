@@ -68,7 +68,7 @@ const ManualFormSignUp = () => {
     });
 
     return (
-        <form tw="grid gap-8" onSubmit={onSubmit}>
+        <form tw="grid gap-8 w-96" onSubmit={onSubmit}>
             <InputField
                 name="username"
                 label="Username"
