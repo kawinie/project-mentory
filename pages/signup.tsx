@@ -96,7 +96,7 @@ const ManualFormSignUp = () => {
     });
 
     const onSubmit = (userData: FormData) => {
-        alert(userData);
+        alert(JSON.stringify(userData));
     };
 
     return (
