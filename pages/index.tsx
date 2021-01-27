@@ -10,7 +10,11 @@ export default function Home() {
             <Head>
                 <title>{title}</title>
             </Head>
-            <Heading fontSize="5xl">Mentory</Heading>
+            <Heading fontSize="5xl">
+                <Link href="/landing" passHref>
+                    Mentory
+                </Link>
+            </Heading>
             <Text mt={8} color="gray.500" align="center">
                 Mentory is an innovative online platform where people can get mentored by real
                 industry experts in real-time instead of taking boring online courses.
