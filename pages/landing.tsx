@@ -1,14 +1,6 @@
 import "twin.macro";
 import { css, keyframes } from "@emotion/react";
-import {
-    Box,
-    Flex,
-    Grid,
-    Text,
-    Image,
-    UnorderedList,
-    ListItem,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, Image, UnorderedList, ListItem } from "@chakra-ui/react";
 
 import { NavBar } from "components/modules/NavBar";
 
