@@ -20,6 +20,12 @@ export default function Home() {
                     Log in
                 </Button>
             </Link>
+
+            <Link href="/mentor" passHref>
+                <Button mt={8} w={32} as="a" _hover={{ textDecor: "none" }}>
+                    Card
+                </Button>
+            </Link>
         </Container>
     );
 }

@@ -6,15 +6,20 @@ const { base: _, ...breakpointValues } = twconfig.theme.screens;
 
 export default extendTheme({
     breakpoints: createBreakpoints({ ...breakpointValues } as const),
+    colors: { ...twconfig.theme.extend.colors },
     styles: {
         global: {
             a: {
-                color: "#805AD5",
+                color: "purple.500",
                 _hover: {
                     color: "purple.700",
                     textDecoration: "underline",
                 },
             },
         },
+    },
+    fonts: {
+        heading: "Roboto",
+        body: "Roboto",
     },
 });
