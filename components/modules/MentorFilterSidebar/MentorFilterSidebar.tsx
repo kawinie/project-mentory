@@ -147,9 +147,9 @@ export const MentorFilterSidebar = () => {
                         isFitted={true}
                         variant="enclosed-colored"
                         colorScheme="purple"
-                        tw="top-80 left-0 fixed">
+                        tw="transform rotate-90 top-64 left--6 fixed">
                         <TabList>
-                            <Tab onClick={onOpen}>Filters</Tab>
+                            <Tab onClick={onOpen}>Filter</Tab>
                         </TabList>
                     </Tabs>
                     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -191,9 +191,9 @@ export const MentorFilterSidebar = () => {
             {min`sm` && (
                 <VStack
                     spacing={8}
-                    h="88vh"
+                    h="93vh"
                     w="260px"
-                    tw="border-gray-200 border-2 bottom-0 break-words"
+                    tw="border-gray-200 border-r-2 bottom-0 break-words"
                     position="fixed"
                     align="start"
                     overflowY="auto"

@@ -134,13 +134,14 @@ export default function Mentor() {
                 <NavBar name="John" />
                 <HStack w="100vw" pt="80px">
                     <Box
-                        display="block"
+                        display={["none", "block"]}
                         minH="100vh"
                         bgColor="trueGray.50"
                         w="300px"
-                        flexShrink={0}>
-                        <MentorFilterSidebar />
-                    </Box>
+                        flexShrink={0}
+                        tw="m-0"
+                    />
+                    <MentorFilterSidebar tw="h-full" />
                     <VStack tw="w-full">
                         <HStack tw="w-full">
                             <Text tw="text-2xl" color="primary">
