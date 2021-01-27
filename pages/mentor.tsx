@@ -141,7 +141,7 @@ export default function Mentor() {
                         flexShrink={0}
                         tw="m-0"
                     />
-                    <MentorFilterSidebar tw="h-full" />
+                    <MentorFilterSidebar />
                     <VStack tw="w-full">
                         <HStack tw="w-full">
                             <Text tw="text-2xl" color="primary">

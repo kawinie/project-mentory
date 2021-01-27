@@ -193,7 +193,7 @@ export const MentorFilterSidebar = () => {
                     spacing={8}
                     h="93vh"
                     w="260px"
-                    tw="border-gray-200 border-r-2 bottom-0 break-words"
+                    tw="pt-10 border-gray-200 border-r-2 bottom-0 break-words"
                     position="fixed"
                     align="start"
                     overflowY="auto"
