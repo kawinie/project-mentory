@@ -2,12 +2,13 @@ import { AppProps } from "next/app";
 import { ReactElement } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
 import { ChakraProvider } from "@chakra-ui/react";
+import withData from "../utils/apollo";
 
 import { ScreenProvider } from "hooks";
 import theme from "theme";
 import Fonts from "theme/fonts";
 
-export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
+function MyApp({ Component, pageProps }: AppProps): ReactElement {
     return (
         <ScreenProvider screens={tailwindTheme`screens`}>
             <GlobalStyles />
@@ -18,3 +19,5 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactElement 
         </ScreenProvider>
     );
 }
+
+export default withData(MyApp);
