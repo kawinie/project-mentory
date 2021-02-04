@@ -25,7 +25,7 @@ export default function Home() {
                 </Button>
             </Link>
 
-            <Link href="/mentor" passHref>
+            <Link href="/mentor-listing" passHref>
                 <Button mt={8} w={32} as="a" _hover={{ textDecor: "none" }}>
                     Card
                 </Button>

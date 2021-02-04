@@ -27,6 +27,7 @@ export function NavBar(props: TNavBarProps) {
 
     return (
         <Flex
+            tw="shadow-md z-10"
             bg="white"
             w="100%"
             h="70px"
@@ -34,8 +35,7 @@ export function NavBar(props: TNavBarProps) {
             py={4}
             justifyContent="space-between"
             alignItems="center"
-            position="fixed"
-            tw="z-10">
+            top="0">
             <Link href="/" fontSize="3xl" pl={3} color="black" tw="font-medium">
                 Mentory
             </Link>
