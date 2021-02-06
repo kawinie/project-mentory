@@ -3,6 +3,7 @@ import { css, keyframes } from "@emotion/react";
 import { Box, Flex, Grid, Text, Image, UnorderedList, ListItem } from "@chakra-ui/react";
 
 import { NavBar } from "components/modules/NavBar";
+import { SearchBar } from "components/units/SearchBar";
 
 const categories = [
     { name: "Coding", picture: "/images/coding.png", color: "#2f323b" },
@@ -53,7 +54,7 @@ const animate = keyframes`
 export default function Landing() {
     return (
         <Flex tw="p-0 h-screen" direction="column">
-            <NavBar name="Toshiki" />
+            <NavBar name="John" />
             <Box h="100%" w="100%" color="#2f323b">
                 <Grid
                     top="50%"

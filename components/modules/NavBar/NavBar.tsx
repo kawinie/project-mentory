@@ -1,9 +1,9 @@
-import { useState } from "react";
 import "twin.macro";
 import {
     Box,
     Button,
     Flex,
+    HStack,
     Link,
     Menu,
     MenuButton,
@@ -13,8 +13,9 @@ import {
     MenuGroup,
 } from "@chakra-ui/react";
 import { HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import SearchBar from "material-ui-search-bar";
+import { User } from "phosphor-react";
 
+import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
 
 type TNavBarProps = {
@@ -22,34 +23,46 @@ type TNavBarProps = {
 };
 
 export function NavBar(props: TNavBarProps) {
-    const [value, setValue] = useState("");
     const { min, max } = useScreen();
 
     return (
         <Flex
-            tw="shadow-md z-10"
+            tw="shadow-md z-20"
             bg="white"
             w="100%"
             h="70px"
             px={5}
             py={4}
-            justifyContent="space-between"
             alignItems="center"
-            top="0">
-            <Link href="/" fontSize="3xl" pl={3} color="black" tw="font-medium">
-                Mentory
-            </Link>
-            <SearchBar
-                tw="w-2/6"
-                value={value}
-                onChange={(newValue) => setValue(newValue)}
-                onRequestSearch={() => alert(value)}
-                onCancelSearch={() => setValue("")}
-            />
+            position="relative">
             {max`sm` && (
-                <Box>
+                <HStack spacing={5} tw="flex align-middle w-full justify-center items-center">
+                    <Link href="/" fontSize="2xl" color="black" tw="font-medium m-auto text-center">
+                        Mentory
+                    </Link>
+                    <HStack
+                        spacing={5}
+                        tw="relative flex w-2/3 justify-center items-center self-center">
+                        <SearchBar label="search" name="search" placeholder="Search..." />
+                        <Menu>
+                            <MenuButton
+                                tw="inline-block h-12 text-sm text-left min-w-min"
+                                as={Button}
+                                variant="outline"
+                                rightIcon={<ChevronDownIcon />}>
+                                Categories
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem>Design</MenuItem>
+                                <MenuItem>Programming</MenuItem>
+                                <MenuItem>Business</MenuItem>
+                                <MenuItem>Makeup</MenuItem>
+                                <MenuItem>Life</MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </HStack>
                     <Menu>
-                        <MenuButton tw="m-2" as={Button} colorScheme="purple">
+                        <MenuButton tw="w-1/4 h-12" as={Button} variant="outline">
                             <HamburgerIcon />
                         </MenuButton>
                         <MenuList>
@@ -59,6 +72,7 @@ export function NavBar(props: TNavBarProps) {
                             </MenuGroup>
                             <MenuDivider />
                             <MenuGroup title="Join">
+                                <MenuItem>Find a Mentor</MenuItem>
                                 <MenuItem>Be a Mentor</MenuItem>
                             </MenuGroup>
                             <MenuDivider />
@@ -68,34 +82,47 @@ export function NavBar(props: TNavBarProps) {
                             </MenuGroup>
                         </MenuList>
                     </Menu>
-                </Box>
+                </HStack>
             )}
             {min`sm` && (
-                <Box>
-                    <Menu>
-                        <MenuButton
-                            tw="w-24 text-sm mr-64"
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}>
-                            Category
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem>Design</MenuItem>
-                            <MenuItem>Programming</MenuItem>
-                            <MenuItem>Business</MenuItem>
-                            <MenuItem>Makeup</MenuItem>
-                            <MenuItem>Life</MenuItem>
-                        </MenuList>
-                    </Menu>
-                    <Link px={4} color="black">
-                        Be a Mentor
+                <HStack tw="flex w-full justify-between items-center">
+                    <Link href="/" fontSize="4xl" color="black" tw="font-medium pr-5">
+                        Mentory
                     </Link>
+                    <HStack spacing={5} tw="relative flex w-2/3 justify-center items-center">
+                        <SearchBar label="search" name="search" placeholder="Search..." />
+                        <Menu>
+                            <MenuButton
+                                tw="inline-block h-12 text-sm text-left min-w-min"
+                                as={Button}
+                                variant="outline"
+                                rightIcon={<ChevronDownIcon />}>
+                                Categories
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem>Design</MenuItem>
+                                <MenuItem>Programming</MenuItem>
+                                <MenuItem>Business</MenuItem>
+                                <MenuItem>Makeup</MenuItem>
+                                <MenuItem>Life</MenuItem>
+                            </MenuList>
+                        </Menu>
+                        <Box tw="relative flex justify-center items-center align-middle">
+                            <Link px={4} tw="underline" color="black">
+                                Find a Mentor
+                            </Link>
+                            <Link px={4} color="black">
+                                Be a Mentor
+                            </Link>
+                        </Box>
+                    </HStack>
                     <Menu>
                         <MenuButton
-                            tw="m-2"
+                            tw="min-w-min h-12"
                             as={Button}
+                            leftIcon={<User size={30} />}
                             rightIcon={<ChevronDownIcon />}
-                            colorScheme="purple">
+                            bg="white">
                             Hi, {props.name}!
                         </MenuButton>
                         <MenuList>
@@ -110,7 +137,7 @@ export function NavBar(props: TNavBarProps) {
                             </MenuGroup>
                         </MenuList>
                     </Menu>
-                </Box>
+                </HStack>
             )}
         </Flex>
     );
