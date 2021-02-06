@@ -21,7 +21,7 @@ const ScreenProvider = ({ children, screens }: { children: ReactNode; screens: T
 
         const mediaData = Object.entries(screens).map(([name, media]) => [
             name,
-            `(min-width: ${media})`,
+            `only screen and (min-width: ${media})`,
         ]);
 
         const handleQueryListener = () => {
@@ -53,7 +53,12 @@ const ScreenProvider = ({ children, screens }: { children: ReactNode; screens: T
 
             mediaData.forEach(([name, media]) => {
                 if (typeof media !== "string") return;
-                mediaQueryLists[name].onchange = handleQueryListener;
+                try {
+                    mediaQueryLists[name].addEventListener("change", handleQueryListener);
+                } catch {
+                    // Support for Safari <= 13
+                    mediaQueryLists[name].addListener(handleQueryListener);
+                }
             });
         }
 
@@ -61,7 +66,12 @@ const ScreenProvider = ({ children, screens }: { children: ReactNode; screens: T
             if (!isAttached) return;
             mediaData.forEach(([name, media]) => {
                 if (typeof media !== "string") return;
-                mediaQueryLists[name].onchange = null;
+                try {
+                    mediaQueryLists[name].removeEventListener("change", handleQueryListener);
+                } catch {
+                    // Support for Safari <= 13
+                    mediaQueryLists[name].removeListener(handleQueryListener);
+                }
             });
         };
     }, [screens]);
