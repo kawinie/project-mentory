@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import "twin.macro";
 import { useForm } from "react-hook-form";
 import { UserPlus } from "phosphor-react";
@@ -22,6 +23,8 @@ import * as z from "zod";
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
+
+import { registerUser } from "../lib/auth";
 
 const data = [
     { name: "Google", source: "/svg/google.svg" },
@@ -91,12 +94,15 @@ const schema = z.object({
 });
 
 const ManualFormSignUp = () => {
+    const router = useRouter();
+
     const { register, handleSubmit, errors } = useForm({
         resolver: zodResolver(schema),
     });
 
     const onSubmit = (userData: FormData) => {
-        alert(JSON.stringify(userData));
+        registerUser(userData.username, userData.email, userData.password);
+        router.push("/landing");
     };
 
     return (
