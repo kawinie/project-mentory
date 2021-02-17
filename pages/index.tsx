@@ -5,6 +5,10 @@ import { Button, Container, Heading, Text } from "@chakra-ui/react";
 
 import { MentorCard, MentorCardProps } from "components/modules/MentorCard";
 
+/* -------------------------------------------------------------------------- */
+/*                                  Mock Data                                 */
+/* -------------------------------------------------------------------------- */
+
 const mentor: Omit<MentorCardProps, "variant"> = {
     fullname: "Bjarne Stroustrup",
     profileImg: "/images/bjarne.jpg",
@@ -30,6 +34,10 @@ const mentor: Omit<MentorCardProps, "variant"> = {
         "In 1979, Stroustrup began his career as a member of technical staff in the Computer Science Research Center of Bell Labs in Murray Hill, New Jersey, USA. There, he began his work on C++ and programming techniques",
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                    Home                                    */
+/* -------------------------------------------------------------------------- */
+
 export default function Home() {
     const title = `Mentory ${process.env.NODE_ENV == "development" ? "(development)" : ""}`;
     return (
@@ -54,7 +62,7 @@ export default function Home() {
 
             <Link href="/mentor-listing" passHref>
                 <Button mt={8} w={32} as="a" _hover={{ textDecor: "none" }}>
-                    Card
+                    Mentor List
                 </Button>
             </Link>
             <MentorCard {...mentor} variant="desktop" />

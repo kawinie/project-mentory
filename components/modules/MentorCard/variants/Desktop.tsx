@@ -1,5 +1,4 @@
 import {} from "twin.macro";
-import { useState, useCallback } from "react";
 import {
     Grid,
     GridProps,
@@ -13,26 +12,172 @@ import {
     Checkbox,
     Text,
 } from "@chakra-ui/react";
-import { Heart, MapPin, Circle, Rss } from "phosphor-react";
+import { MapPin, Circle, Rss } from "phosphor-react";
 import Link from "next/link";
 
-import { ProfileImage, StatGroup, Badge, ScrollableText } from "../components";
+import { ProfileImage, StatGroup, Badge, AutoScrollText, LikeButton } from "../components";
 
 import { MentorCardProps } from "./Base";
 
-export function Desktop({
-    fullname,
-    location,
-    profileImg,
-    badge,
+/* -------------------------------------------------------------------------- */
+/*                                Helper Types                                */
+/* -------------------------------------------------------------------------- */
+
+interface TopLevelGridArea {
+    gridArea: "profile" | "tags" | "main" | "view";
+}
+
+type TopLevelGridItem<T> = T & TopLevelGridArea;
+
+export function pick<T extends unknown, K extends keyof T>(base: T, ...keys: K[]): Pick<T, K> {
+    const entries = keys.map((key) => [key, base[key]]);
+    return Object.fromEntries(entries);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               Profile Section                              */
+/* -------------------------------------------------------------------------- */
+
+export function ProfileSection({
+    img,
+    gridArea,
+}: TopLevelGridItem<{ img: MentorCardProps["profileImg"] }>) {
+    return (
+        <VStack gridArea={gridArea} position="relative">
+            <ProfileImage url={img} />
+            {/* alignContent only works with flexWap = "wrap" | "wrap-reverse" */}
+            <Checkbox
+                w="full"
+                alignContent="start"
+                justifyContent="center"
+                flexGrow={1}
+                flexWrap="wrap">
+                <span tw="text-sm text-secondary">Compare</span>
+            </Checkbox>
+        </VStack>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Tags Section                                */
+/* -------------------------------------------------------------------------- */
+
+export function TagSection({
     tags,
+    gridArea,
+}: TopLevelGridItem<{ tags: MentorCardProps["tags"] }>) {
+    return (
+        <HStack gridArea={gridArea} justify="start" spacing={2} overflow="hidden">
+            {tags.map((t) => (
+                <Tag
+                    key={t}
+                    textTransform="capitalize"
+                    bg="transparent"
+                    border="1px"
+                    borderColor="fade"
+                    fontWeight="normal"
+                    color="secondary"
+                    rounded="full"
+                    fontSize="xs"
+                    flexShrink={0}>
+                    {t}
+                </Tag>
+            ))}
+        </HStack>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Main Section                                */
+/* -------------------------------------------------------------------------- */
+
+export function MainSection({
+    fullname,
+    badge,
     expInYears,
     stories,
     short,
+    location,
+}: TopLevelGridItem<
+    Pick<MentorCardProps, "fullname" | "location" | "expInYears" | "stories" | "short" | "badge">
+>) {
+    return (
+        <VStack gridArea="main" alignItems="start" spacing={4}>
+            {/* Name */}
+            <HStack alignItems="center">
+                <Heading as="h2" fontSize="2xl">
+                    {fullname}
+                </Heading>
+                <Badge text={badge} />
+            </HStack>
+
+            {/* Secondary Info */}
+            <HStack
+                divider={<Circle tw="text-secondary mx-2" weight="fill" size={4} />}
+                overflow="hidden">
+                <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
+                    <MapPin tw="mr-1" size={20} />
+                    <Link href="/" passHref>
+                        <a>{location}</a>
+                    </Link>
+                </Tag>
+                <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
+                    {`${expInYears < 1 ? "<" : ""} ${expInYears}${expInYears > 1 ? "+" : ""} years`}
+                </Tag>
+                <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">
+                    <Rss tw="animate-pulse flex-shrink-0 mr-1" size={20} />
+                    <TagLabel>
+                        <AutoScrollText text={stories} />
+                    </TagLabel>
+                </Tag>
+            </HStack>
+
+            {/* Short summary or content */}
+            <Text fontSize="sm" color="secondary" isTruncated noOfLines={3}>
+                {short}
+            </Text>
+
+            {/* Action Buttons */}
+            <HStack w="full" justifyContent="end" flexGrow={1} alignContent="end" wrap="wrap">
+                <span tw="text-xs text-secondary underline">Available to meet now</span>
+                <Button fontWeight="medium" minW="100px">
+                    Make Appointment
+                </Button>
+                <Button fontWeight="medium" minW="100px" colorScheme="blueGray">
+                    View
+                </Button>
+            </HStack>
+        </VStack>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Stat Section                                */
+/* -------------------------------------------------------------------------- */
+
+export function StatSection({
+    gridArea,
+    direction,
     avgRating,
     noReviews,
     noEndorsements,
-}: MentorCardProps) {
+}: TopLevelGridItem<
+    Pick<MentorCardProps, "avgRating" | "noReviews" | "noEndorsements"> & {
+        direction: "column" | "row";
+    }
+>) {
+    return (
+        <Flex gridArea={gridArea}>
+            <StatGroup {...{ direction, avgRating, noReviews, noEndorsements }} />
+        </Flex>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   Desktop                                  */
+/* -------------------------------------------------------------------------- */
+
+export function Desktop({ profileImg, tags, ...props }: MentorCardProps) {
     const grid_layout: GridProps = {
         templateAreas: `
             "profile tags tags"
@@ -51,103 +196,16 @@ export function Desktop({
         rounded: "md",
     };
 
+    const main = pick(props, "fullname", "location", "badge", "expInYears", "stories", "short");
+    const stat = pick(props, "avgRating", "noReviews", "noEndorsements");
+
     return (
-        <Grid {...grid_layout} {...grid_styles} width={800}>
-            {/* Profile Image */}
-            <VStack gridArea="profile">
-                <ProfileImage url={profileImg} />
-
-                {/* alignContent only works with flexWap = "wrap" | "wrap-reverse" */}
-                <Checkbox
-                    w="full"
-                    alignContent="start"
-                    justifyContent="center"
-                    flexGrow={1}
-                    flexWrap="wrap">
-                    <span tw="text-sm text-secondary">Compare</span>
-                </Checkbox>
-
-                <Button w="full" size="md" fontWeight="medium" leftIcon={<Heart size={20} />}>
-                    Like
-                </Button>
-            </VStack>
-
-            {/* Tags */}
-            <HStack gridArea="tags" justify="start" spacing={2} overflow="hidden">
-                {tags.map((t) => (
-                    <Tag
-                        key={t}
-                        textTransform="capitalize"
-                        bg="transparent"
-                        border="1px"
-                        borderColor="fade"
-                        fontWeight="normal"
-                        color="secondary"
-                        rounded="full"
-                        fontSize="xs"
-                        flexShrink={0}>
-                        {t}
-                    </Tag>
-                ))}
-            </HStack>
-
-            {/* Main */}
-            <VStack gridArea="main" alignItems="start" spacing={4}>
-                <HStack alignItems="center">
-                    <Heading as="h2" fontSize="2xl">
-                        {fullname}
-                    </Heading>
-                    <Badge text={badge} />
-                </HStack>
-
-                {/* Secondary Info */}
-                <HStack
-                    divider={<Circle tw="text-secondary mx-2" weight="fill" size={4} />}
-                    overflow="hidden">
-                    <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
-                        <MapPin tw="mr-1" size={20} />
-                        <Link href="/" passHref>
-                            <a>{location}</a>
-                        </Link>
-                    </Tag>
-                    <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
-                        {`${expInYears} years`}
-                    </Tag>
-                    <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">
-                        <Rss tw="animate-pulse flex-shrink-0 mr-1" size={20} />
-                        <TagLabel>
-                            <ScrollableText text={stories} />
-                        </TagLabel>
-                    </Tag>
-                </HStack>
-
-                {/* Content */}
-                <Text fontSize="sm" color="secondary" flexGrow={1} isTruncated noOfLines={3}>
-                    {short}
-                </Text>
-
-                {/* Action Buttons */}
-                <HStack w="full" justifyContent="end">
-                    <span tw="text-xs text-secondary underline">Available to meet now</span>
-                    <Button fontWeight="medium" minW="100px">
-                        Make Appointment
-                    </Button>
-                    <Button fontWeight="medium" minW="100px">
-                        View
-                    </Button>
-                </HStack>
-            </VStack>
-
-            <Flex gridArea="view">
-                <StatGroup
-                    direction="column"
-                    {...{
-                        avgRating,
-                        noReviews,
-                        noEndorsements,
-                    }}
-                />
-            </Flex>
+        <Grid {...grid_layout} {...grid_styles} width={800} position="relative">
+            <LikeButton top={0} right={0} isLiked={false} />
+            <ProfileSection gridArea="profile" img={profileImg} />
+            <TagSection gridArea="tags" tags={tags} />
+            <MainSection gridArea="main" {...main} />
+            <StatSection gridArea="view" direction="column" {...stat} />
         </Grid>
     );
 }
