@@ -2,6 +2,9 @@ import { extendTheme } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 
 import twconfig from "tailwind.config.js";
+
+import { Button } from "./components/Button";
+
 const { base: _, ...breakpointValues } = twconfig.theme.screens;
 
 export default extendTheme({
@@ -10,9 +13,9 @@ export default extendTheme({
     styles: {
         global: {
             a: {
-                color: "purple.500",
+                color: "purple.700",
                 _hover: {
-                    color: "purple.700",
+                    color: "purple.500",
                     textDecoration: "underline",
                 },
             },
@@ -22,4 +25,8 @@ export default extendTheme({
         heading: "Roboto",
         body: "Roboto",
     },
+
+    // components: {
+    //     Button,
+    // },
 });

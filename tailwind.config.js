@@ -2,8 +2,8 @@ const colorPalette = require("tailwindcss/colors");
 
 const colors = {
     ...colorPalette,
-    primary: colorPalette.black,
-    secondary: colorPalette.gray[500],
+    primary: colorPalette.coolGray[900],
+    secondary: colorPalette.coolGray[500],
 };
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
             base: "0px",
             // => @media (min-width: 0px) { ... }
 
-            sm: "640px",
+            sm: "480px",
             // => @media (min-width: 640px) { ... }
 
             md: "768px",
