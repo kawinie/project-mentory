@@ -26,6 +26,8 @@ export default extendTheme({
         body: "Roboto",
     },
 
+    fontSizes: { ...twconfig.theme.fontSize },
+
     // components: {
     //     Button,
     // },
