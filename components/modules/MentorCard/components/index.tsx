@@ -191,17 +191,21 @@ export function AutoScrollText({ text }: { text?: string }) {
         if (node !== null) setEnableScrolling(node.scrollWidth > node.clientWidth);
     }, []);
     return (
-        <motion.p
-            ref={detectShouldAutoScrollRef}
-            animate={scrollingEnabled && { x: "-50%" }}
-            transition={{
-                repeat: Infinity,
-                duration: Math.max(1, (text ?? "").length / 10),
-                repeatType: "reverse",
-                repeatDelay: 2,
-            }}>
-            {text}
-        </motion.p>
+        <div tw="relative">
+            {/* Gradient Overlay for fading to right (transparent to white)*/}
+            <div tw="w-full h-full absolute top-0 z-10 bg-gradient-to-r from-transparent via-transparent to-white" />
+            <motion.p
+                ref={detectShouldAutoScrollRef}
+                animate={scrollingEnabled && { x: "-50%" }}
+                transition={{
+                    repeat: Infinity,
+                    duration: Math.max(1, (text ?? "").length / 10),
+                    repeatType: "reverse",
+                    repeatDelay: 2,
+                }}>
+                {text}
+            </motion.p>
+        </div>
     );
 }
 

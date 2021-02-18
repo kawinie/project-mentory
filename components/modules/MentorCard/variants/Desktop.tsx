@@ -125,7 +125,7 @@ export function MainSection({
                     {`${expInYears < 1 ? "<" : ""} ${expInYears}${expInYears > 1 ? "+" : ""} years`}
                 </Tag>
                 <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">
-                    <Rss tw="animate-pulse flex-shrink-0 mr-1" size={20} />
+                    <Rss tw="animate-pulse flex-shrink-0 mr-1" size={20} mirrored={true} />
                     <TagLabel>
                         <AutoScrollText text={stories} />
                     </TagLabel>
