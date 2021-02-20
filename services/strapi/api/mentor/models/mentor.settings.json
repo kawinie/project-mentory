@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mentors",
+  "info": {
+    "name": "Mentor",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "userInfo": {
+      "model": "user-info"
+    },
+    "exp": {
+      "type": "string"
+    }
+  }
+}

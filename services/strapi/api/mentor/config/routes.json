@@ -3,7 +3,7 @@
     {
       "method": "GET",
       "path": "/mentors",
-      "handler": "mentors.find",
+      "handler": "mentor.find",
       "config": {
         "policies": []
       }
@@ -11,7 +11,7 @@
     {
       "method": "GET",
       "path": "/mentors/count",
-      "handler": "mentors.count",
+      "handler": "mentor.count",
       "config": {
         "policies": []
       }
@@ -19,7 +19,7 @@
     {
       "method": "GET",
       "path": "/mentors/:id",
-      "handler": "mentors.findOne",
+      "handler": "mentor.findOne",
       "config": {
         "policies": []
       }
@@ -27,7 +27,7 @@
     {
       "method": "POST",
       "path": "/mentors",
-      "handler": "mentors.create",
+      "handler": "mentor.create",
       "config": {
         "policies": []
       }
@@ -35,7 +35,7 @@
     {
       "method": "PUT",
       "path": "/mentors/:id",
-      "handler": "mentors.update",
+      "handler": "mentor.update",
       "config": {
         "policies": []
       }
@@ -43,7 +43,7 @@
     {
       "method": "DELETE",
       "path": "/mentors/:id",
-      "handler": "mentors.delete",
+      "handler": "mentor.delete",
       "config": {
         "policies": []
       }

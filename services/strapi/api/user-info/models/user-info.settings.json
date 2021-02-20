@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_infos",
+  "info": {
+    "name": "UserInfo",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "firstname": {
+      "type": "string",
+      "required": true
+    },
+    "lastname": {
+      "type": "string",
+      "required": true
+    },
+    "city": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "profession": {
+      "type": "string"
+    },
+    "about": {
+      "type": "text"
+    },
+    "avgReviewScore": {
+      "type": "decimal",
+      "max": 5,
+      "min": 0
+    },
+    "tags": {
+      "collection": "tag"
+    },
+    "country": {
+      "type": "string"
+    },
+    "badges": {
+      "collection": "badge"
+    },
+    "profileImg": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    }
+  }
+}
