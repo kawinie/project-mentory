@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "name": "Review",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "score": {
+      "type": "integer",
+      "required": true,
+      "max": 5,
+      "min": 1
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "fromUser": {
+      "model": "user-info"
+    },
+    "toUser": {
+      "model": "user-info"
+    }
+  }
+}
