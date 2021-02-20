@@ -1,7 +1,9 @@
 import "twin.macro";
 import { Grid, GridProps } from "@chakra-ui/react";
 
-import { ProfileSection, TagSection, MainSection, StatSection, pick } from "./Desktop";
+import { pick } from "utils";
+
+import { ProfileSection, TagSection, MainSection, StatSection } from "./Desktop";
 import { MentorCardProps } from "./Base";
 
 // TODO: Implement mobile layout when I have time
@@ -24,8 +26,8 @@ export function Mobile({ profileImg, tags, ...props }: MentorCardProps) {
         rounded: "md",
     };
 
-    const main = pick(props, "fullname", "location", "badge", "expInYears", "stories", "short");
-    const stat = pick(props, "avgRating", "noReviews", "noEndorsements");
+    const main = pick(props, "fullname", "location", "badge", "expInYears", "status", "brief");
+    const stat = pick(props, "avgReviewScore", "noReviews", "noEndorsements");
 
     return (
         <Grid {...grid_layout} {...grid_styles} width={800}>

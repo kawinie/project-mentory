@@ -6,17 +6,17 @@ export type MentorCardProps = {
 
     location: string;
     expInYears: number;
-    stories?: string;
+    status?: string;
 
     tags: string[];
-    avgRating: number;
+    avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 
     profileImg?: string;
     profileUrl?: string;
 
-    short: string;
+    brief: string;
 
     variant: "mobile" | "desktop";
 };

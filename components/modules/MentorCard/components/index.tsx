@@ -1,6 +1,6 @@
 import "twin.macro";
 import Image from "next/image";
-import { ReactElement, useMemo, useCallback, useState } from "react";
+import { ReactElement, useMemo, useCallback, useState, SyntheticEvent } from "react";
 import {
     Stack,
     StackDivider,
@@ -9,55 +9,16 @@ import {
     IconButton,
     IconButtonProps,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { motion, Variant } from "framer-motion";
 import { Star, UserRectangle, ChatTeardropText, User, Heart } from "phosphor-react";
-import ColorThief from "color-thief";
 import { css } from "@emotion/css";
+import ColorThief from "color-thief";
+
+import { rgbToHsl } from "utils";
 
 /* -------------------------------------------------------------------------- */
 /*                                Profile Image                               */
 /* -------------------------------------------------------------------------- */
-
-// const rgbToHex = (r: number, g: number, b: number) =>
-//     `#${[r, g, b]
-//         .map((x) => {
-//             const hex = x.toString(16);
-//             return hex.length === 1 ? "0" + hex : hex;
-//         })
-//         .join("")}`;
-
-function rgbToHsl(r: number, g: number, b: number) {
-    (r /= 255), (g /= 255), (b /= 255);
-
-    const max = Math.max(r, g, b),
-        min = Math.min(r, g, b);
-    let h = 0;
-    let s = 0;
-    const l = (max + min) / 2;
-
-    if (max == min) {
-        h = s = 0; // achromatic
-    } else {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
-        switch (max) {
-            case r:
-                h = (g - b) / d + (g < b ? 6 : 0);
-                break;
-            case g:
-                h = (b - r) / d + 2;
-                break;
-            case b:
-                h = (r - g) / d + 4;
-                break;
-        }
-
-        h /= 6;
-    }
-
-    return [h * 360, s * 100, l * 100];
-}
 
 /**
  * Conditionally render a placeholder profile image
@@ -65,6 +26,18 @@ function rgbToHsl(r: number, g: number, b: number) {
  */
 export function ProfileImage({ url }: { url?: string }) {
     const [hsl, setHsl] = useState([0, 0, 0]);
+    if (url == undefined) return <UserRectangle />;
+
+    const [hue, sat, light] = hsl;
+    const onload = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+        const colorThief = new ColorThief();
+        const rgb = colorThief.getColor(e.currentTarget);
+        if (rgb) {
+            const [r, g, b] = rgb;
+            setHsl(rgbToHsl(r, g, b));
+        }
+    };
+
     return (
         <AspectRatio
             w="100%"
@@ -72,23 +45,9 @@ export function ProfileImage({ url }: { url?: string }) {
             rounded="md"
             overflow="hidden"
             className={css`
-                box-shadow: 0 12px 24px -5px hsla(${hsl[0]}, ${Math.min(hsl[1] + 50, 100)}%, ${hsl[2]}%, 0.25);
+                box-shadow: 0 12px 24px -5px hsla(${hue}, ${Math.min(sat + 50, 100)}%, ${light}%, 0.25);
             `}>
-            {url != undefined ? (
-                <Image
-                    src={url}
-                    sizes="100%"
-                    layout="fill"
-                    objectFit="cover"
-                    onLoad={(e) => {
-                        const colorThief = new ColorThief();
-                        const rgb = colorThief.getColor(e.target);
-                        setHsl(rgbToHsl(rgb[0], rgb[1], rgb[2]));
-                    }}
-                />
-            ) : (
-                <UserRectangle />
-            )}
+            <Image src={url} sizes="100%" layout="fill" objectFit="cover" onLoad={onload} />
         </AspectRatio>
     );
 }
@@ -133,15 +92,16 @@ function makeStats(avgRating: number, noReviews: number, noEndorsements: number)
 
 export type StatGroupProps = {
     direction: "column" | "row";
-    avgRating: number;
+    avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 };
 
 export function StatGroup({ direction, ...rest }: StatGroupProps) {
-    const stats = useMemo(() => makeStats(rest.avgRating, rest.noReviews, rest.noEndorsements), [
-        rest,
-    ]);
+    const stats = useMemo(
+        () => makeStats(rest.avgReviewScore, rest.noReviews, rest.noEndorsements),
+        [rest]
+    );
 
     return (
         <Stack
@@ -193,7 +153,7 @@ export function AutoScrollText({ text }: { text?: string }) {
     return (
         <div tw="relative">
             {/* Gradient Overlay for fading to right (transparent to white)*/}
-            <div tw="w-full h-full absolute top-0 z-10 bg-gradient-to-r from-transparent via-transparent to-white" />
+            <div tw="w-full h-full absolute top-0 z-10 background[linear-gradient(90deg, rgba(255,255,255,0) 75%, white 100%)]" />
             <motion.p
                 ref={detectShouldAutoScrollRef}
                 animate={scrollingEnabled && { x: "-50%" }}
@@ -201,7 +161,7 @@ export function AutoScrollText({ text }: { text?: string }) {
                     repeat: Infinity,
                     duration: Math.max(1, (text ?? "").length / 10),
                     repeatType: "reverse",
-                    repeatDelay: 2,
+                    repeatDelay: 3,
                 }}>
                 {text}
             </motion.p>
@@ -212,6 +172,28 @@ export function AutoScrollText({ text }: { text?: string }) {
 /* -------------------------------------------------------------------------- */
 /*                                 Like Button                                */
 /* -------------------------------------------------------------------------- */
+
+const HeartIcon = ({ isLiked }: { isLiked: boolean }) => {
+    type State = "liked" | "notLiked";
+    const states: Record<State, Variant> = {
+        liked: {
+            scale: 1.2,
+            rotateY: 180,
+        },
+        notLiked: {
+            scale: 0.9,
+            rotateY: 0,
+        },
+    };
+
+    const likedState: State = isLiked ? "liked" : "notLiked";
+
+    return (
+        <motion.div animate={likedState} variants={states} transition={{ type: "spring" }}>
+            <Heart color={isLiked ? "#F43F5E" : "black"} weight={isLiked ? "fill" : "regular"} />
+        </motion.div>
+    );
+};
 
 export function LikeButton({
     isLiked,
@@ -228,8 +210,9 @@ export function LikeButton({
             borderBottomLeftRadius={4}
             aria-label="Like"
             fontSize={24}
-            icon={liked ? <Heart color={"#F43F5E"} weight="fill" /> : <Heart />}
+            icon={<HeartIcon isLiked={liked} />}
             onClick={() => setLiked((like) => !like)}
+            bg="transparent"
         />
     );
 }

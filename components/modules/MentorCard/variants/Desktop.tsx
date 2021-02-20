@@ -1,4 +1,4 @@
-import {} from "twin.macro";
+import "twin.macro";
 import {
     Grid,
     GridProps,
@@ -15,6 +15,8 @@ import {
 import { MapPin, Circle, Rss } from "phosphor-react";
 import Link from "next/link";
 
+import { pick } from "utils";
+
 import { ProfileImage, StatGroup, Badge, AutoScrollText, LikeButton } from "../components";
 
 import { MentorCardProps } from "./Base";
@@ -29,11 +31,6 @@ interface TopLevelGridArea {
 
 type TopLevelGridItem<T> = T & TopLevelGridArea;
 
-export function pick<T extends unknown, K extends keyof T>(base: T, ...keys: K[]): Pick<T, K> {
-    const entries = keys.map((key) => [key, base[key]]);
-    return Object.fromEntries(entries);
-}
-
 /* -------------------------------------------------------------------------- */
 /*                               Profile Section                              */
 /* -------------------------------------------------------------------------- */
@@ -46,13 +43,8 @@ export function ProfileSection({
         <VStack gridArea={gridArea} position="relative">
             <ProfileImage url={img} />
             {/* alignContent only works with flexWap = "wrap" | "wrap-reverse" */}
-            <Checkbox
-                w="full"
-                alignContent="start"
-                justifyContent="center"
-                flexGrow={1}
-                flexWrap="wrap">
-                <span tw="text-sm text-secondary">Compare</span>
+            <Checkbox w="full" alignContent="start" justifyContent="center" flexWrap="wrap">
+                <span tw="text-sm text-secondary z-10">Compare</span>
             </Checkbox>
         </VStack>
     );
@@ -95,11 +87,11 @@ export function MainSection({
     fullname,
     badge,
     expInYears,
-    stories,
-    short,
+    status,
+    brief,
     location,
 }: TopLevelGridItem<
-    Pick<MentorCardProps, "fullname" | "location" | "expInYears" | "stories" | "short" | "badge">
+    Pick<MentorCardProps, "fullname" | "location" | "expInYears" | "status" | "brief" | "badge">
 >) {
     return (
         <VStack gridArea="main" alignItems="start" spacing={4}>
@@ -127,14 +119,14 @@ export function MainSection({
                 <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">
                     <Rss tw="animate-pulse flex-shrink-0 mr-1" size={20} mirrored={true} />
                     <TagLabel>
-                        <AutoScrollText text={stories} />
+                        <AutoScrollText text={status} />
                     </TagLabel>
                 </Tag>
             </HStack>
 
             {/* Short summary or content */}
             <Text fontSize="sm" color="secondary" isTruncated noOfLines={3}>
-                {short}
+                {brief}
             </Text>
 
             {/* Action Buttons */}
@@ -158,17 +150,17 @@ export function MainSection({
 export function StatSection({
     gridArea,
     direction,
-    avgRating,
+    avgReviewScore,
     noReviews,
     noEndorsements,
 }: TopLevelGridItem<
-    Pick<MentorCardProps, "avgRating" | "noReviews" | "noEndorsements"> & {
+    Pick<MentorCardProps, "avgReviewScore" | "noReviews" | "noEndorsements"> & {
         direction: "column" | "row";
     }
 >) {
     return (
         <Flex gridArea={gridArea}>
-            <StatGroup {...{ direction, avgRating, noReviews, noEndorsements }} />
+            <StatGroup {...{ direction, avgReviewScore, noReviews, noEndorsements }} />
         </Flex>
     );
 }
@@ -196,11 +188,11 @@ export function Desktop({ profileImg, tags, ...props }: MentorCardProps) {
         rounded: "md",
     };
 
-    const main = pick(props, "fullname", "location", "badge", "expInYears", "stories", "short");
-    const stat = pick(props, "avgRating", "noReviews", "noEndorsements");
+    const main = pick(props, "fullname", "location", "badge", "expInYears", "status", "brief");
+    const stat = pick(props, "avgReviewScore", "noReviews", "noEndorsements");
 
     return (
-        <Grid {...grid_layout} {...grid_styles} width={800} position="relative">
+        <Grid {...grid_layout} {...grid_styles} width={800} position="relative" overflow="hidden">
             <LikeButton top={0} right={0} isLiked={false} />
             <ProfileSection gridArea="profile" img={profileImg} />
             <TagSection gridArea="tags" tags={tags} />

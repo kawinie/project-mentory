@@ -15,7 +15,7 @@ const mentor: Omit<MentorCardProps, "variant"> = {
     badge: "Top Mentor",
     location: "New York, NY",
     expInYears: 40,
-    stories: "Too busy saving the world from evil coders",
+    status: "Too busy saving the world from evil coders",
     tags: [
         "software engineer",
         "c++ creator",
@@ -26,11 +26,11 @@ const mentor: Omit<MentorCardProps, "variant"> = {
         "c++11",
         "c++98",
     ],
-    avgRating: 4.3,
+    avgReviewScore: 4.3,
     noEndorsements: 93,
     noReviews: 127,
 
-    short:
+    brief:
         "In 1979, Stroustrup began his career as a member of technical staff in the Computer Science Research Center of Bell Labs in Murray Hill, New Jersey, USA. There, he began his work on C++ and programming techniques",
 };
 
