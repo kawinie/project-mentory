@@ -3,12 +3,14 @@ import { ReactElement, useEffect, useState } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
+import { Provider } from "react-redux";
 import Cookie from "js-cookie";
 
 import { ScreenProvider } from "hooks";
 import theme from "theme";
 import Fonts from "theme/fonts";
 
+import { store } from "../redux/store";
 import { useApollo } from "../utils/apollo";
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
@@ -41,14 +43,16 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactElement 
     }, []);
 
     return (
-        <ApolloProvider client={apolloClient}>
-            <ScreenProvider screens={tailwindTheme`screens`}>
-                <GlobalStyles />
-                <Fonts />
-                <ChakraProvider theme={theme}>
-                    <Component tw="debug-screens" {...pageProps} />
-                </ChakraProvider>
-            </ScreenProvider>
-        </ApolloProvider>
+        <Provider store={store}>
+            <ApolloProvider client={apolloClient}>
+                <ScreenProvider screens={tailwindTheme`screens`}>
+                    <GlobalStyles />
+                    <Fonts />
+                    <ChakraProvider theme={theme}>
+                        <Component tw="debug-screens" {...pageProps} />
+                    </ChakraProvider>
+                </ScreenProvider>
+            </ApolloProvider>
+        </Provider>
     );
 }

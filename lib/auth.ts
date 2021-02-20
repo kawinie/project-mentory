@@ -5,11 +5,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 // register a new user
 export const registerUser = (username: string, email: string, password: string) => {
-    // prevent function from being ran on the server
-    if (typeof window === "undefined") {
-        return;
-    }
-
     return new Promise((resolve, reject) => {
         axios
             .post(`${API_URL}/auth/local/register`, { username, email, password })
@@ -29,11 +24,6 @@ export const registerUser = (username: string, email: string, password: string) 
 
 // login an existing user
 export const login = (identifier: string, password: string) => {
-    // prevent function from being ran on the server
-    if (typeof window === "undefined") {
-        return;
-    }
-
     return new Promise((resolve, reject) => {
         axios
             .post(`${API_URL}/auth/local/`, { identifier, password })

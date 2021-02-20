@@ -1,6 +1,7 @@
 import "twin.macro";
 import { css, keyframes } from "@emotion/react";
 import { Box, Flex, Grid, Text, Image, UnorderedList, ListItem } from "@chakra-ui/react";
+import { useStore } from "react-redux";
 
 import { NavBar } from "components/modules/NavBar";
 import { SearchBar } from "components/units/SearchBar";
@@ -52,9 +53,10 @@ const animate = keyframes`
 `;
 
 export default function Landing() {
+    const store = useStore();
     return (
         <Flex tw="p-0 h-screen" direction="column">
-            <NavBar name="John" />
+            <NavBar name={store.getState().username} />
             <Box h="100%" w="100%" color="#2f323b">
                 <Grid
                     top="50%"

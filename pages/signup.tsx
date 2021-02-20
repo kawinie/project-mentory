@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import "twin.macro";
 import { useForm } from "react-hook-form";
 import { UserPlus } from "phosphor-react";
+import { useDispatch } from "react-redux";
 import {
     Button,
     ButtonProps,
@@ -24,6 +25,7 @@ import * as z from "zod";
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
+import { createSession } from "../redux/actions";
 import { registerUser } from "../lib/auth";
 
 const data = [
@@ -95,13 +97,15 @@ const schema = z.object({
 
 const ManualFormSignUp = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const { register, handleSubmit, errors } = useForm({
         resolver: zodResolver(schema),
     });
 
-    const onSubmit = (userData: FormData) => {
-        registerUser(userData.username, userData.email, userData.password);
+    const onSubmit = async (userData: FormData) => {
+        await registerUser(userData.username, userData.email, userData.password);
+        dispatch(createSession(userData.username));
         router.push("/landing");
     };
 
