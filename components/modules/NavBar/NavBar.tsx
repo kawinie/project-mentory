@@ -12,8 +12,7 @@ import {
     MenuDivider,
     MenuGroup,
 } from "@chakra-ui/react";
-import { HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { User } from "phosphor-react";
+import { User, CaretDown, UserCircle } from "phosphor-react";
 
 import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
@@ -49,7 +48,7 @@ export function NavBar(props: TNavBarProps) {
                                 tw="inline-block h-12 text-sm text-left min-w-min"
                                 as={Button}
                                 variant="outline"
-                                rightIcon={<ChevronDownIcon />}>
+                                rightIcon={<CaretDown />}>
                                 Categories
                             </MenuButton>
                             <MenuList>
@@ -63,7 +62,7 @@ export function NavBar(props: TNavBarProps) {
                     </HStack>
                     <Menu>
                         <MenuButton tw="w-1/4 h-12" as={Button} variant="outline">
-                            <HamburgerIcon />
+                            <UserCircle />
                         </MenuButton>
                         <MenuList>
                             <MenuGroup title="Profile">
@@ -96,7 +95,7 @@ export function NavBar(props: TNavBarProps) {
                                 tw="inline-block h-12 text-sm text-left min-w-min"
                                 as={Button}
                                 variant="outline"
-                                rightIcon={<ChevronDownIcon />}>
+                                rightIcon={<CaretDown />}>
                                 Categories
                             </MenuButton>
                             <MenuList>
@@ -121,7 +120,7 @@ export function NavBar(props: TNavBarProps) {
                             tw="min-w-min h-12"
                             as={Button}
                             leftIcon={<User size={30} />}
-                            rightIcon={<ChevronDownIcon />}
+                            rightIcon={<CaretDown />}
                             bg="white">
                             Hi, {props.name}!
                         </MenuButton>
