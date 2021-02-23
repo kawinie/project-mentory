@@ -24,7 +24,7 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactElement 
 
         if (token) {
             // authenticate the token on the server and place set user object
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}users/me`, {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
