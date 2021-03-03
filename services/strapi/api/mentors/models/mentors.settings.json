@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "mentors",
   "info": {
-    "name": "Mentors"
+    "name": "Mentors",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -19,8 +20,9 @@
     "location": {
       "type": "string"
     },
-    "description": {
-      "type": "string"
+    "short": {
+      "type": "text",
+      "maxLength": 255
     },
     "availability": {
       "type": "integer"

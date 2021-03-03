@@ -3,8 +3,7 @@ import { Grid, GridProps } from "@chakra-ui/react";
 
 import { pick } from "utils";
 
-import { ProfileSection, TagSection, MainSection, StatSection } from "./Desktop";
-import { MentorCardProps } from "./Base";
+import { ProfileSection, TagSection, MainSection, StatSection, MentorCardProps } from "./Base";
 
 // TODO: Implement mobile layout when I have time
 export function Mobile({ profileImg, tags, ...props }: MentorCardProps) {

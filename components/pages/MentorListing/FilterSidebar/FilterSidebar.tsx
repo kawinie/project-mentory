@@ -83,7 +83,7 @@ function FilterSection({ title, icon, options }: FilterSectionProps) {
 
 export function FilterSidebar() {
     return (
-        <Box tw="overflow-hidden p-8 h-full flex-shrink-0">
+        <Box tw="overflow-hidden flex-shrink-0">
             {/* We need to wrap the scrollable content in a div to fix safari bug
             See https://stackoverflow.com/questions/57934803/workaround-for-a-safari-position-sticky-webkit-sticky-bug */}
             <Box tw="overflow-y-scroll h-full shadow-lg rounded-md bg-white">
