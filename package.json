@@ -4,13 +4,16 @@
     "private": true,
     "scripts": {
         "dev": "rm -rf .next && next dev",
+        "dev:strapi": "cd services/strapi && npm run develop",
         "build": "next build",
+        "build:strapi": "cd services/strapi && npm run build",
         "start": "next start",
         "lint": "eslint . --ext .ts,.tsx,.js,.jsx && tsc --pretty --noEmit",
-        "lint-fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix && tsc --pretty --noEmit",
+        "lint:type-only": "tsc --pretty --noEmit",
+        "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix && tsc --pretty --noEmit",
+        "clean-install": "rm -rf node_modules && npm cache verify && npm ci",
         "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook",
-        "clean-install": "rm -rf node_modules && npm cache verify && npm ci"
+        "build-storybook": "build-storybook"
     },
     "husky": {
         "hooks": {
