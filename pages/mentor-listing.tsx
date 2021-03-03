@@ -47,7 +47,7 @@ function DisplayResult({ searchQuery }: { searchQuery: string }) {
             </Grid>
             <VStack spacing={8}>
                 {mentors == null ? (
-                    <VStack alignItems="stretch" spacing={8} w="full" maxW="800px">
+                    <VStack alignItems="stretch" spacing={8} w="full">
                         {times(6, (i) => (
                             <Box
                                 key={i}
@@ -58,7 +58,8 @@ function DisplayResult({ searchQuery }: { searchQuery: string }) {
                                 flexGrow={1}
                                 w="full">
                                 <SkeletonCircle size="10" />
-                                <SkeletonText mt="4" noOfLines={8} spacing="4" />
+
+                                <SkeletonText mt="4" noOfLines={4} spacing="4" />
                             </Box>
                         ))}
                     </VStack>
@@ -124,7 +125,7 @@ export default function MentorListing() {
             "sidebar results"
         `,
         templateRows: "150px 1fr",
-        templateColumns: "max-content 1fr",
+        templateColumns: "200px 1fr",
     };
 
     const mobileLayout: GridProps = {
@@ -145,7 +146,8 @@ export default function MentorListing() {
             <Box tw="sticky top-0 z-50">
                 <NavBar username="John" />
             </Box>
-            <Grid {...gridLayout} w="full" maxWidth="container.xl" mx="auto" gap={8}>
+
+            <Grid {...gridLayout} w="full" maxWidth="container.lg" mx="auto" gap={8}>
                 {/* Banner */}
                 {min`md` && <ArticleSection />}
 
