@@ -3,10 +3,11 @@ import { ReactElement } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
+import { Global } from "@emotion/react";
 
 import { ScreenProvider } from "hooks";
 import theme from "theme";
-import Fonts from "theme/fonts";
+import fonts from "theme/fonts";
 
 import { useApollo } from "../utils/apollo";
 
@@ -16,10 +17,11 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactElement 
     return (
         <ApolloProvider client={apolloClient}>
             <ScreenProvider screens={tailwindTheme`screens`}>
+                <Global styles={fonts} />
                 <GlobalStyles />
-                <Fonts />
                 <ChakraProvider theme={theme}>
-                    <Component tw="debug-screens" {...pageProps} />
+                    <div tw="debug-screens" />
+                    <Component {...pageProps} />
                 </ChakraProvider>
             </ScreenProvider>
         </ApolloProvider>

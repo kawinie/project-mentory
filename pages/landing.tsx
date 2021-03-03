@@ -54,7 +54,7 @@ const animate = keyframes`
 export default function Landing() {
     return (
         <Flex tw="p-0 h-screen" direction="column">
-            <NavBar name="John" />
+            <NavBar username="John" />
             <Box h="100%" w="100%" color="#2f323b">
                 <Grid
                     top="50%"

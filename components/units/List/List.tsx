@@ -1,22 +1,17 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
+import { HStack } from "@chakra-ui/react";
 
-export interface TListPropsWithRenderProp<T extends unknown> {
+type ListProps<T extends unknown> = {
     items: T[];
-    renderItem: (item: T) => ReactNode;
-    renderContainer?: (props: { children: ReactNode; className?: string }) => ReactElement;
-    className?: string;
-}
-
-export type TListProps<T> = TListPropsWithRenderProp<T>;
-
-export const List = <T extends unknown>({
-    items,
-    className,
-    renderItem,
-    renderContainer = (props) => <ul {...props} />,
-}: TListProps<T>) => {
-    return renderContainer({
-        className: className,
-        children: items.map(renderItem),
-    });
+    renderItem: (item: T) => ReactElement;
 };
+
+export function List<T>({ items, renderItem }: ListProps<T>) {
+    return (
+        <HStack as="ul" spacing={[4, null, 8]}>
+            {items.map((item, i) => (
+                <li key={i}>{renderItem(item)}</li>
+            ))}
+        </HStack>
+    );
+}

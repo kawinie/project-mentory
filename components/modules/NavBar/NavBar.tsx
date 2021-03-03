@@ -1,143 +1,157 @@
 import "twin.macro";
+import NextLink from "next/link";
 import {
-    Box,
+    IconButton,
     Button,
-    Flex,
+    ButtonProps,
     HStack,
-    Link,
+    StackProps,
+    Heading,
     Menu,
-    MenuButton,
+    MenuButton as _MenuButton,
     MenuList,
     MenuItem,
-    MenuDivider,
     MenuGroup,
+    Grid,
+    Link,
 } from "@chakra-ui/react";
-import { User, CaretDown, UserCircle } from "phosphor-react";
+import { CaretDown, UserCircle } from "phosphor-react";
+import { omit } from "lodash";
+import { ReactElement } from "react";
 
 import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
+import { List } from "components/units/List";
 
-type TNavBarProps = {
-    name: string;
+/* -------------------------------------------------------------------------- */
+/*                             NavBar Menu Button                             */
+/* -------------------------------------------------------------------------- */
+
+type ItemGroup = { title: string; items: string[] };
+type MenuButtonProps = ButtonProps & {
+    title: string;
+    itemGroups: ItemGroup[];
+    mobileIcon?: ReactElement;
 };
 
-export function NavBar(props: TNavBarProps) {
+function NavBarMenuButton({ title, itemGroups, mobileIcon, ...props }: MenuButtonProps) {
     const { min, max } = useScreen();
+    const common = {
+        w: "100%",
+        variant: "outline",
+        _focus: { shadow: "none", outline: "none" },
+        ...props,
+    };
+
+    const iconButtonProps = omit(common, "leftIcon", "rightIcon");
 
     return (
-        <Flex
-            tw="shadow-md z-20"
-            bg="white"
-            w="100%"
-            h="70px"
-            px={5}
-            py={4}
-            alignItems="center"
-            position="relative">
-            {max`sm` && (
-                <HStack spacing={5} tw="flex align-middle w-full justify-center items-center">
-                    <Link href="/" fontSize="2xl" color="black" tw="font-medium m-auto text-center">
-                        Mentory
-                    </Link>
-                    <HStack
-                        spacing={5}
-                        tw="relative flex w-2/3 justify-center items-center self-center">
-                        <SearchBar label="search" name="search" placeholder="Search..." />
-                        <Menu>
-                            <MenuButton
-                                tw="inline-block h-12 text-sm text-left min-w-min"
-                                as={Button}
-                                variant="outline"
-                                rightIcon={<CaretDown />}>
-                                Categories
-                            </MenuButton>
-                            <MenuList>
-                                <MenuItem>Design</MenuItem>
-                                <MenuItem>Programming</MenuItem>
-                                <MenuItem>Business</MenuItem>
-                                <MenuItem>Makeup</MenuItem>
-                                <MenuItem>Life</MenuItem>
-                            </MenuList>
-                        </Menu>
-                    </HStack>
-                    <Menu>
-                        <MenuButton tw="w-1/4 h-12" as={Button} variant="outline">
-                            <UserCircle />
-                        </MenuButton>
-                        <MenuList>
-                            <MenuGroup title="Profile">
-                                <MenuItem>My Account</MenuItem>
-                                <MenuItem>Payments </MenuItem>
-                            </MenuGroup>
-                            <MenuDivider />
-                            <MenuGroup title="Join">
-                                <MenuItem>Find a Mentor</MenuItem>
-                                <MenuItem>Be a Mentor</MenuItem>
-                            </MenuGroup>
-                            <MenuDivider />
-                            <MenuGroup title="Help">
-                                <MenuItem>Docs</MenuItem>
-                                <MenuItem>FAQ</MenuItem>
-                            </MenuGroup>
-                        </MenuList>
-                    </Menu>
-                </HStack>
+        <Menu isLazy>
+            {max`md` && (
+                <_MenuButton
+                    as={IconButton}
+                    icon={mobileIcon ?? props.leftIcon ?? props.rightIcon}
+                    {...iconButtonProps}
+                />
             )}
-            {min`sm` && (
-                <HStack tw="flex w-full justify-between items-center">
-                    <Link href="/" fontSize="4xl" color="black" tw="font-medium pr-5">
-                        Mentory
-                    </Link>
-                    <HStack spacing={5} tw="relative flex w-2/3 justify-center items-center">
-                        <SearchBar label="search" name="search" placeholder="Search..." />
-                        <Menu>
-                            <MenuButton
-                                tw="inline-block h-12 text-sm text-left min-w-min"
-                                as={Button}
-                                variant="outline"
-                                rightIcon={<CaretDown />}>
-                                Categories
-                            </MenuButton>
-                            <MenuList>
-                                <MenuItem>Design</MenuItem>
-                                <MenuItem>Programming</MenuItem>
-                                <MenuItem>Business</MenuItem>
-                                <MenuItem>Makeup</MenuItem>
-                                <MenuItem>Life</MenuItem>
-                            </MenuList>
-                        </Menu>
-                        <Box tw="relative flex justify-center items-center align-middle">
-                            <Link px={4} tw="underline" color="black">
-                                Find a Mentor
-                            </Link>
-                            <Link px={4} color="black">
-                                Be a Mentor
-                            </Link>
-                        </Box>
-                    </HStack>
-                    <Menu>
-                        <MenuButton
-                            tw="min-w-min h-12"
-                            as={Button}
-                            leftIcon={<User size={30} />}
-                            rightIcon={<CaretDown />}
-                            bg="white">
-                            Hi, {props.name}!
-                        </MenuButton>
-                        <MenuList>
-                            <MenuGroup title="Profile">
-                                <MenuItem>My Account</MenuItem>
-                                <MenuItem>Payments </MenuItem>
-                            </MenuGroup>
-                            <MenuDivider />
-                            <MenuGroup title="Help">
-                                <MenuItem>Docs</MenuItem>
-                                <MenuItem>FAQ</MenuItem>
-                            </MenuGroup>
-                        </MenuList>
-                    </Menu>
-                </HStack>
+            {min`md` && (
+                <_MenuButton as={Button} {...common}>
+                    {title}
+                </_MenuButton>
             )}
-        </Flex>
+            <MenuList>
+                {itemGroups.map(({ title, items }) => (
+                    <MenuGroup key={title} title={title}>
+                        {items.map((item) => (
+                            <MenuItem key={item} _hover={{ filter: "brightness(95%)" }}>
+                                {item}
+                            </MenuItem>
+                        ))}
+                    </MenuGroup>
+                ))}
+            </MenuList>
+        </Menu>
     );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   Desktop                                  */
+/* -------------------------------------------------------------------------- */
+
+const styleProps: StackProps = {
+    h: "70px",
+    py: 3,
+    px: 8,
+    bg: "white",
+    alignItems: "center",
+    spacing: 4,
+    justify: "space-between",
+    w: "full",
+    shadow: "lg",
+    fontWeight: "semibold",
+};
+
+const navMenuItems = [
+    { href: "/join", label: "Become a Mentor" },
+    { href: "/faq", label: "FAQ" },
+];
+
+const userMenuItems = [
+    { title: "Profile", items: ["My Account", "Payments"] },
+    { title: "Help", items: ["Docs", "FAQ"] },
+];
+
+const categories = [
+    { title: "", items: ["All Categories"] },
+    { title: "Category", items: ["Design", "Programming", "Business", "Makeup", "Lifestyle"] },
+];
+
+function Desktop({ username }: NavBarProps) {
+    return (
+        <HStack {...styleProps}>
+            <Heading letterSpacing="wide" size="lg">
+                <NextLink href="/" passHref>
+                    <Link whiteSpace="nowrap">Mentory</Link>
+                </NextLink>
+            </Heading>
+            <Grid templateColumns="minmax(0, 1fr) max-content" gap={4} maxWidth="800px" w="full">
+                <SearchBar placeholder="Search mentor..." />
+                <NavBarMenuButton
+                    title="All Categories"
+                    itemGroups={categories}
+                    rightIcon={<CaretDown tw="inline" size={24} />}
+                />
+            </Grid>
+            <List
+                items={navMenuItems}
+                renderItem={(item) => (
+                    <NextLink href={item.href} passHref>
+                        <Link whiteSpace="nowrap" fontSize="sm">
+                            {item.label}
+                        </Link>
+                    </NextLink>
+                )}
+            />
+            <NavBarMenuButton
+                w="max-content"
+                variant="ghost"
+                leftIcon={<UserCircle tw="inline" size={24} />}
+                rightIcon={<CaretDown tw="inline" size={24} />}
+                title={`Hi, ${username}!`}
+                itemGroups={userMenuItems}
+            />
+        </HStack>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   NavBar                                   */
+/* -------------------------------------------------------------------------- */
+
+export type NavBarProps = {
+    username: string;
+};
+
+export function NavBar({ username }: NavBarProps) {
+    return <Desktop username={username} />;
 }
