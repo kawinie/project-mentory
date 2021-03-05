@@ -66,12 +66,12 @@ const SocialSignUp = () => {
                             </Link>
                         )}
                         {min`sm` && (
-                            <Link href={API_URL + "/connect/" + provider}>
-                                <Button {...buttonProps} aria-label={name}>
-                                    <HStack justify="start" spacing={8}>
+                            <Link href={API_URL + "/connect/" + provider} passHref>
+                                <Button as="a" {...buttonProps} aria-label={name} display="block">
+                                    <HStack spacing={6}>
                                         <Image
                                             src={source}
-                                            style={{ height: "35px", width: "auto" }}
+                                            style={{ height: "35px", marginLeft: "15%" }}
                                         />
                                         <Text>Sign Up with {name}</Text>
                                     </HStack>
@@ -190,7 +190,7 @@ export default function Signup() {
                 <Grid w="100%" gap={[8, 12]} templateColumns={[null, "1fr auto 1fr"]}>
                     <VStack tw="col-span-full" spacing={4} align="center">
                         <Heading fontSize="5xl">Welcome to Mentory!</Heading>
-                        <Text maxw="sm" fontSize="sm" color="gray.500">
+                        <Text fontSize="sm" color="gray.500">
                             With one of your connected social media account below or with your email
                             and password.
                         </Text>
