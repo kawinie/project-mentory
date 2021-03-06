@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/asdfs",
+      "handler": "asdf.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/asdfs/count",
+      "handler": "asdf.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/asdfs/:id",
+      "handler": "asdf.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/asdfs",
+      "handler": "asdf.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/asdfs/:id",
+      "handler": "asdf.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/asdfs/:id",
+      "handler": "asdf.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

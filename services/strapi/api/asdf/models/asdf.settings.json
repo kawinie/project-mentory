@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "asdfs",
+  "info": {
+    "name": "asdf"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "asdf": {
+      "type": "string"
+    }
+  }
+}
