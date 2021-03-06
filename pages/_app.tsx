@@ -15,7 +15,7 @@ import { store } from "../redux/store";
 import { useApollo } from "../utils/apollo";
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
-    const apolloClient = useApollo(pageProps.initialApolloState);
+    const apolloClient = useApollo(pageProps);
 
     const [user, setUser] = useState(null);
 
