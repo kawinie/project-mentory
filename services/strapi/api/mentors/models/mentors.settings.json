@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "mentors",
   "info": {
-    "name": "Mentorrs",
+    "name": "Mentors",
     "description": ""
   },
   "options": {
@@ -17,7 +17,7 @@
     "title": {
       "type": "string"
     },
-    "place": {
+    "location": {
       "type": "string"
     },
     "description": {
