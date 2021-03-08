@@ -1,17 +1,32 @@
-import { ReactElement } from "react";
-import { HStack } from "@chakra-ui/react";
+import { ReactElement, Key } from "react";
+import { Stack, StackDirection, StackProps } from "@chakra-ui/react";
 
-type ListProps<T extends unknown> = {
+export type ListProps<T> = StackProps & {
+    direction?: StackDirection;
     items: T[];
     renderItem: (item: T) => ReactElement;
 };
 
-export function List<T>({ items, renderItem }: ListProps<T>) {
+export function List<T extends { [key: string]: unknown; key?: Key | null | undefined }>({
+    direction = "row",
+    items,
+    renderItem,
+    ...props
+}: ListProps<T>) {
     return (
-        <HStack as="ul" spacing={[4, null, 8]}>
+        <Stack
+            marginInlineStart="0 !important"
+            direction={direction}
+            as="ul"
+            listStyleType="none"
+            textDecoration="none"
+            p={0}
+            m={0}
+            spacing={[4, null, 8]}
+            {...props}>
             {items.map((item, i) => (
-                <li key={i}>{renderItem(item)}</li>
+                <li key={item.key ?? i}>{renderItem(item)}</li>
             ))}
-        </HStack>
+        </Stack>
     );
 }

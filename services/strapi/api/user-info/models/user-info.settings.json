@@ -36,9 +36,6 @@
       "max": 5,
       "min": 0
     },
-    "tags": {
-      "collection": "tag"
-    },
     "country": {
       "type": "string"
     },
@@ -55,6 +52,19 @@
       ],
       "plugin": "upload",
       "required": false
+    },
+    "state": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "component",
+      "repeatable": true,
+      "component": "units.tag-component"
+    },
+    "customProfileSections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "profile.profile-section"
     }
   }
 }

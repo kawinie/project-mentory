@@ -21,7 +21,6 @@ export default extendTheme({
         global: {
             a: {
                 _hover: {
-                    color: "purple.500",
                     textDecoration: "underline",
                 },
             },

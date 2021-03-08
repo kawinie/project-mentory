@@ -27,6 +27,13 @@ export const Tag: ComponentMultiStyleConfig = {
                 fontFamily: "menlo",
             },
         },
+
+        text: {
+            container: {
+                m: 0,
+                p: 0,
+            },
+        },
     },
     defaultProps: {},
 };
