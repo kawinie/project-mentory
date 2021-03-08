@@ -1,5 +1,5 @@
 const { parseUri } = require('mysql-parse')
-const config = parseUri(process.env.STAGING_DB_URL);
+const config = parseUri(process.env.DATABASE_URL);
 
 module.exports = ({ env }) => ({
     defaultConnection: 'default',
