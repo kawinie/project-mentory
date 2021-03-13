@@ -5,10 +5,11 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
 import { Provider } from "react-redux";
 import Cookie from "js-cookie";
+import { Global } from "@emotion/react";
 
 import { ScreenProvider } from "hooks";
 import theme from "theme";
-import Fonts from "theme/fonts";
+import fonts from "theme/fonts";
 
 import { store } from "../redux/store";
 import { useApollo } from "../utils/apollo";
@@ -46,10 +47,11 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactElement 
         <Provider store={store}>
             <ApolloProvider client={apolloClient}>
                 <ScreenProvider screens={tailwindTheme`screens`}>
+                    <Global styles={fonts} />
                     <GlobalStyles />
-                    <Fonts />
                     <ChakraProvider theme={theme}>
-                        <Component tw="debug-screens" {...pageProps} />
+                        <div tw="debug-screens" />
+                        <Component {...pageProps} />
                     </ChakraProvider>
                 </ScreenProvider>
             </ApolloProvider>
