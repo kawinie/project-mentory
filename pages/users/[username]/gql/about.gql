@@ -1,0 +1,12 @@
+query User($username: String) {
+    users: userInfos(where: { user: { username: $username } }) {
+        about
+        profileSections {
+            title
+            content
+            img {
+                url
+            }
+        }
+    }
+}

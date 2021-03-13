@@ -1,18 +1,18 @@
-const colorPalette = require("tailwindcss/colors");
-
-const colors = {
-    ...colorPalette,
-    primary: colorPalette.coolGray[900],
-    secondary: colorPalette.coolGray[500],
-    fade: "#DDE2F2",
-};
+const colors = require("./theme/colors");
 
 module.exports = {
     darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
-            // Enable all Tailwind color utilities
-            colors: colors,
+            colors: {
+                ...colors,
+                primary: colors.coolGray[900],
+                secondary: colors.coolGray[500],
+                fade: "#DDE2F2",
+                "text-primary": colors.blueGray[500],
+                "text-primary-darker": colors.blueGray[700],
+                "text-primary-lighter": colors.blueGray[200],
+            },
         },
         screens: {
             base: "0px",

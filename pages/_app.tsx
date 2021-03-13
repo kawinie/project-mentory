@@ -1,3 +1,4 @@
+import { NextComponentType, NextPageContext } from "next";
 import { AppProps } from "next/app";
 import { ReactElement, useEffect, useState } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
@@ -6,22 +7,39 @@ import { ApolloProvider } from "@apollo/client";
 import { Provider } from "react-redux";
 import Cookie from "js-cookie";
 import { Global } from "@emotion/react";
-import { NextComponentType, NextPageContext } from "next";
 
 import { ScreenProvider } from "hooks";
+import { ComponentWithLayout } from "utils/layout";
+import { separateApolloCacheFromProps, useApollo } from "utils/apollo";
 import theme from "theme";
 import fonts from "theme/fonts";
-import { ComponentWithLayout } from "utils/layout";
+import { store } from "redux/store";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Props = { [key: string]: unknown };
 
-import { store } from "../redux/store";
-import { useApollo } from "../utils/apollo";
-
-interface CustomApp<P = Record<string, unknown>> extends AppProps<P> {
+interface MyAppProps<P = Props> extends AppProps<P> {
     Component: NextComponentType<NextPageContext, unknown, P> & ComponentWithLayout;
 }
 
-export default function MyApp({ Component, pageProps }: CustomApp): ReactElement {
-    const apolloClient = useApollo(pageProps);
+const mergeWithLayout = <T extends Props>(
+    Component: MyAppProps["Component"],
+    { layoutProps, ...pageComponentProps }: T & { layoutProps?: Props }
+) => {
+    if (Component.layout) {
+        return (
+            <Component.layout {...layoutProps}>
+                <Component {...pageComponentProps} />
+            </Component.layout>
+        );
+    }
+
+    return <Component {...pageComponentProps} />;
+};
+
+export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps): ReactElement {
+    // Seperate Apollo cache from props
+    const [state, pagePropsWithLayoutProps] = separateApolloCacheFromProps(_pageProps);
+    const apolloClient = useApollo(state);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -48,9 +66,6 @@ export default function MyApp({ Component, pageProps }: CustomApp): ReactElement
         }
     }, []);
 
-    const mergeWithLayout = Component.mergeWithLayout ?? ((page: ReactElement) => page);
-    const layoutProps = Component.mergeWithLayout ? pageProps.layoutProps : {};
-
     return (
         <Provider store={store}>
             <ApolloProvider client={apolloClient}>
@@ -59,7 +74,7 @@ export default function MyApp({ Component, pageProps }: CustomApp): ReactElement
                     <GlobalStyles />
                     <ChakraProvider theme={theme}>
                         <div tw="debug-screens" />
-                        {mergeWithLayout(<Component {...pageProps} />, layoutProps)}
+                        {mergeWithLayout(Component, pagePropsWithLayoutProps)}
                     </ChakraProvider>
                 </ScreenProvider>
             </ApolloProvider>

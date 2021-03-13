@@ -1,10 +1,9 @@
-import {
-    GetStaticPaths,
-    InferGetStaticPropsType,
-    GetStaticPropsContext,
-    GetStaticPropsResult,
-} from "next";
-import { gql, useQuery } from "@apollo/client";
+import tw from "twin.macro";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
+import NextImage from "next/image";
+import NextLink from "next/link";
+import { useQuery } from "@apollo/client";
 import {
     Box,
     Heading,
@@ -17,7 +16,7 @@ import {
     Divider,
     Button,
     StackProps,
-    Link,
+    AspectRatio,
 } from "@chakra-ui/react";
 import {
     Circle,
@@ -29,48 +28,21 @@ import {
 } from "phosphor-react";
 import { capitalize } from "lodash";
 import { ReactNode } from "react";
-import NextLink from "next/link";
-import { useRouter } from "next/dist/client/router";
-import tw from "twin.macro";
 
 import { NavBar } from "components/modules/NavBar";
-import { ProfileImage, StatGroup } from "components/modules/MentorCard/components";
+import { StatGroup } from "components/modules/MentorCard/components";
 import { List } from "components/units";
 import { addApolloState, initializeApollo } from "utils/apollo";
 import { LayoutComponent } from "utils/layout";
+import { strapiImgLoader } from "utils/strapi";
 
 /**
  * 1. Next/link works inside a Component and switches out that Component when performing client-side transition. This means that whatever is outside of <Component /> will not be rerendered
- * 2. On first visting to a page, the entire page needs to be prerendered. There is no way to do partial page rendering.
  */
 
-const REACT_APP_BACKEND_URL = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
+export const REACT_APP_BACKEND_URL = process.env.NEXT_PUBLIC_CMS_URL;
 
-const query = gql`
-    query User($firstname: String, $lastname: String) {
-        users: userInfos(where: { firstname: $firstname, lastname: $lastname }) {
-            firstname
-            lastname
-            city
-            state
-            about
-            profileImg {
-                url
-            }
-
-            tags {
-                index
-                tag {
-                    label
-                }
-            }
-
-            badges {
-                label
-            }
-        }
-    }
-`;
+import query from "./gql/index.gql";
 
 function TopSection({
     firstname,
@@ -80,21 +52,30 @@ function TopSection({
     badges,
     city,
     state,
-    about,
+    brief,
     avgReviewScore,
 }: any) /*eslint-disable-line*/ {
     const fullname = `${capitalize(firstname)} ${capitalize(lastname)}`;
-    const imgUrl = `${REACT_APP_BACKEND_URL}${profileImg.url}`;
+
     type TagComponent = {
         index: number;
         tag: {
             label: string;
         };
     };
+
     return (
         <HStack alignItems="start" spacing={8}>
             <Box w="150px" flexShrink={0}>
-                <ProfileImage url={imgUrl} />
+                <AspectRatio w="full" ratio={1} rounded="md" overflow="hidden">
+                    <NextImage
+                        loader={strapiImgLoader}
+                        src={profileImg.url}
+                        sizes="100%"
+                        layout="fill"
+                        objectFit="cover"
+                    />
+                </AspectRatio>
             </Box>
             <VStack justify="start" alignItems="start" spacing={4}>
                 <VStack alignItems="start" w="full" spacing={2}>
@@ -133,13 +114,16 @@ function TopSection({
                 </HStack>
                 {/* About */}
                 <Box>
-                    <Text color="blueGray.500">{about}</Text>
+                    <Text fontSize="sm" color="blueGray.500">
+                        {brief}
+                    </Text>
                 </Box>
                 {/* Stat Group  */}
+                {/* TODO: Connect noEndorsements and noReviews */}
                 <HStack justify="center" w="full">
                     <StatGroup
                         direction="row"
-                        avgReviewScore={avgReviewScore}
+                        avgReviewScore={avgReviewScore ?? 0}
                         noEndorsements={0}
                         noReviews={0}
                         css={{ border: "0px" }}
@@ -170,7 +154,7 @@ function SocialLinkList(props: StackProps) {
             items={socialLinks}
             renderItem={({ href, label, icon: Icon }) => (
                 <Button
-                    as={Link}
+                    as={"a"}
                     href={href}
                     variant="ghost"
                     width="full"
@@ -192,15 +176,14 @@ type ActiveLinkProps = {
 
 const ActiveLink = ({ children, href, className, label }: ActiveLinkProps) => {
     const router = useRouter();
-    console.log(router.pathname, href);
     return (
         <NextLink href={href} scroll={false}>
             <a
                 css={[
-                    router.pathname === href
+                    router.asPath === href
                         ? tw`text-blueGray-700 border-blueGray-700`
                         : tw`text-blueGray-500 border-blueGray-200 hover:text-blueGray-700`,
-                    tw`block pb-4 font-semibold text-sm sm:text-base border-b-2 focus:outline-none focus:text-gray-900 whitespace-nowrap`,
+                    tw`block pb-4 px-4 cursor-pointer font-semibold text-sm sm:text-base border-b-2 focus:outline-none focus:text-gray-900 whitespace-nowrap`,
                 ]}
                 className={className}>
                 {label ?? children}
@@ -209,74 +192,84 @@ const ActiveLink = ({ children, href, className, label }: ActiveLinkProps) => {
     );
 };
 
+/* -------------------------------------------------------------------------- */
+/*                               UserPageLayout                               */
+/* -------------------------------------------------------------------------- */
+
 export type UserPageLayoutProps = {
     children?: ReactNode;
-    firstname: string;
-    lastname: string;
+    username: string;
 };
 
-export const UserPageLayout: LayoutComponent<UserPageLayoutProps, typeof getStaticProps> = ({
-    children,
-    firstname,
-    lastname,
-}) => {
-    const { data, loading } = useQuery(query, { variables: { firstname, lastname } });
+export const UserPageLayout: LayoutComponent<PageProps, Params> = ({ children, username }) => {
+    const { data } = useQuery(query, { variables: { username } });
     const user = data.users[0];
 
     return (
         <Box>
             <NavBar username={user.firstname} />
-            <HStack mx="auto" maxW="container.md" mt={8} pos="relative">
-                <SocialLinkList pos="absolute" top={0} pr={4} transform="translateX(-100%)" />
-                <TopSection {...user} />
+            <HStack mx="auto" alignItems="start" maxW="container.lg" spacing={8} mt={8}>
+                <SocialLinkList />
+                <Box flexGrow={1}>
+                    <TopSection {...user} />
+
+                    <HStack spacing={0} my={16} alignItems="stretch">
+                        {[
+                            { href: "", label: "Index" },
+                            { href: "about", label: "About" },
+                            { href: "availability", label: "Availability" },
+                            { href: "reviews", label: "Reviews" },
+                            { href: "tags", label: "Tags" },
+                        ].map(({ href, label }) => (
+                            <ActiveLink
+                                key={label}
+                                href={`/users/${username}/${href}`}
+                                label={label}
+                            />
+                        ))}
+                        <div tw="flex flex-col w-full border-b-2 border-blueGray-200" />
+                    </HStack>
+                    {children}
+                </Box>
             </HStack>
-            <ActiveLink href={`/user/${firstname}.${lastname}`} label="Index" />
-            <ActiveLink href={`/user/${firstname}.${lastname}/about`} label="About" />
-            {children}
         </Box>
     );
 };
-
-export default UserPageLayout;
 
 /* -------------------------------------------------------------------------- */
 /*                              Data Requirement                              */
 /* -------------------------------------------------------------------------- */
 
-type PageProps = {
-    firstname: string;
-    lastname: string;
+type Params = {
+    username: string;
 };
 
-const getStaticProps = async ({
-    params,
-}: GetStaticPropsContext<{ username: string }>): Promise<GetStaticPropsResult<PageProps>> => {
-    const [firstname, lastname] = params?.username?.split(".") ?? [];
-    if (firstname == undefined || lastname == undefined) {
-        return {
-            notFound: true,
-        };
+type PageProps = {
+    username: string;
+};
+
+const getStaticProps: GetStaticProps<PageProps, Params> = async ({ params }) => {
+    if (params == undefined) {
+        return { notFound: true };
     }
+
+    const { username } = params;
 
     const client = initializeApollo();
-    const response = await client.query({ query, variables: { firstname, lastname } });
-    const users = response.data.users;
-    if (response.error || users == null || users.length == 0) {
-        return {
-            notFound: true,
-        };
+    const { data, error } = await client.query({ query, variables: { username } });
+    if (error || data.users == null || data.users.length == 0) {
+        return { notFound: true };
     }
 
-    return addApolloState(client, { props: { firstname, lastname } });
+    return addApolloState(client, { props: { username } });
 };
 
 const getStaticPaths: GetStaticPaths = async () => {
     // TODO: Fetch popular users from cms
-    const paths = ["bjarne.stroustrup"].map((username) => ({ params: { username } }));
-
+    // NOTE: Paths array specifies pre-generated paths
+    const paths = [].map((username) => ({ params: { username } }));
     return { paths, fallback: "blocking" };
 };
 
 UserPageLayout.blockingDataRequirement = getStaticProps;
-
-export { getStaticProps, getStaticPaths };
+export { getStaticProps, getStaticPaths, UserPageLayout as default };
