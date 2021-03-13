@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-// import * as actions from "redux/actions";
+import * as actions from "redux/actions";
 
 //
 // ────────────────────────────────────────────────────── I ──────────
@@ -17,3 +17,6 @@ function ifElse<B extends boolean, T, K>(c: B, a: T, b: K) {
 //   :::::: R E D U C E R S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────────
 //
+export const username = createReducer("", {
+    [actions.createSession.type]: (state, action) => action.payload.text,
+});

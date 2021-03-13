@@ -1,8 +1,10 @@
 import Link from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import "twin.macro";
 import { useForm } from "react-hook-form";
 import { UserPlus } from "phosphor-react";
+import { useDispatch } from "react-redux";
 import {
     Button,
     ButtonProps,
@@ -23,11 +25,16 @@ import * as z from "zod";
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
+import { createSession } from "../redux/actions";
+import { registerUser } from "../lib/auth";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+
 const data = [
-    { name: "Google", source: "/svg/google.svg" },
-    { name: "Facebook", source: "/svg/facebook.svg" },
-    { name: "Twitter", source: "/svg/twitter.svg" },
-    { name: "LinkedIn", source: "/svg/linkedin.svg" },
+    { name: "Google", provider: "google", source: "/svg/google.svg" },
+    { name: "Facebook", provider: "facebook", source: "/svg/facebook.svg" },
+    { name: "Twitter", provider: "twitter", source: "/svg/twitter.svg" },
+    { name: "LinkedIn", provider: "linkedin", source: "/svg/linkedin.svg" },
 ] as const;
 
 const SocialSignUp = () => {
@@ -42,24 +49,34 @@ const SocialSignUp = () => {
     return (
         <VStack justify="start" spacing={8}>
             <Grid tw="w-full gap-4" autoFlow={["column", "row"]} as="ul">
-                {data.map(({ name, source }) => (
+                {data.map(({ name, provider, source }) => (
                     <li key={name}>
                         {max`sm` && (
-                            <IconButton
-                                {...buttonProps}
-                                aria-label={name}
-                                icon={
-                                    <Image src={source} style={{ height: "35px", width: "auto" }} />
-                                }
-                            />
+                            <Link href={API_URL + "/connect/" + provider}>
+                                <IconButton
+                                    {...buttonProps}
+                                    aria-label={name}
+                                    icon={
+                                        <Image
+                                            src={source}
+                                            style={{ height: "35px", width: "auto" }}
+                                        />
+                                    }
+                                />
+                            </Link>
                         )}
                         {min`sm` && (
-                            <Button {...buttonProps} aria-label={name}>
-                                <HStack justify="start" spacing={8}>
-                                    <Image src={source} style={{ height: "35px", width: "auto" }} />
-                                    <Text>Sign Up with {name}</Text>
-                                </HStack>
-                            </Button>
+                            <Link href={API_URL + "/connect/" + provider}>
+                                <Button {...buttonProps} aria-label={name}>
+                                    <HStack justify="start" spacing={8}>
+                                        <Image
+                                            src={source}
+                                            style={{ height: "35px", width: "auto" }}
+                                        />
+                                        <Text>Sign Up with {name}</Text>
+                                    </HStack>
+                                </Button>
+                            </Link>
                         )}
                     </li>
                 ))}
@@ -91,12 +108,17 @@ const schema = z.object({
 });
 
 const ManualFormSignUp = () => {
+    const router = useRouter();
+    const dispatch = useDispatch();
+
     const { register, handleSubmit, errors } = useForm({
         resolver: zodResolver(schema),
     });
 
-    const onSubmit = (userData: FormData) => {
-        alert(JSON.stringify(userData));
+    const onSubmit = async (userData: FormData) => {
+        await registerUser(userData.username, userData.email, userData.password);
+        dispatch(createSession(userData.username));
+        router.push("/landing");
     };
 
     return (

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import "twin.macro";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
 import {
     Button,
@@ -17,6 +19,9 @@ import {
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
+
+import { createSession } from "../redux/actions";
+import { login } from "../lib/auth";
 
 const data = [
     { name: "Facebook", Icon: FacebookLogo, color: "facebook" },
@@ -64,9 +69,20 @@ type FormData = {
 };
 
 const MaunalFormSignIn = () => {
+    const router = useRouter();
+    const dispatch = useDispatch();
     const { register, handleSubmit } = useForm<FormData>();
     const onSubmit = handleSubmit((data) => {
-        alert(JSON.stringify(data, null, 4) + "\n DON'T forget to send this to API!");
+        login(data.username, data.password)
+            .then(() => {
+                dispatch(createSession(data.username));
+                router.push("/landing");
+            })
+            .catch((err) => {
+                router.reload();
+                console.log(err);
+                alert("Invalid email or password");
+            });
     });
 
     return (

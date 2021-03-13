@@ -5,3 +5,7 @@ import {} from "redux/models";
 //   :::::: A C T I O N S : :  :   :    :     :        :          :
 // ────────────────────────────────────────────────────────────────
 //
+
+export const createSession = createAction("CREATE_SESSION", function (text: string) {
+    return { payload: { text } };
+});
