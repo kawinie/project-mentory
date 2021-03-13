@@ -68,7 +68,7 @@ const SocialSignUp = () => {
                         {min`sm` && (
                             <Link href={API_URL + "/connect/" + provider} passHref>
                                 <Button as="a" {...buttonProps} aria-label={name} display="block">
-                                    <HStack spacing={6}>
+                                    <HStack spacing={6} alignItems="center" h="full">
                                         <Image
                                             src={source}
                                             style={{ height: "35px", marginLeft: "15%" }}
