@@ -2,12 +2,16 @@ import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Cookie from "js-cookie";
 import { Container, Heading, Spinner } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
+
+import { createSession } from "../../../redux/actions";
 import "twin.macro";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 export default function Connect() {
     const router = useRouter();
+    const dispatch = useDispatch();
     const [text, setText] = useState("Hang tight...");
 
     const { provider, ...all } = router.query;
@@ -30,7 +34,7 @@ export default function Connect() {
                 // Successfully logged with Strapi
                 // Now saving the jwt to use it for future authenticated requests to Strapi
                 Cookie.set("token", res.jwt);
-
+                dispatch(createSession(res.user.username));
                 Router.push("/landing");
             })
             .catch((err) => {
