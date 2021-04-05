@@ -40,8 +40,6 @@ import { strapiImgLoader } from "utils/strapi";
  * 1. Next/link works inside a Component and switches out that Component when performing client-side transition. This means that whatever is outside of <Component /> will not be rerendered
  */
 
-export const REACT_APP_BACKEND_URL = process.env.NEXT_PUBLIC_CMS_URL;
-
 import query from "./gql/index.gql";
 
 function TopSection({
