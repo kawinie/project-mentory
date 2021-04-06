@@ -1,34 +1,59 @@
 import { useMemo } from "react";
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from "@apollo/client";
+import { GetStaticPropsResult } from "next";
+import deepmerge from "deepmerge";
+import isEqual from "lodash/isEqual";
 
-const API_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+const CONTENT_SERVER_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === "undefined", // set to true for SSR
-        link: new HttpLink({
-            uri: `${API_URL}/graphql`,
-        }),
         cache: new InMemoryCache(),
+        link: new HttpLink({
+            uri: `${CONTENT_SERVER_URL}/graphql`,
+        }),
     });
 }
 
-export function initializeApollo(initialState: any = null) {
+// Recursively combine array
+// More info at https://github.com/TehShrike/deepmerge
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const combineMerge = (target: any[], source: any[], options: any) => {
+    const destination = target.slice();
+    source.forEach((item, index) => {
+        if (typeof destination[index] === "undefined") {
+            destination[index] = options.cloneUnlessOtherwiseSpecified(item, options);
+        } else if (options.isMergeableObject(item)) {
+            destination[index] = deepmerge(target[index], item, options);
+        } else if (target.indexOf(item) === -1) {
+            destination.push(item);
+        }
+    });
+    return destination;
+};
+
+export function initializeApollo(initialState?: NormalizedCacheObject) {
     const _apolloClient = apolloClient ?? createApolloClient();
 
-    // If your page has Next.js data fetching methods that use Apollo Client,
-    // the initial state gets hydrated here
+    // If your page has Next.js data fetching methods that use Apollo Client, the initial state
+    // gets hydrated here
     if (initialState) {
         // Get existing cache, loaded during client side data fetching
         const existingCache = _apolloClient.extract();
 
-        // Restore the cache using the data passed from
-        // getStaticProps/getServerSideProps combined with the existing cached data
-        _apolloClient.cache.restore({ ...existingCache, ...initialState });
-    }
+        // Merge the existing cache into data passed from getStaticProps/getServerSideProps
+        const data = deepmerge(initialState, existingCache, {
+            // combine arrays using object equality (like in sets)
+            arrayMerge: combineMerge,
+        });
 
+        // Restore the cache with the merged data
+        _apolloClient.cache.restore(data);
+    }
     // For SSG and SSR always create a new Apollo Client
     if (typeof window === "undefined") return _apolloClient;
 
@@ -37,7 +62,28 @@ export function initializeApollo(initialState: any = null) {
     return _apolloClient;
 }
 
-export function useApollo(initialState: null | undefined) {
-    const store = useMemo(() => initializeApollo(initialState), [initialState]);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function addApolloState<T>(
+    client: ApolloClient<NormalizedCacheObject>,
+    pageResult: GetStaticPropsResult<T>
+) {
+    if ("props" in pageResult) {
+        return {
+            ...pageResult,
+            props: { ...pageResult.props, [APOLLO_STATE_PROP_NAME]: client.cache.extract() },
+        };
+    }
+
+    return pageResult;
+}
+
+export const separateApolloCacheFromProps = <T>({
+    [APOLLO_STATE_PROP_NAME]: state,
+    ...props
+}: T & { [APOLLO_STATE_PROP_NAME]?: NormalizedCacheObject }) => [state, props] as const;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useApollo(state: NormalizedCacheObject | undefined) {
+    const store = useMemo(() => initializeApollo(state), [state]);
     return store;
 }

@@ -16,11 +16,11 @@ export type StatProps = {
 export function Stat({ icon, value, title }: StatProps) {
     return (
         <div>
-            <span tw="flex justify-center">
+            <span tw="flex justify-center items-center">
                 {icon}
                 <span tw="text-sm font-bold ml-1">{value}</span>
             </span>
-            <div tw="text-sm text-secondary">{title}</div>
+            <div tw="text-sm text-secondary whitespace-nowrap">{title}</div>
         </div>
     );
 }
@@ -46,9 +46,10 @@ export type StatGroupProps = {
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
+    className?: string;
 };
 
-export function StatGroup({ direction, ...rest }: StatGroupProps) {
+export function StatGroup({ direction, className, ...rest }: StatGroupProps) {
     const stats = useMemo(
         () => makeStats(rest.avgReviewScore, rest.noReviews, rest.noEndorsements),
         [rest]
@@ -64,7 +65,8 @@ export function StatGroup({ direction, ...rest }: StatGroupProps) {
             alignItems="center"
             p={4}
             justify="space-between"
-            divider={<StackDivider alignSelf="center" width="50%" />}>
+            divider={<StackDivider alignSelf="center" width="50%" />}
+            className={className}>
             {stats.map(({ icon: Icon, ...stat }) => (
                 <Stat key={stat.title} {...stat} icon={<Icon tw="inline" size={16} />} />
             ))}

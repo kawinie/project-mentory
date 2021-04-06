@@ -1,3 +1,4 @@
+import { NextComponentType, NextPageContext } from "next";
 import { AppProps } from "next/app";
 import { ReactElement, useEffect, useState } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
@@ -8,15 +9,37 @@ import Cookie from "js-cookie";
 import { Global } from "@emotion/react";
 
 import { ScreenProvider } from "hooks";
+import { ComponentWithLayout } from "utils/layout";
+import { separateApolloCacheFromProps, useApollo } from "utils/apollo";
 import theme from "theme";
 import fonts from "theme/fonts";
+import { store } from "redux/store";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Props = { [key: string]: unknown };
 
-import { store } from "../redux/store";
-import { useApollo } from "../utils/apollo";
+interface MyAppProps<P = Props> extends AppProps<P> {
+    Component: NextComponentType<NextPageContext, unknown, P> & ComponentWithLayout;
+}
 
-export default function MyApp({ Component, pageProps }: AppProps): ReactElement {
-    const apolloClient = useApollo(pageProps.initialApolloState);
+const mergeWithLayout = <T extends Props>(
+    Component: MyAppProps["Component"],
+    { layoutProps, ...pageComponentProps }: T & { layoutProps?: Props }
+) => {
+    if (Component.layout) {
+        return (
+            <Component.layout {...layoutProps}>
+                <Component {...pageComponentProps} />
+            </Component.layout>
+        );
+    }
 
+    return <Component {...pageComponentProps} />;
+};
+
+export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps): ReactElement {
+    // Seperate Apollo cache from props
+    const [state, pagePropsWithLayoutProps] = separateApolloCacheFromProps(_pageProps);
+    const apolloClient = useApollo(state);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -51,7 +74,7 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactElement 
                     <GlobalStyles />
                     <ChakraProvider theme={theme}>
                         <div tw="debug-screens" />
-                        <Component {...pageProps} />
+                        {mergeWithLayout(Component, pagePropsWithLayoutProps)}
                     </ChakraProvider>
                 </ScreenProvider>
             </ApolloProvider>

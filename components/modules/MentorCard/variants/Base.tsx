@@ -92,13 +92,14 @@ export function MainSection({
     fullname,
     badge,
     expInYears,
+    status,
     brief,
     location,
 }: TopLevelGridItem<
     Pick<MentorCardProps, "fullname" | "location" | "expInYears" | "status" | "brief" | "badge">
 >) {
     return (
-        <VStack gridArea="main" alignItems="stretch" spacing={4}>
+        <VStack gridArea="main" alignItems="start" spacing={4}>
             {/* Name */}
             <HStack alignItems="center">
                 <Heading as="h2" fontSize="2xl">
@@ -121,6 +122,13 @@ export function MainSection({
                     {`${expInYears < 1 ? "<" : ""} ${expInYears}${expInYears > 1 ? "+" : ""} years`}
                 </Tag>
             </HStack>
+
+            <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">
+                <Rss tw="animate-pulse flex-shrink-0 mr-1" size={20} mirrored={true} />
+                <TagLabel>
+                    <AutoScrollText text={status} />
+                </TagLabel>
+            </Tag>
 
             {/* Short summary or content */}
             <Text fontSize="sm" color="secondary" isTruncated noOfLines={3}>

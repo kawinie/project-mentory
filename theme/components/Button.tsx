@@ -6,16 +6,18 @@ export const Button: ComponentSingleStyleConfig = {
         fontWeight: "semibold",
         transitionDuration: 1,
         flexShrink: 0,
-        borderRadius: "lg",
-        _hover: {
-            shadow: "lg",
-        },
-        outline: "none",
     },
     variants: {
         primary: {
-            bg: "blueGray.900",
+            p: 3,
+            bg: "blueGray.700",
             color: "blueGray.200",
+            minHeight: "44px",
+            minWidth: "100px",
+            _hover: {
+                shadow: "lg",
+            },
+            outline: "none",
         },
         outline: {
             borderColor: "coolGray.200",

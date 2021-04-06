@@ -1,0 +1,5 @@
+query User($firstname: String, $lastname: String) {
+    users: userInfos(where: { firstname: $firstname, lastname: $lastname }) {
+        about
+    }
+}

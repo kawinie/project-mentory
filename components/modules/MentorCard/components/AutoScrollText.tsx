@@ -12,7 +12,7 @@ export function AutoScrollText({ text }: { text?: string }) {
         if (node !== null) setEnableScrolling(node.scrollWidth > node.clientWidth);
     }, []);
     return (
-        <div tw="relative w-full">
+        <div tw="relative">
             {/* Gradient Overlay for fading to right (transparent to white)*/}
             <div tw="w-full h-full absolute top-0 z-10 background[linear-gradient(90deg, rgba(255,255,255,0) 75%, white 100%)]" />
             <motion.p

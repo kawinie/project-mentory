@@ -17,16 +17,7 @@ export default extendTheme({
         Tag,
         Menu,
     },
-    styles: {
-        global: {
-            a: {
-                _hover: {
-                    color: "purple.500",
-                    textDecoration: "underline",
-                },
-            },
-        },
-    },
+
     fonts: {
         heading: "Roboto",
         body: "'Open Sans'",
