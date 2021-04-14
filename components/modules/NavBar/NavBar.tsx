@@ -18,10 +18,13 @@ import {
 import { CaretDown, UserCircle } from "phosphor-react";
 import { omit } from "lodash";
 import { ReactElement } from "react";
+import { useRouter } from "next/router";
 
 import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
 import { List } from "components/units/List";
+
+import { logout } from "../../../lib/auth";
 
 /* -------------------------------------------------------------------------- */
 /*                             NavBar Menu Button                             */
@@ -35,6 +38,12 @@ type MenuButtonProps = ButtonProps & {
 };
 
 function NavBarMenuButton({ title, itemGroups, mobileIcon, ...props }: MenuButtonProps) {
+    const router = useRouter();
+    function logoutUser() {
+        logout();
+        router.push("/login");
+    }
+
     const { min, max } = useScreen();
     const common = {
         w: "100%",
@@ -63,7 +72,10 @@ function NavBarMenuButton({ title, itemGroups, mobileIcon, ...props }: MenuButto
                 {itemGroups.map(({ title, items }) => (
                     <MenuGroup key={title} title={title}>
                         {items.map((item) => (
-                            <MenuItem key={item} _hover={{ filter: "brightness(95%)" }}>
+                            <MenuItem
+                                onClick={item === "Log Out" ? () => logoutUser() : () => null}
+                                key={item}
+                                _hover={{ filter: "brightness(95%)" }}>
                                 {item}
                             </MenuItem>
                         ))}
@@ -98,7 +110,7 @@ const navMenuItems = [
 
 const userMenuItems = [
     { title: "Profile", items: ["My Account", "Payments"] },
-    { title: "Help", items: ["Docs", "FAQ"] },
+    { title: "Help", items: ["Docs", "FAQ", "Log Out"] },
 ];
 
 const categories = [
