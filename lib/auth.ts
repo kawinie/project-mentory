@@ -1,6 +1,8 @@
 import Cookie from "js-cookie";
 import axios from "axios";
 
+import { setAuthStatus } from "redux/actions";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 // register a new user
@@ -33,6 +35,7 @@ export const login = (identifier: string, password: string) => {
 
                 // resolve the promise to set loading to false
                 resolve(res);
+                setAuthStatus("authenticated");
             })
             .catch((error) => {
                 //reject the promise and pass the error object back to the form

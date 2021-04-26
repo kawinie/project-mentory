@@ -89,7 +89,12 @@ const MaunalFormSignIn = () => {
             .then(() => {
                 typeof window !== "undefined" ? localStorage.setItem("username", username) : null;
                 dispatch(setCurrentUser(username));
-                router.push("/landing");
+                const { referal } = router.query;
+                if (referal) {
+                    router.replace(referal as string);
+                } else {
+                    router.push("/landing");
+                }
             })
             .catch((err) => {
                 router.reload();

@@ -287,7 +287,7 @@ function Edit() {
         case "authenticated":
             return <UserForm />;
         case "unauthenticated":
-            router.push("/login");
+            router.push("/login?referal=/users/me/edit");
             return <Box>Please login</Box>;
     }
 }
