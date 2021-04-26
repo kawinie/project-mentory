@@ -22,8 +22,8 @@ import {
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
+import { setCurrentUser } from "redux/actions";
 
-import { createSession } from "../redux/actions";
 import { login } from "../lib/auth";
 
 const data = [
@@ -84,13 +84,11 @@ const MaunalFormSignIn = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { register, handleSubmit } = useForm<FormData>();
-    const onSubmit = handleSubmit((data) => {
-        login(data.username, data.password)
+    const onSubmit = handleSubmit(({ username, password }) => {
+        login(username, password)
             .then(() => {
-                dispatch(createSession(data.username));
-                typeof window !== "undefined"
-                    ? localStorage.setItem("username", data.username)
-                    : null;
+                typeof window !== "undefined" ? localStorage.setItem("username", username) : null;
+                dispatch(setCurrentUser(username));
                 router.push("/landing");
             })
             .catch((err) => {

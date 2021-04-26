@@ -126,4 +126,4 @@ export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context
 };
 
 // Use the same static paths as main layout
-export { getStaticPaths } from "./index";
+export { getStaticPaths } from ".";

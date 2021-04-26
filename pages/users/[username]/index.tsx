@@ -36,10 +36,6 @@ import { addApolloState, initializeApollo } from "utils/apollo";
 import { LayoutComponent } from "utils/layout";
 import { strapiImgLoader } from "utils/strapi";
 
-/**
- * 1. Next/link works inside a Component and switches out that Component when performing client-side transition. This means that whatever is outside of <Component /> will not be rerendered
- */
-
 import query from "./gql/index.gql";
 
 function TopSection({

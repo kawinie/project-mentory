@@ -1,11 +1,11 @@
 import "twin.macro";
 import { GetStaticProps } from "next";
 import { useQuery, useMutation } from "@apollo/client";
-import merge from "deepmerge";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
 import { Dispatch, SetStateAction, useEffect, useState, Fragment } from "react";
+import deepmerge from "deepmerge";
 
 import { withLayout } from "utils/layout";
 import {
@@ -290,6 +290,32 @@ export default Availability;
 /* -------------------------------------------------------------------------- */
 type Params = { username: string };
 
+// export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (context) => {
+//     if (context.params == undefined) {
+//         return {
+//             notFound: true,
+//         };
+//     }
+
+//     const _layoutProps = Availability.retrievePropsFromLayoutDataRequirement(context);
+//     if (_layoutProps == undefined) {
+//         return {
+//             notFound: true,
+//         };
+//     }
+
+//     const { username } = context.params;
+//     const [layoutCache, layoutProps] = separateApolloCacheFromProps(_layoutProps);
+//     const client = initializeApollo(layoutCache);
+
+//     return addApolloState(client, {
+//         props: {
+//             username,
+//             layoutProps,
+//         },
+//     });
+// };
+
 export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (context) => {
     // Null guard
     if (context.params == undefined) {
@@ -308,7 +334,7 @@ export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (
     // Extract the cache from the most recent query and combine it with the cache from the layout dependency
     if (layoutApolloCache) {
         const mergeOption = { arrayMerge: combineMerge };
-        const mergedCache = merge(layoutApolloCache, client.extract(), mergeOption);
+        const mergedCache = deepmerge(layoutApolloCache, client.extract(), mergeOption);
         client.restore(mergedCache);
     }
 

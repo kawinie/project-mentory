@@ -1,6 +1,6 @@
 import { NextComponentType, NextPageContext } from "next";
 import { AppProps } from "next/app";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
@@ -14,6 +14,7 @@ import { separateApolloCacheFromProps, useApollo } from "utils/apollo";
 import theme from "theme";
 import fonts from "theme/fonts";
 import { store } from "redux/store";
+import { setAuthStatus, setCurrentUser } from "redux/actions";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Props = { [key: string]: unknown };
 
@@ -40,14 +41,15 @@ export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps):
     // Seperate Apollo cache from props
     const [state, pagePropsWithLayoutProps] = separateApolloCacheFromProps(_pageProps);
     const apolloClient = useApollo(state);
-    const [user, setUser] = useState(null);
 
     useEffect(() => {
         // grab token value from cookie
         const token = Cookie.get("token");
+        const { dispatch } = store;
 
         if (token) {
             // authenticate the token on the server and place set user object
+            dispatch(setAuthStatus("autheticating"));
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -57,12 +59,17 @@ export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps):
                 // delete the token and log the user out on client
                 if (!res.ok) {
                     Cookie.remove("token");
-                    setUser(null);
+                    dispatch(setAuthStatus("unauthenticated"));
+                    dispatch(setCurrentUser(null));
                     return null;
                 }
-                const newUser = await res.json();
-                setUser(newUser);
+
+                const { username } = await res.json();
+                dispatch(setCurrentUser(username));
+                dispatch(setAuthStatus("authenticated"));
             });
+        } else {
+            dispatch(setAuthStatus("unauthenticated"));
         }
     }, []);
 
