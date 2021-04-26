@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_day_days",
+  "info": {
+    "name": "Day",
+    "icon": "calendar-plus"
+  },
+  "options": {},
+  "attributes": {
+    "Name": {
+      "type": "enumeration",
+      "enum": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ]
+    }
+  }
+}
