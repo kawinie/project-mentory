@@ -20,6 +20,9 @@ import About from "./about";
 
 import { UserPageLayout } from ".";
 
+/* -------------------------------------------------------------------------- */
+/*                             Times Component                                */
+/* -------------------------------------------------------------------------- */
 type TimesProps = {
     weekTimes: { [key: string]: [{ time: string; selected: boolean }] };
     times: [{ time: string; selected: boolean }];
@@ -42,9 +45,11 @@ function Times(props: TimesProps) {
                         width="20"
                         height="10"
                         onClick={() => {
+                            // Toggles "selected" field within week availability object
                             props.weekTimes[props.day][i].selected = !props.weekTimes[props.day][i]
                                 .selected;
                             props.handleWeekTimes(props.weekTimes);
+                            // Increments or decrements total times selected accordingly
                             entry.selected
                                 ? props.handleSelected(props.selected + 1)
                                 : props.handleSelected(props.selected - 1);
@@ -59,6 +64,9 @@ function Times(props: TimesProps) {
     );
 }
 
+/* -------------------------------------------------------------------------- */
+/*                              Week Component                                */
+/* -------------------------------------------------------------------------- */
 type WeekProps = {
     weekTimes: { [key: string]: [{ time: string; selected: boolean }] };
     handleWeekTimes: Dispatch<
@@ -94,6 +102,9 @@ function Week(props: WeekProps) {
     );
 }
 
+/* -------------------------------------------------------------------------- */
+/*                             Top Bar Component                              */
+/* -------------------------------------------------------------------------- */
 type TopBarProps = {
     selected: number;
 };
@@ -123,15 +134,46 @@ function TopBar(props: TopBarProps) {
     );
 }
 
+/* -------------------------------------------------------------------------- */
+/*                  Configure/Arrange Dates Helper Function                   */
+/* -------------------------------------------------------------------------- */
+function configDates() {
+    const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const today = new Date();
+    const weekDates = [];
+
+    // Format today's date
+    const mmdd = `${weekDays[today.getDay()]} ${String(today.getMonth() + 1)}/${String(
+        today.getDate()
+    )}`;
+    weekDates.push(mmdd);
+
+    // Use today's date to get & format the next 6 days of the week
+    for (let i = 1; i < 7; i++) {
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + i);
+        const mmdd = `${weekDays[tomorrow.getDay()]} ${String(tomorrow.getMonth() + 1)}/${String(
+            tomorrow.getDate()
+        )}`;
+        weekDates.push(mmdd);
+    }
+
+    return weekDates;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                         Full Availability Component                        */
+/* -------------------------------------------------------------------------- */
+const weekAvailabilityClean: { [key: string]: [{ time: string; selected: boolean }] } = {};
+const weekDates = configDates();
+
 type AvailabilityProps = {
     username: string;
 };
-const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const weekAvailabilityClean: { [key: string]: [{ time: string; selected: boolean }] } = {};
 
 const Availability = withLayout(UserPageLayout, function ({ username }: AvailabilityProps) {
-    const [totalSelected, setTotalSelected] = useState(0);
-    const [weekAvailabilityData, setWeekAvailabilityData] = useState({});
+    const [totalSelected, setTotalSelected] = useState(0); // total selected times
+    const [weekAvailabilityData, setWeekAvailabilityData] = useState({}); // cleaned fetched week availability data
 
     // Get the weekAvailability data
     const { data } = useQuery(query, { variables: { username } });
@@ -139,9 +181,12 @@ const Availability = withLayout(UserPageLayout, function ({ username }: Availabi
     const { weekAvailability } = user;
 
     useEffect(() => {
-        // Arrange the weekAvailability data recieved from the query
-        weekDays.map((wd) => (weekAvailabilityClean[wd] = [{ time: "", selected: false }]));
+        // Initialize the cleaned week availability data
+        weekDates.map(
+            (wd) => (weekAvailabilityClean[wd.slice(0, 3)] = [{ time: "", selected: false }])
+        );
 
+        // Arrange the week availability data recieved from the query
         weekAvailability.map((a: { dayName: string; availableAt: string }) => {
             if (weekAvailabilityClean[a.dayName][0].time === "") {
                 weekAvailabilityClean[a.dayName] = [
@@ -153,6 +198,13 @@ const Availability = withLayout(UserPageLayout, function ({ username }: Availabi
                     selected: false,
                 });
             }
+        });
+
+        // Add the dates to the days of the week
+        weekDates.map((wd) => {
+            delete Object.assign(weekAvailabilityClean, {
+                [wd]: weekAvailabilityClean[wd.slice(0, 3)],
+            })[wd.slice(0, 3)];
         });
 
         setWeekAvailabilityData(weekAvailabilityClean);
