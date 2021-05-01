@@ -16,13 +16,16 @@ import {
 } from "@chakra-ui/react";
 import { X } from "phosphor-react";
 import axios from "axios";
-import { times } from "lodash";
+import { first, times } from "lodash";
+import { useQuery } from "@apollo/client";
+import { useSelector } from "react-redux";
 
 import { FilterSidebar } from "components/pages/MentorListing";
 import { MentorCard } from "components/modules/MentorCard";
 import { NavBar } from "components/modules/NavBar";
 import { useScreen } from "hooks";
 import { Mentor, Article } from "models";
+import query from "pages/gql/users.gql";
 
 /* -------------------------------------------------------------------------- */
 /*                               Mentor Results                               */
@@ -31,11 +34,24 @@ import { Mentor, Article } from "models";
 function DisplayResult({ searchQuery }: { searchQuery: string }) {
     const [mentors, setMentors] = useState<Mentor[] | null>(null);
 
+    const checkBoxes = useSelector((state) => state.filterCheckboxes);
+    let categories = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
+    if (categories) {
+        categories = categories.filter((element) => checkBoxes[element] == true);
+    }
+    const { loading, data } = useQuery(query, {
+        variables: { category: categories },
+    });
+    console.log("categories: " + categories);
+    console.log(data);
+    console.log(mentors);
     useEffect(() => {
-        axios
-            .get<Mentor[]>("/api/mentors", { params: { searchQuery } })
-            .then((response) => setMentors(response.data));
-    }, [searchQuery]);
+        const users = loading ? [] : data.users;
+        setMentors(users);
+        // axios
+        //     .get<Mentor[]>("/api/mentors", { params: { searchQuery } })
+        //     .then((response) => setMentors(response.data));
+    }, [loading, categories]);
 
     return (
         <Box tw="h-full w-full">
@@ -66,12 +82,13 @@ function DisplayResult({ searchQuery }: { searchQuery: string }) {
                     </VStack>
                 ) : (
                     mentors.map(({ firstname, lastname, ...rest }) => (
-                        <MentorCard
-                            key={firstname + lastname}
-                            fullname={`${firstname} ${lastname}`}
-                            {...rest}
-                            variant="desktop"
-                        />
+                        <Text key={firstname + lastname}>{`${firstname} ${lastname}`}</Text>
+                        // <MentorCard
+                        //     key={firstname + lastname}
+                        //     fullname={`${firstname} ${lastname}`}
+                        //     {...rest}
+                        //     variant="desktop"
+                        // />
                     ))
                 )}
             </VStack>

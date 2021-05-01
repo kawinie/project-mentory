@@ -73,6 +73,9 @@
       "plugin": "users-permissions",
       "model": "user"
     },
+    "category": {
+      "model": "category"
+    },
     "weekAvailability": {
       "type": "component",
       "repeatable": true,

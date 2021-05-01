@@ -3,16 +3,21 @@ import { ReactElement } from "react";
 import { HStack, VStack, Checkbox, Box, Flex, Heading, Badge } from "@chakra-ui/react";
 import { Sliders, DotsNine, Tag, CheckSquare, HourglassHigh, Star } from "phosphor-react";
 import { times } from "lodash";
+import { useQuery } from "@apollo/client";
+import { useDispatch } from "react-redux";
+
+import { setCheckboxes } from "redux/actions";
+import query from "pages/gql/category.gql";
 
 /* -------------------------------------------------------------------------- */
 /*                                  Mock Data                                 */
 /* -------------------------------------------------------------------------- */
 
-const categories = [
-    { name: "Software Engineering", count: 32 },
-    { name: "UI/UX", count: 20 },
-    { name: "Data Science", count: 12 },
-];
+// const categories = [
+//     { name: "Software Engineering", count: 32 },
+//     { name: "UI/UX", count: 20 },
+//     { name: "Data Science", count: 12 },
+// ];
 
 const tags = [
     { name: "React", count: 35 },
@@ -40,11 +45,19 @@ type FilterOptionProps = {
     inlineElement: ReactElement;
     count: number;
     isSelected?: boolean;
+    name: string;
 };
 
-function FilterOption({ inlineElement, count, isSelected }: FilterOptionProps) {
+function FilterOption({ inlineElement, count, isSelected, name }: FilterOptionProps) {
+    const dispatch = useDispatch();
     return (
-        <Checkbox size={"md"} isChecked={isSelected}>
+        <Checkbox
+            size={"md"}
+            isChecked={isSelected}
+            onChange={(e) => {
+                console.log("e.target.checked: " + name + " is " + e.target.checked);
+                dispatch(setCheckboxes({ [name]: e.target.checked }));
+            }}>
             <span tw="mr-2 text-sm">{inlineElement}</span>
             <Badge tw="px-2 bg-blueGray-200 text-secondary rounded-full">{count}</Badge>
         </Checkbox>
@@ -82,6 +95,12 @@ function FilterSection({ title, icon, options }: FilterSectionProps) {
 /* -------------------------------------------------------------------------- */
 
 export function FilterSidebar() {
+    const { loading, error, data } = useQuery(query);
+    if (loading) return "Loading...";
+    if (error) return `Error! ${error.message}`;
+
+    const { categories } = data;
+    console.log(categories);
     return (
         <Box tw="overflow-hidden flex-shrink-0">
             {/* We need to wrap the scrollable content in a div to fix safari bug
@@ -101,8 +120,9 @@ export function FilterSidebar() {
                         title="Categories"
                         icon={<DotsNine size={24} />}
                         options={categories.map((cat) => ({
-                            inlineElement: <>{cat.name}</>,
-                            count: cat.count,
+                            inlineElement: <>{cat.Category}</>,
+                            count: 12,
+                            name: cat.Category,
                         }))}
                     />
 
@@ -112,6 +132,7 @@ export function FilterSidebar() {
                         options={tags.map((tag) => ({
                             inlineElement: <>{tag.name}</>,
                             count: tag.count,
+                            name: tag.name,
                         }))}
                     />
 
@@ -121,6 +142,7 @@ export function FilterSidebar() {
                         options={availabilities.map((avail) => ({
                             inlineElement: <>{avail.name}</>,
                             count: avail.count,
+                            name: avail.name,
                         }))}
                     />
 
@@ -148,6 +170,7 @@ export function FilterSidebar() {
                                 </Flex>
                             ),
                             count: review.count,
+                            name: `review-${review.star}`,
                         }))}
                     />
 

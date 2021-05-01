@@ -42,3 +42,16 @@ type TransactionDetails = {
 export const currentTransaction = createReducer<TransactionDetails | null>(null, (builder) => {
     builder.addCase(actions.setTransctionDetails, (_, action) => action.payload);
 });
+
+const initialCheckboxes: Record<string, boolean> = {};
+export const filterCheckboxes = createReducer(initialCheckboxes, (builder) => {
+    builder.addCase(actions.setCheckboxes, (currentState, action) => {
+        const payload = action.payload;
+
+        Object.keys(payload).forEach((k) => {
+            currentState[k] = payload[k];
+        });
+
+        return currentState;
+    });
+});
