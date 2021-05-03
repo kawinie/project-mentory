@@ -70,6 +70,9 @@ type AboutProps = {
 
 const About = withLayout(UserPageLayout, function ({ username }: AboutProps) {
     const { data } = useQuery(query, { variables: { username } });
+
+    console.log(useQuery(query, { variables: { username } }));
+
     const user = data.users[0];
 
     const { profileSections } = user;

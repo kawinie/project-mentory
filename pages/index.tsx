@@ -35,30 +35,6 @@ export default function Home() {
                     Mentor List
                 </Button>
             </Link>
-            <Review
-                username="chibat"
-                date="4/5/2021"
-                title="Amazing Mentor!"
-                review="A simple review"
-            />
-            <Review
-                username="chibat"
-                date="4/5/2021"
-                title="Amazing Mentor!"
-                review="A longer review fdjklfsdf dlfdsfd sfodsf dslf dsfojds fjdsf ods fodsf dsf odsjf dsjf odjs fjds fdso foojds ofjds fjods fojd sjf dsjof dsojf odjs fojds fds fdsojf odjsf ds"
-            />
-            <Review
-                username="chibat"
-                date="4/5/2021"
-                title="Amazing Mentor!"
-                review="A simple review"
-            />
-            <Review
-                username="chibat"
-                date="4/5/2021"
-                title="Amazing Mentor!"
-                review="A simple review"
-            />
         </Container>
     );
 }

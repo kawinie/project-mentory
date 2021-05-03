@@ -99,8 +99,10 @@ const animate = keyframes`
 const LandingNavBar = () => {
     return (
         <Flex bg="white" w="50%" h="70px" top="550px" position="absolute" left="25%">
-            <HStack spacing={4} tw="flex w-full justify-center">
-                <SearchBar name="search" placeholder="Search..." />
+            <HStack spacing={4} tw="flex w-full justify-center" h="full">
+                <Box h="48px" w="full">
+                    <SearchBar name="search" placeholder="Search..." />
+                </Box>
                 <Menu>
                     <MenuButton
                         tw="inline-block h-12 text-sm text-left min-w-min"

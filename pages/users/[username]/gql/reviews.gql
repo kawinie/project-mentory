@@ -1,0 +1,14 @@
+query User($username: String) {
+    reviews(where: { toUser: { user: { username: $username } } }) {
+        score
+        description
+        published_at
+        title
+        likes
+        fromUser {
+            user {
+                username
+            }
+        }
+    }
+}
