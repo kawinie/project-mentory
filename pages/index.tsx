@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { Button, Container, Heading, Text } from "@chakra-ui/react";
 
+import { Review } from "components/modules/Review";
 /* -------------------------------------------------------------------------- */
 /*                                    Home                                    */
 /* -------------------------------------------------------------------------- */

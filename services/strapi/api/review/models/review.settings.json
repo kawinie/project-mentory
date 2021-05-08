@@ -26,6 +26,13 @@
     },
     "toUser": {
       "model": "user-info"
+    },
+    "title": {
+      "type": "string"
+    },
+    "likes": {
+      "type": "integer",
+      "default": 0
     }
   }
 }
