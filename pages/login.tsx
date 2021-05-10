@@ -88,6 +88,9 @@ const MaunalFormSignIn = () => {
         login(data.username, data.password)
             .then(() => {
                 dispatch(createSession(data.username));
+                typeof window !== "undefined"
+                    ? localStorage.setItem("username", data.username)
+                    : null;
                 router.push("/landing");
             })
             .catch((err) => {

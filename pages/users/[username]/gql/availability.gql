@@ -1,4 +1,4 @@
-query User($username: String) {
+query GetUserAvailability($username: String) {
     users: userInfos(where: { user: { username: $username } }) {
         weekAvailability {
             dayName

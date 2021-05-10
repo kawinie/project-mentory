@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_datetime_meetings",
+  "info": {
+    "name": "Meetings",
+    "icon": "calendar-day"
+  },
+  "options": {},
+  "attributes": {
+    "transactionDateTime": {
+      "type": "datetime"
+    }
+  }
+}

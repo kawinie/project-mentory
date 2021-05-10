@@ -118,6 +118,7 @@ const ManualFormSignUp = () => {
     const onSubmit = async (userData: FormData) => {
         await registerUser(userData.username, userData.email, userData.password);
         dispatch(createSession(userData.username));
+        typeof window !== "undefined" ? localStorage.setItem("username", userData.username) : null;
         router.push("/landing");
     };
 

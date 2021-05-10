@@ -1,11 +1,11 @@
 import "twin.macro";
 import { GetStaticProps } from "next";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import merge from "deepmerge";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState, Fragment } from "react";
 
 import { withLayout } from "utils/layout";
 import {
@@ -16,7 +16,8 @@ import {
 } from "utils/apollo";
 
 import query from "./gql/availability.gql";
-import About from "./about";
+import userIdQuery from "./gql/transactionusers.gql";
+import mutation from "./gql/transaction.gql";
 
 import { UserPageLayout } from ".";
 
@@ -80,7 +81,7 @@ function Week(props: WeekProps) {
     return (
         <Grid templateColumns="repeat(14, 1fr)" gap={8}>
             {Object.entries(props.weekTimes).map((wt, i) => (
-                <>
+                <Fragment key={i}>
                     <VStack>
                         <Text tw="mt-10" fontSize="large" fontWeight="bold">
                             {wt[0]}
@@ -96,10 +97,31 @@ function Week(props: WeekProps) {
                         />
                     </VStack>
                     {i < 6 ? <Divider tw="mt-10" orientation="vertical" /> : null}
-                </>
+                </Fragment>
             ))}
         </Grid>
     );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                       Format DateTimes Helper Function                     */
+/* -------------------------------------------------------------------------- */
+function formatDateTimes(weekTimes: { [key: string]: [{ time: string; selected: boolean }] }) {
+    const dateTimes: { [key: string]: string }[] = [];
+
+    for (const key in weekTimes) {
+        weekTimes[key].map((time) => {
+            if (time.selected) {
+                dateTimes.push({
+                    transactionDateTime: new Date(
+                        `${key.slice(4, 8)}/2021 ${time.time}`
+                    ).toISOString(),
+                });
+            }
+        });
+    }
+
+    return dateTimes;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -107,9 +129,14 @@ function Week(props: WeekProps) {
 /* -------------------------------------------------------------------------- */
 type TopBarProps = {
     selected: number;
+    weekTimes: { [key: string]: [{ time: string; selected: boolean }] };
+    mentorName: string;
+    userId: number;
 };
 
 function TopBar(props: TopBarProps) {
+    const [createTransaction, { data }] = useMutation(mutation);
+
     return (
         <HStack spacing={480}>
             <HStack spacing={12}>
@@ -126,7 +153,24 @@ function TopBar(props: TopBarProps) {
                 <Text fontSize="xs" fontWeight="bold">
                     {props.selected} Selected
                 </Text>
-                <Button onClick={() => null} width="40">
+                <Button
+                    onClick={() => {
+                        if (!formatDateTimes(props.weekTimes).length) {
+                            alert("Please select at least one meeting time");
+                        } else if (!props.userId) {
+                            alert("You must be signed in to book a meeting.");
+                        } else {
+                            createTransaction({
+                                variables: {
+                                    mentor: props.mentorName,
+                                    user: props.userId,
+                                    meeting: formatDateTimes(props.weekTimes),
+                                },
+                            });
+                            alert("Woohoo, you booked it!");
+                        }
+                    }}
+                    width="40">
                     Book Now
                 </Button>
             </HStack>
@@ -175,7 +219,18 @@ const Availability = withLayout(UserPageLayout, function ({ username }: Availabi
     const [totalSelected, setTotalSelected] = useState(0); // total selected times
     const [weekAvailabilityData, setWeekAvailabilityData] = useState({}); // cleaned fetched week availability data
 
-    // Get the weekAvailability data
+    // Get the currently logged-in user ID
+    const loggedInUser = typeof window !== "undefined" ? localStorage.getItem("username") : null;
+    const userData = loggedInUser
+        ? useQuery(userIdQuery, { variables: { loggedInUser } }).data
+        : null;
+    const loggedInUserId = userData
+        ? userData.users.filter(
+              (user: { username: string | null }) => user.username === loggedInUser
+          )[0].id
+        : null;
+
+    // Get the mentor's week availability data
     const { data } = useQuery(query, { variables: { username } });
     const user = data.users[0];
     const { weekAvailability } = user;
@@ -212,7 +267,12 @@ const Availability = withLayout(UserPageLayout, function ({ username }: Availabi
 
     return (
         <VStack>
-            <TopBar selected={totalSelected} />
+            <TopBar
+                selected={totalSelected}
+                weekTimes={weekAvailabilityData}
+                mentorName={username}
+                userId={loggedInUserId}
+            />
             <Week
                 weekTimes={weekAvailabilityData}
                 handleWeekTimes={setWeekAvailabilityData}
@@ -242,7 +302,7 @@ export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (
     await client.query({ query, variables: { username } });
 
     // Get return props from layout data fetching method and extract cache from layout props if any
-    const result = (await About.retrievePropsFromLayoutDataRequirement(context)) ?? {};
+    const result = (await Availability.retrievePropsFromLayoutDataRequirement(context)) ?? {};
     const [layoutApolloCache, layoutProps] = separateApolloCacheFromProps(result);
 
     // Extract the cache from the most recent query and combine it with the cache from the layout dependency
