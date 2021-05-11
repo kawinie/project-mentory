@@ -1,7 +1,7 @@
 import Cookie from "js-cookie";
 import axios from "axios";
 
-import { setAuthStatus, setCurrentUser, setUserId } from "redux/actions";
+import { setAuthStatus, setUsername, setUserId } from "redux/actions";
 import { store } from "redux/store";
 const { dispatch } = store;
 
@@ -9,14 +9,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 function setLogin(token: string, username: string, id: number) {
     Cookie.set("token", token);
-    dispatch(setCurrentUser(username));
+    dispatch(setUsername(username));
     dispatch(setUserId(id));
     dispatch(setAuthStatus("authenticated"));
 }
 
 function setLogout() {
     Cookie.remove("token");
-    dispatch(setCurrentUser(null));
+    dispatch(setUsername(null));
     dispatch(setUserId(null));
     dispatch(setAuthStatus("unauthenticated"));
 }

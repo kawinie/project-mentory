@@ -25,7 +25,7 @@ import * as z from "zod";
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
 
-import { setCurrentUser } from "../redux/actions";
+import { setUsername } from "../redux/actions";
 import { registerUser } from "../lib/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
@@ -118,7 +118,7 @@ const ManualFormSignUp = () => {
     const onSubmit = async (userData: FormData) => {
         await registerUser(userData.username, userData.email, userData.password);
         typeof window !== "undefined" ? localStorage.setItem("username", userData.username) : null;
-        dispatch(setCurrentUser(userData.username));
+        dispatch(setUsername(userData.username));
         router.push("/landing");
     };
 

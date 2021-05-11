@@ -22,7 +22,7 @@ import {
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
-import { setCurrentUser } from "redux/actions";
+import { setUsername } from "redux/actions";
 
 import { login } from "../lib/auth";
 

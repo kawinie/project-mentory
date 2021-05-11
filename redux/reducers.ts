@@ -22,7 +22,7 @@ function ifElse<B extends boolean, T, K>(c: B, a: T, b: K) {
 
 const initialUsername = null;
 export const currentUsername = createReducer<string | null>(initialUsername, (builder) => {
-    builder.addCase(actions.setCurrentUser, (_, action) => action.payload);
+    builder.addCase(actions.setUsername, (_, action) => action.payload);
 });
 
 export const currentUserId = createReducer<number | null>(null, (builder) => {

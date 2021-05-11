@@ -4,7 +4,7 @@ import Cookie from "js-cookie";
 import { Container, Heading, Spinner } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 
-import { setCurrentUser } from "redux/actions";
+import { setUsername } from "redux/actions";
 import "twin.macro";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
@@ -35,7 +35,7 @@ export default function Connect() {
                 // Successfully logged with Strapi
                 // Now saving the jwt to use it for future authenticated requests to Strapi
                 Cookie.set("token", res.jwt);
-                dispatch(setCurrentUser(res.user.username));
+                dispatch(setUsername(res.user.username));
                 Router.push("/landing");
             })
             .catch((err) => {
