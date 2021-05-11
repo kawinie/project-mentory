@@ -19,15 +19,17 @@ import {
     AccordionIcon,
     AccordionPanel,
 } from "@chakra-ui/react";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { Pencil } from "phosphor-react";
 import { floor, padStart, range } from "lodash";
+import { useForm } from "react-hook-form";
 
 import { NavBar } from "components/modules/NavBar";
 import { strapiImgLoader } from "utils/strapi";
 
 import query from "./gql/edit.gql";
+import aboutMutation from "./gql/aboutMutation.gql";
 
 type ActiveTabProps = {
     href: string;
@@ -45,7 +47,7 @@ const ActiveTab = ({ href, label }: ActiveTabProps) => {
             _hover={{ borderColor: "primary", color: "text-primary-darker" }}
             borderRight="2px"
             borderColor={isActive ? "text-primary-darker" : "fade"}
-            color={isActive ? "primary" : "text-primary-lighter"}
+            color={isActive ? "primary" : "darkgray"}
             textTransform="capitalize"
             borderRadius="0"
             onClick={() => router.replace(`#${href}`)}
@@ -68,7 +70,39 @@ function Header() {
 function AboutTab() {
     const username = useSelector((state) => state.currentUsername);
     const { data } = useQuery(query, { variables: { username } });
-    const { firstname, lastname, brief, about, city, status, profession, state } = data.users[0];
+    const {
+        id,
+        firstname,
+        lastname,
+        brief,
+        about,
+        city,
+        status,
+        profession,
+        state,
+    } = data.users[0];
+
+    console.log(id);
+
+    const [updateUserInfo] = useMutation(aboutMutation);
+
+    const { handleSubmit, register } = useForm({
+        defaultValues: {
+            firstname,
+            lastname,
+            brief,
+            about,
+            city,
+            status,
+            profession,
+            state,
+        },
+    });
+
+    const submitHandler = handleSubmit((values) => {
+        console.log(values);
+        updateUserInfo({ variables: { id, data: values } });
+    });
 
     const sections = ([
         { brief },
@@ -93,7 +127,7 @@ function AboutTab() {
                 fontWeight="semibold">
                 About
             </Box>
-            <Grid w="full" columnGap={16} rowGap={8} templateColumns="150px 1fr">
+            <Grid as="form" w="full" columnGap={16} rowGap={8} templateColumns="150px 1fr">
                 <Box textAlign="center" fontWeight="bold">
                     Name
                 </Box>
@@ -104,13 +138,15 @@ function AboutTab() {
                         <Box textAlign="center" fontWeight="bold" textTransform="capitalize">
                             {section.name}
                         </Box>
-                        <Textarea value={section.data ?? ""} />
+                        <Textarea name={section.name} ref={register} />
                     </Fragment>
                 ))}
             </Grid>
 
-            <Box alignSelf="flex-end">
-                <Button disabled={true}>Save</Button>
+            <Box alignSelf="flex-end" pb={8}>
+                <Button type="submit" onClick={submitHandler}>
+                    Save
+                </Button>
             </Box>
         </Fragment>
     );

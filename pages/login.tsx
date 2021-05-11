@@ -82,25 +82,17 @@ type FormData = {
 
 const MaunalFormSignIn = () => {
     const router = useRouter();
-    const dispatch = useDispatch();
     const { register, handleSubmit } = useForm<FormData>();
-    const onSubmit = handleSubmit(({ username, password }) => {
-        login(username, password)
-            .then(() => {
-                typeof window !== "undefined" ? localStorage.setItem("username", username) : null;
-                dispatch(setCurrentUser(username));
-                const { referal } = router.query;
-                if (referal) {
-                    router.replace(referal as string);
-                } else {
-                    router.push("/landing");
-                }
-            })
-            .catch((err) => {
-                router.reload();
-                console.log(err);
-                alert("Invalid email or password");
-            });
+    const onSubmit = handleSubmit(async ({ username, password }) => {
+        try {
+            await login(username, password);
+            typeof window !== "undefined" ? localStorage.setItem("username", username) : null;
+            const referal = router.query.referal as string | undefined;
+            router.push(referal ?? "/landing");
+        } catch (error) {
+            console.log(error);
+            alert("Invalid email or password");
+        }
     });
 
     return (

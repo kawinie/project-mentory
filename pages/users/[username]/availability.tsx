@@ -290,32 +290,6 @@ export default Availability;
 /* -------------------------------------------------------------------------- */
 type Params = { username: string };
 
-// export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (context) => {
-//     if (context.params == undefined) {
-//         return {
-//             notFound: true,
-//         };
-//     }
-
-//     const _layoutProps = Availability.retrievePropsFromLayoutDataRequirement(context);
-//     if (_layoutProps == undefined) {
-//         return {
-//             notFound: true,
-//         };
-//     }
-
-//     const { username } = context.params;
-//     const [layoutCache, layoutProps] = separateApolloCacheFromProps(_layoutProps);
-//     const client = initializeApollo(layoutCache);
-
-//     return addApolloState(client, {
-//         props: {
-//             username,
-//             layoutProps,
-//         },
-//     });
-// };
-
 export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (context) => {
     // Null guard
     if (context.params == undefined) {

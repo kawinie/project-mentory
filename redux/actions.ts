@@ -12,8 +12,13 @@ function withPayload<K extends unknown[], V>(action: (...args: K) => V) {
 }
 
 export const setCurrentUser = createAction(
-    "user/set",
+    "username/set",
     withPayload((username: string | null) => username)
+);
+
+export const setUserId = createAction(
+    "userId/set",
+    withPayload((id: number | null) => id)
 );
 
 export const setAuthStatus = createAction(

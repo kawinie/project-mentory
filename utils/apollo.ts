@@ -3,6 +3,7 @@ import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from "@a
 import { setContext } from "@apollo/client/link/context";
 import { GetStaticPropsResult } from "next";
 import deepmerge from "deepmerge";
+import Cookie from "js-cookie";
 
 const CONTENT_SERVER_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
@@ -15,7 +16,8 @@ const httpLink = new HttpLink({
 
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
-    const token = localStorage.getItem("token");
+    const token = Cookie.get("token");
+    console.log("Token: ", token);
     // return the headers to the context so httpLink can read them
     return {
         headers: {

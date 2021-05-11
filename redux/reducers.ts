@@ -25,6 +25,10 @@ export const currentUsername = createReducer<string | null>(initialUsername, (bu
     builder.addCase(actions.setCurrentUser, (_, action) => action.payload);
 });
 
+export const currentUserId = createReducer<number | null>(null, (builder) => {
+    builder.addCase(actions.setUserId, (_, action) => action.payload);
+});
+
 export const authStatus = createReducer<AuthStatus>("ready", (builder) => {
     builder.addCase(actions.setAuthStatus, (_, action) => action.payload);
 });

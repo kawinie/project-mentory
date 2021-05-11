@@ -4,6 +4,7 @@ import merge from "deepmerge";
 import { GetStaticProps } from "next";
 import { useQuery } from "@apollo/client";
 import { Stack, Box, VStack, Text, AspectRatio } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
 
 import { withLayout } from "utils/layout";
 import { strapiImgLoader } from "utils/strapi";
