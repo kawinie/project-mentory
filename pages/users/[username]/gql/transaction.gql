@@ -1,0 +1,14 @@
+mutation CreateTransaction($mentor: String, $user: ID, $meeting: [ComponentDatetimeMeetingInput]) {
+  createTransaction(input: { data: { mentor: $mentor, user: $user, meeting: $meeting } }) {
+    transaction {
+      id
+      mentor
+      user {
+        username
+      }
+      meeting {
+        transactionDateTime
+      }
+    }
+  }
+}

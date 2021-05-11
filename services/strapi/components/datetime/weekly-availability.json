@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_datetime_weekly_availabilities",
+  "info": {
+    "name": "WeeklyAvailability",
+    "icon": "calendar-alt"
+  },
+  "options": {},
+  "attributes": {}
+}

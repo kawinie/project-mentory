@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_datetime_availabilities",
+  "info": {
+    "name": "Availability",
+    "icon": "calendar"
+  },
+  "options": {},
+  "attributes": {
+    "DateTime": {
+      "type": "datetime"
+    }
+  }
+}

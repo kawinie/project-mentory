@@ -1,0 +1,6 @@
+query GetUserId($username: String) {
+    users: users(where: { user: { username: $username } }) {
+        id
+        username
+    }
+}

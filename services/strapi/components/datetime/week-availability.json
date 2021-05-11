@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_datetime_week_availabilities",
+  "info": {
+    "name": "WeekAvailability",
+    "icon": "calendar-check",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "dayName": {
+      "type": "enumeration",
+      "enum": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ]
+    },
+    "availableAt": {
+      "type": "time"
+    }
+  }
+}

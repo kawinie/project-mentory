@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_daytime_day_times",
+  "info": {
+    "name": "DayTime",
+    "icon": "hourglass-half"
+  },
+  "options": {},
+  "attributes": {
+    "meetingDateTime": {
+      "type": "datetime"
+    }
+  }
+}

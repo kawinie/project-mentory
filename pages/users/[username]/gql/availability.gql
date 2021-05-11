@@ -1,5 +1,8 @@
-query User($firstname: String, $lastname: String) {
-    users: userInfos(where: { firstname: $firstname, lastname: $lastname }) {
-        about
+query GetUserAvailability($username: String) {
+    users: userInfos(where: { user: { username: $username } }) {
+        weekAvailability {
+            dayName
+            availableAt
+        }
     }
 }
