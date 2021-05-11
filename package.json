@@ -5,7 +5,7 @@
     "scripts": {
         "start": "next start",
         "start:storybook": "start-storybook -p 6006",
-        "dev": "rmdir /s || rm -rf .next && next dev",
+        "dev": "rm -rf .next && next dev",
         "windows-dev": "next dev",
         "dev:strapi": "cd services/strapi && npm run develop",
         "build": "next build",
