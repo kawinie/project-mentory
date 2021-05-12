@@ -82,8 +82,6 @@ function AboutTab() {
         state,
     } = data.users[0];
 
-    console.log(id);
-
     const [updateUserInfo] = useMutation(aboutMutation);
 
     const { handleSubmit, register } = useForm({

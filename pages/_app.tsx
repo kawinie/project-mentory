@@ -26,19 +26,18 @@ interface MyAppProps<P = Props> extends AppProps<P> {
 type Component = MyAppProps["Component"];
 type CombinedProps<T> = T & { layoutProps?: Props; pageComponentProps?: Props };
 const mergeWithLayout = <T extends Props>(Component: Component, props: CombinedProps<T>) => {
+    const { layoutProps, ...componentProps } = props;
     return Component.layout ? (
-        <Component.layout {...props.layoutProps}>
-            <Component {...props.pageComponentProps} />
+        <Component.layout {...layoutProps}>
+            <Component {...componentProps} />
         </Component.layout>
     ) : (
-        <Component {...props.pageComponentProps} />
+        <Component {...componentProps} />
     );
 };
 
-export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps): ReactElement {
-    const [state, pagePropsWithLayoutProps] = separateApolloCacheFromProps(_pageProps);
-    const apolloClient = useApollo(state);
-
+export default function MyApp({ Component, pageProps }: MyAppProps): ReactElement {
+    const apolloClient = useApollo(pageProps);
     useEffect(() => {
         const token = Cookie.get("token");
         autheticateWithToken(token);
@@ -52,7 +51,7 @@ export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps):
                     <GlobalStyles />
                     <ChakraProvider theme={theme}>
                         <div tw="debug-screens" />
-                        {mergeWithLayout(Component, pagePropsWithLayoutProps)}
+                        {mergeWithLayout(Component, pageProps)}
                     </ChakraProvider>
                 </ScreenProvider>
             </ApolloProvider>

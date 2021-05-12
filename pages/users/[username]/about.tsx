@@ -66,20 +66,20 @@ function Section({ title, content, img }: CustomSectionProps) {
 }
 
 type AboutProps = {
-    username: string;
+    about: string;
+    profileSections: {
+        title: string;
+        content: string;
+        img: {
+            url: string;
+        };
+    }[];
 };
 
-const About = withLayout(UserPageLayout, function ({ username }: AboutProps) {
-    const { data } = useQuery(query, { variables: { username } });
-
-    console.log(useQuery(query, { variables: { username } }));
-
-    const user = data.users[0];
-
-    const { profileSections } = user;
+const About = withLayout(UserPageLayout, function ({ about, profileSections }: AboutProps) {
     return (
         <VStack spacing={12} alignItems="stretch">
-            <Section title="About" content={user.about} />
+            <Section title="About" content={about} />
             <Section title="Language" content="English" />
             {profileSections.map((section: CustomSectionProps) => (
                 <Section key={section.title} {...section} />
@@ -96,34 +96,25 @@ export default About;
 type Params = { username: string };
 
 export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context) => {
-    // Null guard
     if (context.params == undefined) {
         return { notFound: true };
     }
 
-    // Query data specially for this route
-    const { username } = context.params;
     const client = initializeApollo();
-    await client.query({ query, variables: { username } });
+    const variables = { username: context.params.username };
+    const { data, error } = await client.query({ query, variables });
 
-    // Get return props from layout data fetching method and extract cache from layout props if any
-    const result = (await About.retrievePropsFromLayoutDataRequirement(context)) ?? {};
-    const [layoutApolloCache, layoutProps] = separateApolloCacheFromProps(result);
-
-    // Extract the cache from the most recent query and combine it with the cache from the layout dependency
-    if (layoutApolloCache) {
-        const mergeOption = { arrayMerge: combineMerge };
-        const mergedCache = merge(layoutApolloCache, client.extract(), mergeOption);
-        client.restore(mergedCache);
+    if (error || data.users == null || data.users.length == 0) {
+        return { notFound: true };
     }
 
-    // Send the merged cache together with props for layout and this page
-    return addApolloState(client, {
+    const layoutProps = await About.retrievePropsFromLayoutDataRequirement(context);
+    return {
         props: {
-            username,
+            ...data.users[0],
             layoutProps,
         },
-    });
+    };
 };
 
 // Use the same static paths as main layout

@@ -1,22 +1,16 @@
 import "twin.macro";
 import { GetStaticProps } from "next";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
 import { Dispatch, SetStateAction, useEffect, useState, Fragment } from "react";
-import deepmerge from "deepmerge";
+import { useSelector } from "react-redux";
 
 import { withLayout } from "utils/layout";
-import {
-    addApolloState,
-    separateApolloCacheFromProps,
-    initializeApollo,
-    combineMerge,
-} from "utils/apollo";
+import { addApolloState, initializeApollo } from "utils/apollo";
 
 import query from "./gql/availability.gql";
-import userIdQuery from "./gql/transactionusers.gql";
 import mutation from "./gql/transaction.gql";
 
 import { UserPageLayout } from ".";
@@ -131,11 +125,11 @@ type TopBarProps = {
     selected: number;
     weekTimes: { [key: string]: [{ time: string; selected: boolean }] };
     mentorName: string;
-    userId: number;
 };
 
 function TopBar(props: TopBarProps) {
-    const [createTransaction, { data }] = useMutation(mutation);
+    const [createTransaction] = useMutation(mutation);
+    const loggedInUsername = useSelector((state) => state.currentUsername);
 
     return (
         <HStack spacing={480}>
@@ -157,13 +151,13 @@ function TopBar(props: TopBarProps) {
                     onClick={() => {
                         if (!formatDateTimes(props.weekTimes).length) {
                             alert("Please select at least one meeting time");
-                        } else if (!props.userId) {
+                        } else if (!loggedInUsername) {
                             alert("You must be signed in to book a meeting.");
                         } else {
                             createTransaction({
                                 variables: {
                                     mentor: props.mentorName,
-                                    user: props.userId,
+                                    user: loggedInUsername,
                                     meeting: formatDateTimes(props.weekTimes),
                                 },
                             });
@@ -213,75 +207,65 @@ const weekDates = configDates();
 
 type AvailabilityProps = {
     username: string;
+    weekAvailability: {
+        dayName: string;
+        availableAt: string;
+    }[];
 };
 
-const Availability = withLayout(UserPageLayout, function ({ username }: AvailabilityProps) {
-    const [totalSelected, setTotalSelected] = useState(0); // total selected times
-    const [weekAvailabilityData, setWeekAvailabilityData] = useState({}); // cleaned fetched week availability data
+const Availability = withLayout(
+    UserPageLayout,
+    function ({ username, weekAvailability }: AvailabilityProps) {
+        const [totalSelected, setTotalSelected] = useState(0);
+        const [weekAvailabilityData, setWeekAvailabilityData] = useState({});
 
-    // Get the currently logged-in user ID
-    const loggedInUser = typeof window !== "undefined" ? localStorage.getItem("username") : null;
-    const userData = loggedInUser
-        ? useQuery(userIdQuery, { variables: { loggedInUser } }).data
-        : null;
-    const loggedInUserId = userData
-        ? userData.users.filter(
-              (user: { username: string | null }) => user.username === loggedInUser
-          )[0].id
-        : null;
+        useEffect(() => {
+            // Initialize the cleaned week availability data
+            weekDates.forEach(
+                (wd) => (weekAvailabilityClean[wd.slice(0, 3)] = [{ time: "", selected: false }])
+            );
 
-    // Get the mentor's week availability data
-    const { data } = useQuery(query, { variables: { username } });
-    const user = data.users[0];
-    const { weekAvailability } = user;
+            // Arrange the week availability data recieved from the query
+            weekAvailability.forEach((a: { dayName: string; availableAt: string }) => {
+                if (weekAvailabilityClean[a.dayName][0].time === "") {
+                    weekAvailabilityClean[a.dayName] = [
+                        { time: a.availableAt.slice(0, 5), selected: false },
+                    ];
+                } else {
+                    weekAvailabilityClean[a.dayName].push({
+                        time: a.availableAt.slice(0, 5),
+                        selected: false,
+                    });
+                }
+            });
 
-    useEffect(() => {
-        // Initialize the cleaned week availability data
-        weekDates.map(
-            (wd) => (weekAvailabilityClean[wd.slice(0, 3)] = [{ time: "", selected: false }])
+            // Add the dates to the days of the week
+            weekDates.forEach((wd) => {
+                delete Object.assign(weekAvailabilityClean, {
+                    [wd]: weekAvailabilityClean[wd.slice(0, 3)],
+                })[wd.slice(0, 3)];
+            });
+
+            setWeekAvailabilityData(weekAvailabilityClean);
+        }, [weekAvailability]);
+
+        return (
+            <VStack>
+                <TopBar
+                    selected={totalSelected}
+                    weekTimes={weekAvailabilityData}
+                    mentorName={username}
+                />
+                <Week
+                    weekTimes={weekAvailabilityData}
+                    handleWeekTimes={setWeekAvailabilityData}
+                    selected={totalSelected}
+                    handleSelected={setTotalSelected}
+                />
+            </VStack>
         );
-
-        // Arrange the week availability data recieved from the query
-        weekAvailability.map((a: { dayName: string; availableAt: string }) => {
-            if (weekAvailabilityClean[a.dayName][0].time === "") {
-                weekAvailabilityClean[a.dayName] = [
-                    { time: a.availableAt.slice(0, 5), selected: false },
-                ];
-            } else {
-                weekAvailabilityClean[a.dayName].push({
-                    time: a.availableAt.slice(0, 5),
-                    selected: false,
-                });
-            }
-        });
-
-        // Add the dates to the days of the week
-        weekDates.map((wd) => {
-            delete Object.assign(weekAvailabilityClean, {
-                [wd]: weekAvailabilityClean[wd.slice(0, 3)],
-            })[wd.slice(0, 3)];
-        });
-
-        setWeekAvailabilityData(weekAvailabilityClean);
-    }, [weekAvailability]);
-
-    return (
-        <VStack>
-            <TopBar
-                selected={totalSelected}
-                weekTimes={weekAvailabilityData}
-                mentorName={username}
-                userId={loggedInUserId}
-            />
-            <Week
-                weekTimes={weekAvailabilityData}
-                handleWeekTimes={setWeekAvailabilityData}
-                selected={totalSelected}
-                handleSelected={setTotalSelected}
-            />
-        </VStack>
-    );
-});
+    }
+);
 
 export default Availability;
 
@@ -291,31 +275,23 @@ export default Availability;
 type Params = { username: string };
 
 export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (context) => {
-    // Null guard
     if (context.params == undefined) {
         return { notFound: true };
     }
 
-    // Query data specially for this route
-    const { username } = context.params;
     const client = initializeApollo();
-    await client.query({ query, variables: { username } });
+    const variables = { username: context.params.username };
+    const { data, error } = await client.query({ query, variables });
 
-    // Get return props from layout data fetching method and extract cache from layout props if any
-    const result = (await Availability.retrievePropsFromLayoutDataRequirement(context)) ?? {};
-    const [layoutApolloCache, layoutProps] = separateApolloCacheFromProps(result);
-
-    // Extract the cache from the most recent query and combine it with the cache from the layout dependency
-    if (layoutApolloCache) {
-        const mergeOption = { arrayMerge: combineMerge };
-        const mergedCache = deepmerge(layoutApolloCache, client.extract(), mergeOption);
-        client.restore(mergedCache);
+    if (error || data.users == null || data.users.length == 0) {
+        return { notFound: true };
     }
 
-    // Send the merged cache together with props for layout and this page
+    const layoutProps = await Availability.retrievePropsFromLayoutDataRequirement(context);
     return addApolloState(client, {
+        revalidate: 5,
         props: {
-            username,
+            ...data.users[0],
             layoutProps,
         },
     });

@@ -3,8 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import "twin.macro";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { TwitterLogo, FacebookLogo, LinkedinLogo, SignIn } from "phosphor-react";
+import { SignIn } from "phosphor-react";
 import {
     Box,
     Button,
@@ -22,7 +21,6 @@ import {
 
 import { useScreen } from "hooks";
 import { InputField } from "components/units/InputField";
-import { setUsername } from "redux/actions";
 
 import { login } from "../lib/auth";
 

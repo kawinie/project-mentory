@@ -3,7 +3,6 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import NextImage from "next/image";
 import NextLink from "next/link";
-import { useQuery } from "@apollo/client";
 import {
     Box,
     Heading,
@@ -28,11 +27,12 @@ import {
 } from "phosphor-react";
 import { capitalize } from "lodash";
 import { ReactNode } from "react";
+import { useSelector } from "react-redux";
 
 import { NavBar } from "components/modules/NavBar";
 import { StatGroup } from "components/modules/MentorCard/components";
 import { List } from "components/units";
-import { addApolloState, initializeApollo } from "utils/apollo";
+import { initializeApollo } from "utils/apollo";
 import { LayoutComponent } from "utils/layout";
 import { strapiImgLoader } from "utils/strapi";
 
@@ -63,7 +63,7 @@ function TopSection({
             <Box w="150px" flexShrink={0}>
                 <AspectRatio w="full" ratio={1} rounded="md" overflow="hidden">
                     <NextImage
-                        loader={strapiImgLoader}
+                        loader={strapiImgLoader ?? ""}
                         src={profileImg.url}
                         sizes="100%"
                         layout="fill"
@@ -193,19 +193,41 @@ const ActiveLink = ({ children, href, className, label }: ActiveLinkProps) => {
 export type UserPageLayoutProps = {
     children?: ReactNode;
     username: string;
+    firstname: string;
+    lastname: string;
+    city: string;
+    state: string;
+    brief: string;
+
+    profileImg: {
+        url: string;
+    };
+
+    tags: {
+        index: string;
+        tag: {
+            label: string;
+        };
+    }[];
+
+    badges: {
+        label: string;
+    }[];
 };
 
-export const UserPageLayout: LayoutComponent<PageProps, Params> = ({ children, username }) => {
-    const { data } = useQuery(query, { variables: { username } });
-    const user = data.users[0];
+export const UserPageLayout: LayoutComponent<UserPageLayoutProps, Params> = ({
+    children,
+    ...props
+}) => {
+    const username = useSelector((state) => state.currentUsername);
 
     return (
         <Box>
-            <NavBar username={user.firstname} />
+            <NavBar username={username ?? "User"} />
             <HStack mx="auto" alignItems="start" maxW="container.lg" spacing={8} mt={8}>
                 <SocialLinkList />
                 <Box flexGrow={1}>
-                    <TopSection {...user} />
+                    <TopSection {...props} />
 
                     <HStack spacing={0} my={16} alignItems="stretch">
                         {[
@@ -217,7 +239,7 @@ export const UserPageLayout: LayoutComponent<PageProps, Params> = ({ children, u
                         ].map(({ href, label }) => (
                             <ActiveLink
                                 key={label}
-                                href={`/users/${username}/${href}`}
+                                href={`/users/${props.username}/${href}`}
                                 label={label}
                             />
                         ))}
@@ -238,11 +260,7 @@ type Params = {
     username: string;
 };
 
-type PageProps = {
-    username: string;
-};
-
-const getStaticProps: GetStaticProps<PageProps, Params> = async ({ params }) => {
+const getStaticProps: GetStaticProps<UserPageLayoutProps, Params> = async ({ params }) => {
     if (params == undefined) {
         return { notFound: true };
     }
@@ -255,12 +273,15 @@ const getStaticProps: GetStaticProps<PageProps, Params> = async ({ params }) => 
         return { notFound: true };
     }
 
-    return addApolloState(client, { props: { username } });
+    return {
+        props: {
+            username,
+            ...data.users[0],
+        },
+    };
 };
 
 const getStaticPaths: GetStaticPaths = async () => {
-    // TODO: Fetch popular users from cms
-    // NOTE: Paths array specifies pre-generated paths
     const paths = [].map((username) => ({ params: { username } }));
     return { paths, fallback: "blocking" };
 };
