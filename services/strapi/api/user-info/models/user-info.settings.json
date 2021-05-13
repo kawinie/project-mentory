@@ -59,11 +59,6 @@
     "state": {
       "type": "string"
     },
-    "tags": {
-      "type": "component",
-      "repeatable": true,
-      "component": "units.tag-component"
-    },
     "profileSections": {
       "type": "component",
       "repeatable": true,
@@ -80,6 +75,9 @@
       "type": "component",
       "repeatable": true,
       "component": "datetime.week-availability"
+    },
+    "tags": {
+      "collection": "tag"
     }
   }
 }

@@ -6,8 +6,8 @@ import { times } from "lodash";
 import { useQuery } from "@apollo/client";
 import { useDispatch } from "react-redux";
 
-import { setCheckboxes } from "redux/actions";
-import query from "pages/gql/category.gql";
+import { setTags, setCategories, setCheckboxes } from "redux/actions";
+import filterTypes from "pages/gql/filterTypes.gql";
 
 /* -------------------------------------------------------------------------- */
 /*                                  Mock Data                                 */
@@ -19,11 +19,11 @@ import query from "pages/gql/category.gql";
 //     { name: "Data Science", count: 12 },
 // ];
 
-const tags = [
-    { name: "React", count: 35 },
-    { name: "SQL", count: 16 },
-    { name: "Python", count: 20 },
-];
+// const tags = [
+//     { name: "React", count: 35 },
+//     { name: "SQL", count: 16 },
+//     { name: "Python", count: 20 },
+// ];
 
 const availabilities = [
     { name: "30 hours", count: 2 },
@@ -59,7 +59,7 @@ function FilterOption({ inlineElement, count, isSelected, name }: FilterOptionPr
                 dispatch(setCheckboxes({ [name]: e.target.checked }));
             }}>
             <span tw="mr-2 text-sm">{inlineElement}</span>
-            <Badge tw="px-2 bg-blueGray-200 text-secondary rounded-full">{count}</Badge>
+            {/* <Badge tw="px-2 bg-blueGray-200 text-secondary rounded-full">{count}</Badge> */}
         </Checkbox>
     );
 }
@@ -95,12 +95,14 @@ function FilterSection({ title, icon, options }: FilterSectionProps) {
 /* -------------------------------------------------------------------------- */
 
 export function FilterSidebar() {
-    const { loading, error, data } = useQuery(query);
+    const dispatch = useDispatch();
+    const { loading, error, data } = useQuery(filterTypes);
     if (loading) return "Loading...";
     if (error) return `Error! ${error.message}`;
 
-    const { categories } = data;
-    console.log(categories);
+    const { categories, tags } = data;
+    dispatch(setCategories(categories));
+    dispatch(setTags(tags));
     return (
         <Box tw="overflow-hidden flex-shrink-0">
             {/* We need to wrap the scrollable content in a div to fix safari bug
@@ -130,19 +132,9 @@ export function FilterSidebar() {
                         title="Tags"
                         icon={<Tag size={24} />}
                         options={tags.map((tag) => ({
-                            inlineElement: <>{tag.name}</>,
-                            count: tag.count,
-                            name: tag.name,
-                        }))}
-                    />
-
-                    <FilterSection
-                        title="Availability"
-                        icon={<HourglassHigh size={24} />}
-                        options={availabilities.map((avail) => ({
-                            inlineElement: <>{avail.name}</>,
-                            count: avail.count,
-                            name: avail.name,
+                            inlineElement: <>{tag.label}</>,
+                            count: 12,
+                            name: tag.label,
                         }))}
                     />
 

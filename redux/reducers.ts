@@ -43,13 +43,66 @@ export const currentTransaction = createReducer<TransactionDetails | null>(null,
     builder.addCase(actions.setTransctionDetails, (_, action) => action.payload);
 });
 
-const initialCheckboxes: Record<string, boolean> = {};
+const initialCategories: Record<string, string[]> = {};
+export const categories = createReducer(initialCategories, (builder) => {
+    builder.addCase(actions.setCategories, (currentState, action) => {
+        const payload = action.payload;
+        currentState["categories"] = payload;
+        return currentState;
+    });
+});
+
+const initialTags: Record<string, string[]> = {};
+export const tags = createReducer(initialTags, (builder) => {
+    builder.addCase(actions.setTags, (currentState, action) => {
+        const payload = action.payload;
+        currentState["tags"] = payload;
+        return currentState;
+    });
+});
+
+const initialSearchQuery = "";
+export const searchQuery = createReducer(initialSearchQuery, (builder) => {
+    builder.addCase(actions.setSearchQuery, (currentState, action) => {
+        const payload = action.payload;
+        currentState = payload;
+        return currentState;
+    });
+});
+
+const initialCheckboxes: Record<string, [boolean, string]> = {};
 export const filterCheckboxes = createReducer(initialCheckboxes, (builder) => {
     builder.addCase(actions.setCheckboxes, (currentState, action) => {
         const payload = action.payload;
 
+        const categories = [
+            "Business",
+            "Video",
+            "Music",
+            "Programming",
+            "Design",
+            "Writing",
+            "Makeup",
+            "Lifestyle",
+        ];
+
+        const tags = [
+            "Next.js",
+            "Python",
+            "C++",
+            "Javascript",
+            "Ruby",
+            "PyTorch",
+            "Tensorflow",
+            "NLP",
+            "Computer Vision",
+        ];
+
+        // update the state
         Object.keys(payload).forEach((k) => {
-            currentState[k] = payload[k];
+            if (categories.includes(k)) currentState[k] = [payload[k], "categories"];
+            if (tags.includes(k)) currentState[k] = [payload[k], "tags"];
+            if (k.startsWith("review-")) currentState[k] = [payload[k], "scores"];
         });
 
         return currentState;

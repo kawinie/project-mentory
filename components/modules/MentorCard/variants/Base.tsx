@@ -15,6 +15,8 @@ import Link from "next/link";
 
 import { ProfileImage, StatGroup, Badge, AutoScrollText } from "../components";
 
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+
 export type MentorCardProps = {
     fullname: string;
     badge: string;
@@ -23,12 +25,12 @@ export type MentorCardProps = {
     expInYears: number;
     status?: string;
 
-    tags: string[];
+    tags: JSON;
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 
-    profileImg?: string;
+    profileImg?: JSON;
     profileUrl?: string;
 
     brief: string;
@@ -56,7 +58,7 @@ export function ProfileSection({
 }: TopLevelGridItem<{ img: MentorCardProps["profileImg"] }>) {
     return (
         <VStack gridArea={gridArea} position="relative">
-            <ProfileImage url={img} />
+            {img && <ProfileImage url={REACT_APP_BACKEND_URL + img.url} />}
             {/* alignContent only works with flexWap = "wrap" | "wrap-reverse" */}
             <Checkbox w="full" alignContent="start" justifyContent="center" flexWrap="wrap">
                 <span tw="text-sm text-secondary z-10">Compare</span>
@@ -76,8 +78,8 @@ export function TagSection({
     return (
         <HStack gridArea={gridArea} justify="start" spacing={2} overflow="hidden">
             {tags.map((t) => (
-                <Tag key={t} variant="primary">
-                    {t}
+                <Tag key={t.label} variant="primary">
+                    {t.label}
                 </Tag>
             ))}
         </HStack>
@@ -105,7 +107,7 @@ export function MainSection({
                 <Heading as="h2" fontSize="2xl">
                     {fullname}
                 </Heading>
-                <Badge text={badge} />
+                {/* <Badge text={badge} /> */}
             </HStack>
 
             {/* Secondary Info */}
@@ -118,9 +120,9 @@ export function MainSection({
                         <a>{location}</a>
                     </Link>
                 </Tag>
-                <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
+                {/* <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
                     {`${expInYears < 1 ? "<" : ""} ${expInYears}${expInYears > 1 ? "+" : ""} years`}
-                </Tag>
+                </Tag> */}
             </HStack>
 
             <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">

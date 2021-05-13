@@ -32,6 +32,9 @@ export function Desktop({ profileImg, tags, ...props }: MentorCardProps) {
         shadow: "lg",
     };
 
+    // const main = pick(props, "fullname", "location", "badge", "expInYears", "status", "brief");
+    // const stat = pick(props, "avgReviewScore", "noReviews", "noEndorsements");
+
     const main = pick(props, "fullname", "location", "badge", "expInYears", "status", "brief");
     const stat = pick(props, "avgReviewScore", "noReviews", "noEndorsements");
 

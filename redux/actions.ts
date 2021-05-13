@@ -43,3 +43,18 @@ export const setCheckboxes = createAction(
     "filter/checkboxes/set",
     withPayload((object: Record<string, boolean>) => object)
 );
+
+export const setCategories = createAction(
+    "filter/checkboxes/categories",
+    withPayload((object: string[]) => object)
+);
+
+export const setTags = createAction(
+    "filter/checkboxes/tags",
+    withPayload((object: string[]) => object)
+);
+
+export const setSearchQuery = createAction(
+    "search/set",
+    withPayload((object: string) => object)
+);

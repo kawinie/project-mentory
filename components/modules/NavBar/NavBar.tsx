@@ -17,9 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { CaretDown, UserCircle } from "phosphor-react";
 import { omit } from "lodash";
-import { ReactElement } from "react";
-import { useRouter } from "next/router";
 
+import { useRouter } from "next/router";
+import { ReactElement, Fragment } from "react";
+import { useQuery } from "@apollo/client";
+
+import filterTypes from "pages/gql/filterTypes.gql";
 import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
 import { List } from "components/units/List";
@@ -113,12 +116,30 @@ const userMenuItems = [
     { title: "Help", items: ["Docs", "FAQ", "Log Out"] },
 ];
 
-const categories = [
-    { title: "", items: ["All Categories"] },
-    { title: "Category", items: ["Design", "Programming", "Business", "Makeup", "Lifestyle"] },
-];
+// const categorie = [
+//     { title: "", items: ["All Categories"] },
+//     { title: "Category", items: ["Design", "Programming", "Business", "Makeup", "Lifestyle"] },
+// ];
+
+type categoryProps = {
+    __typename: string;
+    Category: string;
+};
 
 function Desktop({ username }: NavBarProps) {
+    const { loading, error, data } = useQuery(filterTypes);
+    if (loading) return <Fragment>Loading...</Fragment>;
+    if (error) return <Fragment>`Error! ${error.message}`</Fragment>;
+
+    const { categories } = data;
+
+    const c = categories.map((e: categoryProps) => {
+        return e.Category;
+    });
+    // const cat = [
+    //     { title: "", items: ["All Categories"] },
+    //     { title: "Category", items: c },
+    // ];
     return (
         <HStack {...styleProps}>
             <Heading letterSpacing="wide" size="lg">
@@ -128,11 +149,11 @@ function Desktop({ username }: NavBarProps) {
             </Heading>
             <Grid templateColumns="minmax(0, 1fr) max-content" gap={4} maxWidth="800px" w="full">
                 <SearchBar placeholder="Search mentor..." />
-                <NavBarMenuButton
+                {/* <NavBarMenuButton
                     title="All Categories"
-                    itemGroups={categories}
+                    itemGroups={cat}
                     rightIcon={<CaretDown tw="inline" size={24} />}
-                />
+                /> */}
             </Grid>
             <List
                 items={navMenuItems}

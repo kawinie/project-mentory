@@ -1,24 +1,34 @@
-query UserInfo($category: [String]){
-    users:userInfos(where: { category: { Category_contains: $category } }) {
-        firstname
-        lastname
-    		badges {
-          label
-        }
-    		location: city
-    		status
-    		tags {
-          tag {
-            label
-          }
-        }
-    		avgReviewScore
-    		brief
-    		profileImg {
-          url
-        }
-    		category {
-          Category
-        }
+query UserInfo($categories: [String], $tags: [String], $searchQuery: [String], $scores: [Int]) {
+  users: userInfos(
+    where: {
+      category: { Category_contains: $categories },
+      tags: { label_contains: $tags},
+      _where: {
+        _or: [
+          {firstname_contains: $searchQuery},
+          {lastname_contains: $searchQuery}
+        ]
+      }
+      avgReviewScore_gte: $scores
     }
+  ) {
+    firstname
+    lastname
+    badges {
+      label
+    }
+    location: city
+    status
+    tags {
+      label
+    }
+    avgReviewScore
+    brief
+    profileImg {
+      url
+    }
+    category {
+      Category
+    }
+  }
 }

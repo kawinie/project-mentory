@@ -1,5 +1,5 @@
 import "twin.macro";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import {
     Heading,
     Box,
@@ -31,35 +31,66 @@ import query from "pages/gql/users.gql";
 /*                               Mentor Results                               */
 /* -------------------------------------------------------------------------- */
 
-function DisplayResult({ searchQuery }: { searchQuery: string }) {
+function DisplayResult() {
     const [mentors, setMentors] = useState<Mentor[] | null>(null);
 
     const checkBoxes = useSelector((state) => state.filterCheckboxes);
-    let categories = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
-    if (categories) {
-        categories = categories.filter((element) => checkBoxes[element] == true);
-    }
-    const { loading, data } = useQuery(query, {
-        variables: { category: categories },
+    const searchQuery = useSelector((state) => state.searchQuery);
+    const searchWords = searchQuery.match(/\S+/g); // match the non-whitespace
+
+    const categories = useMemo(() => {
+        const categories = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
+        return categories.filter(
+            (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "categories"
+        );
+    }, [checkBoxes]);
+
+    const tags = useMemo(() => {
+        const tags = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
+        return tags.filter(
+            (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "tags"
+        );
+    }, [checkBoxes]);
+
+    const scoresQuery = useMemo(() => {
+        const scores = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
+        return scores.filter(
+            (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "scores"
+        );
+    }, [checkBoxes]);
+
+    const scores = scoresQuery.map((element) => {
+        const res = element.match(/\d+/g);
+        if (res) return parseInt(res.toString());
+        return null;
     });
-    console.log("categories: " + categories);
-    console.log(data);
-    console.log(mentors);
+
+    const variables = {
+        categories: categories,
+        tags: tags,
+        searchQuery: searchWords,
+        scores: scores,
+    };
+    const { loading, data } = useQuery(query, { variables });
+
     useEffect(() => {
         const users = loading ? [] : data.users;
         setMentors(users);
-        // axios
-        //     .get<Mentor[]>("/api/mentors", { params: { searchQuery } })
-        //     .then((response) => setMentors(response.data));
-    }, [loading, categories]);
+    }, [loading, checkBoxes, searchQuery]);
 
     return (
         <Box tw="h-full w-full">
             <Grid tw="justify-start items-center gap-x-4 gap-y-1" mb={8}>
-                <Text tw="text-xl inline font-semibold">Search Results For “programming”</Text>
-                <Link tw="text-sm flex" href="/mentor" gridColumn={2}>
-                    <X size={20} /> Clear All Filters
-                </Link>
+                {searchQuery && (
+                    <Fragment>
+                        <Text tw="text-xl inline font-semibold">
+                            Search Results For “{searchQuery}”
+                        </Text>
+                        <Link tw="text-sm flex" href="/mentor-listing" gridColumn={2}>
+                            <X size={20} /> Clear All Filters
+                        </Link>
+                    </Fragment>
+                )}
                 <div tw="text-secondary uppercase">{mentors?.length} Results</div>
             </Grid>
             <VStack spacing={8}>
@@ -82,13 +113,13 @@ function DisplayResult({ searchQuery }: { searchQuery: string }) {
                     </VStack>
                 ) : (
                     mentors.map(({ firstname, lastname, ...rest }) => (
-                        <Text key={firstname + lastname}>{`${firstname} ${lastname}`}</Text>
-                        // <MentorCard
-                        //     key={firstname + lastname}
-                        //     fullname={`${firstname} ${lastname}`}
-                        //     {...rest}
-                        //     variant="desktop"
-                        // />
+                        // <Text key={firstname + lastname}>{`${firstname} ${lastname}`}</Text>
+                        <MentorCard
+                            key={firstname + lastname}
+                            fullname={`${firstname} ${lastname}`}
+                            {...rest}
+                            variant="desktop"
+                        />
                     ))
                 )}
             </VStack>
@@ -180,7 +211,7 @@ export default function MentorListing() {
 
                 {/* Results */}
                 <Box gridArea="results">
-                    <DisplayResult searchQuery={"Get input from user"} />
+                    <DisplayResult />
                 </Box>
             </Grid>
         </Grid>

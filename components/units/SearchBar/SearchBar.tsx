@@ -2,10 +2,14 @@ import "twin.macro";
 import { useRef, forwardRef, ComponentPropsWithoutRef, useState, useEffect } from "react";
 import { IconButton, HStack } from "@chakra-ui/react";
 import { MagnifyingGlass, XCircle } from "phosphor-react";
+import { useDispatch } from "react-redux";
 import composeRefs from "@seznam/compose-react-refs";
+
+import { setSearchQuery } from "redux/actions";
 
 export const SearchBar = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<"input">>(
     (props, externalRef) => {
+        const dispatch = useDispatch();
         const ref = useRef<HTMLInputElement>(null);
         const [hasValue, setHasValue] = useState(false);
 
@@ -13,12 +17,14 @@ export const SearchBar = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<"
         useEffect(() => {
             const onchange = () => {
                 setHasValue(ref.current?.value != "");
+                const val = ref.current?.value ? ref.current?.value : "";
+                dispatch(setSearchQuery(val));
             };
 
             const current = ref.current;
             current?.addEventListener("input", onchange);
             return () => current?.removeEventListener("input", onchange);
-        }, []);
+        }, [dispatch]);
 
         // Clear search field
         const onclick = () => {
