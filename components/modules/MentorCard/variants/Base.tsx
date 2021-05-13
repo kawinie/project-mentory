@@ -18,11 +18,11 @@ import { ProfileImage, StatGroup, Badge, AutoScrollText } from "../components";
 const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
 
 interface Tags {
-    label: string
+    label: string;
 }
 
 interface Image {
-    url: string
+    url: string;
 }
 
 export type MentorCardProps = {

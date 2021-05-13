@@ -97,8 +97,8 @@ function FilterSection({ title, icon, options }: FilterSectionProps) {
 export function FilterSidebar() {
     const dispatch = useDispatch();
     const { loading, error, data } = useQuery(filterTypes);
-    if (loading) return <Fragment>Loading...</Fragment>
-    if (error) return <Fragment>Error! ${error.message}</Fragment>
+    if (loading) return <Fragment>Loading...</Fragment>;
+    if (error) return <Fragment>Error! ${error.message}</Fragment>;
 
     const { categories, tags } = data;
     dispatch(setCategories(categories));
