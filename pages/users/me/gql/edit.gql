@@ -5,9 +5,10 @@ query User($username: String) {
         lastname
         city
         about
+        status
+        profession
         brief
         state
-        brief
         profileImg {
             url
         }

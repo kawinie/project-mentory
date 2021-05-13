@@ -1,6 +1,6 @@
 import "twin.macro";
-import { GetStaticProps } from "next";
-import { useMutation, useQuery } from "@apollo/client";
+import { GetServerSideProps } from "next";
+import { useMutation } from "@apollo/client";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
@@ -12,7 +12,6 @@ import { initializeApollo } from "utils/apollo";
 
 import query from "./gql/availability.gql";
 import mutation from "./gql/transaction.gql";
-import userIdQuery from "./gql/transactionusers.gql";
 
 import { UserPageLayout } from ".";
 
@@ -130,8 +129,8 @@ type TopBarProps = {
 
 function TopBar(props: TopBarProps) {
     const [createTransaction] = useMutation(mutation);
-    const loggedInUsername = useSelector((state) => state.currentUsername);
-    const { data } = useQuery(userIdQuery, { variables: loggedInUsername });
+    const loggedInUserId = useSelector((state) => state.currentUserId);
+
     return (
         <HStack spacing={480}>
             <HStack spacing={12}>
@@ -152,13 +151,13 @@ function TopBar(props: TopBarProps) {
                     onClick={() => {
                         if (!formatDateTimes(props.weekTimes).length) {
                             alert("Please select at least one meeting time");
-                        } else if (!loggedInUsername) {
+                        } else if (!loggedInUserId) {
                             alert("You must be signed in to book a meeting.");
                         } else {
                             createTransaction({
                                 variables: {
                                     mentor: props.mentorName,
-                                    user: data.users[0].id,
+                                    user: loggedInUserId,
                                     meeting: formatDateTimes(props.weekTimes),
                                 },
                             });
@@ -275,7 +274,9 @@ export default Availability;
 /* -------------------------------------------------------------------------- */
 type Params = { username: string };
 
-export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (context) => {
+export const getServerSideProps: GetServerSideProps<AvailabilityProps, Params> = async (
+    context
+) => {
     if (context.params == undefined) {
         return { notFound: true };
     }
@@ -298,4 +299,4 @@ export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (
 };
 
 // Use the same static paths as main layout
-export { getStaticPaths } from "./index";
+// export { getStaticPaths } from "./index";

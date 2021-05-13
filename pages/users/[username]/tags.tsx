@@ -1,5 +1,5 @@
 import "twin.macro";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { Badge } from "@chakra-ui/react";
 
 import { withLayout } from "utils/layout";
@@ -58,7 +58,7 @@ export default Tags;
 
 type Params = { username: string };
 
-export const getStaticProps: GetStaticProps<TagsProps, Params> = async (context) => {
+export const getServerSideProps: GetServerSideProps<TagsProps, Params> = async (context) => {
     if (context.params == undefined) {
         return { notFound: true };
     }
@@ -81,4 +81,4 @@ export const getStaticProps: GetStaticProps<TagsProps, Params> = async (context)
 };
 
 // Use the same static paths as main layout
-export { getStaticPaths } from "./index";
+// export { getStaticPaths } from "./index";
