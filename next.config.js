@@ -29,9 +29,9 @@ module.exports = withBundleAnalyzer({
     },
 
     // This is how to do redirections
-    // async redirects() {
-    //     return [
-    //         { source: "/user/:username", destination: "/user/:username/about", permanent: true },
-    //     ];
-    // },
+    async redirects() {
+        return [
+            { source: "/users/:username", destination: "/users/:username/about", permanent: true },
+        ];
+    },
 });

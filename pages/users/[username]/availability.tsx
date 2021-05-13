@@ -8,7 +8,7 @@ import { Dispatch, SetStateAction, useEffect, useState, Fragment } from "react";
 import { useSelector } from "react-redux";
 
 import { withLayout } from "utils/layout";
-import { addApolloState, initializeApollo } from "utils/apollo";
+import { initializeApollo } from "utils/apollo";
 
 import query from "./gql/availability.gql";
 import mutation from "./gql/transaction.gql";

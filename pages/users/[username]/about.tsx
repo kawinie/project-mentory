@@ -1,19 +1,11 @@
 import "twin.macro";
 import Image from "next/image";
-import merge from "deepmerge";
 import { GetStaticProps } from "next";
-import { useQuery } from "@apollo/client";
 import { Stack, Box, VStack, Text, AspectRatio } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
 
 import { withLayout } from "utils/layout";
 import { strapiImgLoader } from "utils/strapi";
-import {
-    addApolloState,
-    combineMerge,
-    separateApolloCacheFromProps,
-    initializeApollo,
-} from "utils/apollo";
+import { initializeApollo } from "utils/apollo";
 
 import query from "./gql/about.gql";
 
@@ -118,4 +110,4 @@ export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context
 };
 
 // Use the same static paths as main layout
-export { getStaticPaths } from ".";
+export { getStaticPaths } from "./index";

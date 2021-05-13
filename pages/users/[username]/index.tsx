@@ -231,7 +231,6 @@ export const UserPageLayout: LayoutComponent<UserPageLayoutProps, Params> = ({
 
                     <HStack spacing={0} my={16} alignItems="stretch">
                         {[
-                            { href: "", label: "Index" },
                             { href: "about", label: "About" },
                             { href: "availability", label: "Availability" },
                             { href: "reviews", label: "Reviews" },
