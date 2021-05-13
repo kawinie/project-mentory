@@ -2,6 +2,8 @@ import { createReducer } from "@reduxjs/toolkit";
 
 import * as actions from "redux/actions";
 
+import { AuthStatus } from "./models";
+
 //
 // ────────────────────────────────────────────────────── I ──────────
 //   :::::: H E L P E R S : :  :   :    :     :        :          :
@@ -17,6 +19,16 @@ function ifElse<B extends boolean, T, K>(c: B, a: T, b: K) {
 //   :::::: R E D U C E R S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────────
 //
-export const username = createReducer("", {
-    [actions.createSession.type]: (state, action) => action.payload.text,
+
+const initialUsername = null;
+export const currentUsername = createReducer<string | null>(initialUsername, (builder) => {
+    builder.addCase(actions.setUsername, (_, action) => action.payload);
+});
+
+export const currentUserId = createReducer<number | null>(null, (builder) => {
+    builder.addCase(actions.setUserId, (_, action) => action.payload);
+});
+
+export const authStatus = createReducer<AuthStatus>("ready", (builder) => {
+    builder.addCase(actions.setAuthStatus, (_, action) => action.payload);
 });

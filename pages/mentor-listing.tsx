@@ -30,6 +30,7 @@ import { Mentor, Article } from "models";
 
 function DisplayResult({ searchQuery }: { searchQuery: string }) {
     const [mentors, setMentors] = useState<Mentor[] | null>(null);
+
     useEffect(() => {
         axios
             .get<Mentor[]>("/api/mentors", { params: { searchQuery } })

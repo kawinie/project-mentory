@@ -1,21 +1,37 @@
 import { useMemo } from "react";
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { GetStaticPropsResult } from "next";
 import deepmerge from "deepmerge";
-import isEqual from "lodash/isEqual";
+import Cookie from "js-cookie";
 
-const CONTENT_SERVER_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+const CONTENT_SERVER_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+const httpLink = new HttpLink({
+    uri: `${CONTENT_SERVER_URL}/graphql`,
+});
+
+const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = Cookie.get("token");
+    console.log("Token: ", token);
+    // return the headers to the context so httpLink can read them
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : "",
+        },
+    };
+});
 
 function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === "undefined", // set to true for SSR
         cache: new InMemoryCache(),
-        link: new HttpLink({
-            uri: `${CONTENT_SERVER_URL}/graphql`,
-        }),
+        link: typeof window === "undefined" ? httpLink : authLink.concat(httpLink),
     });
 }
 

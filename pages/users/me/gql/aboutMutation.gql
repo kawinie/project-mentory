@@ -1,0 +1,13 @@
+mutation UpdateAbout($id: ID!, $data: editUserInfoInput!) {
+    updateUserInfo(input: { where: { id: $id }, data: $data }) {
+        userInfo {
+            firstname
+            lastname
+            city
+            about
+            brief
+            state
+            brief
+        }
+    }
+}

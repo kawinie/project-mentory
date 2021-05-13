@@ -1,6 +1,6 @@
 import { NextComponentType, NextPageContext } from "next";
 import { AppProps } from "next/app";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect } from "react";
 import { GlobalStyles, theme as tailwindTheme } from "twin.macro";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ApolloProvider } from "@apollo/client";
@@ -14,6 +14,8 @@ import { separateApolloCacheFromProps, useApollo } from "utils/apollo";
 import theme from "theme";
 import fonts from "theme/fonts";
 import { store } from "redux/store";
+import { autheticateWithToken } from "lib/auth";
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Props = { [key: string]: unknown };
 
@@ -21,49 +23,24 @@ interface MyAppProps<P = Props> extends AppProps<P> {
     Component: NextComponentType<NextPageContext, unknown, P> & ComponentWithLayout;
 }
 
-const mergeWithLayout = <T extends Props>(
-    Component: MyAppProps["Component"],
-    { layoutProps, ...pageComponentProps }: T & { layoutProps?: Props }
-) => {
-    if (Component.layout) {
-        return (
-            <Component.layout {...layoutProps}>
-                <Component {...pageComponentProps} />
-            </Component.layout>
-        );
-    }
-
-    return <Component {...pageComponentProps} />;
+type Component = MyAppProps["Component"];
+type CombinedProps<T> = T & { layoutProps?: Props; pageComponentProps?: Props };
+const mergeWithLayout = <T extends Props>(Component: Component, props: CombinedProps<T>) => {
+    const { layoutProps, ...componentProps } = props;
+    return Component.layout ? (
+        <Component.layout {...layoutProps}>
+            <Component {...componentProps} />
+        </Component.layout>
+    ) : (
+        <Component {...componentProps} />
+    );
 };
 
-export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps): ReactElement {
-    // Seperate Apollo cache from props
-    const [state, pagePropsWithLayoutProps] = separateApolloCacheFromProps(_pageProps);
-    const apolloClient = useApollo(state);
-    const [user, setUser] = useState(null);
-
+export default function MyApp({ Component, pageProps }: MyAppProps): ReactElement {
+    const apolloClient = useApollo(pageProps);
     useEffect(() => {
-        // grab token value from cookie
         const token = Cookie.get("token");
-
-        if (token) {
-            // authenticate the token on the server and place set user object
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }).then(async (res) => {
-                // if res comes back not valid, token is not valid
-                // delete the token and log the user out on client
-                if (!res.ok) {
-                    Cookie.remove("token");
-                    setUser(null);
-                    return null;
-                }
-                const newUser = await res.json();
-                setUser(newUser);
-            });
-        }
+        autheticateWithToken(token);
     }, []);
 
     return (
@@ -74,7 +51,7 @@ export default function MyApp({ Component, pageProps: _pageProps }: MyAppProps):
                     <GlobalStyles />
                     <ChakraProvider theme={theme}>
                         <div tw="debug-screens" />
-                        {mergeWithLayout(Component, pagePropsWithLayoutProps)}
+                        {mergeWithLayout(Component, pageProps)}
                     </ChakraProvider>
                 </ScreenProvider>
             </ApolloProvider>

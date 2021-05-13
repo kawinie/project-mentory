@@ -1,0 +1,15 @@
+query User($username: String) {
+    users: userInfos(where: { user: { username: $username } }) {
+        id
+        firstname
+        lastname
+        city
+        about
+        brief
+        state
+        brief
+        profileImg {
+            url
+        }
+    }
+}
