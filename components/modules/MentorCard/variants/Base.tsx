@@ -26,14 +26,16 @@ interface Image {
 }
 
 export type MentorCardProps = {
-    fullname: string;
+    user: { username: string };
+    firstname: string;
+    lastname: string;
     badge: string;
 
     location: string;
     expInYears: number;
     status?: string;
 
-    tags: Array<Tags>;
+    tags: Tags[];
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
@@ -99,21 +101,23 @@ export function TagSection({
 /* -------------------------------------------------------------------------- */
 
 export function MainSection({
-    fullname,
+    user,
+    firstname,
+    lastname,
     badge,
     expInYears,
     status,
     brief,
     location,
 }: TopLevelGridItem<
-    Pick<MentorCardProps, "fullname" | "location" | "expInYears" | "status" | "brief" | "badge">
+    Pick<MentorCardProps, "user" | "firstname" | "lastname" | "location" | "expInYears" | "status" | "brief" | "badge">
 >) {
     return (
         <VStack gridArea="main" alignItems="start" spacing={4}>
             {/* Name */}
             <HStack alignItems="center">
                 <Heading as="h2" fontSize="2xl">
-                    {fullname}
+                    {firstname} {lastname}
                 </Heading>
                 {/* <Badge text={badge} /> */}
             </HStack>
@@ -148,12 +152,16 @@ export function MainSection({
             {/* Action Buttons */}
             <HStack w="full" justifyContent="end" flexGrow={1} alignContent="end" wrap="wrap">
                 <span tw="text-xs text-secondary underline">Available to meet now</span>
-                <Button minW="100px" variant="outline">
-                    Make Appointment
-                </Button>
-                <Button minW="100px" colorScheme="blueGray">
-                    View
-                </Button>
+                <Link href={"/users/" + user.username + "/availability"} passHref>
+                    <Button minW="100px" variant="outline">
+                        Make Appointment
+                    </Button>
+                </Link>
+                <Link href={"/users/" + user.username} passHref>
+                    <Button minW="100px" colorScheme="blueGray">
+                        View
+                    </Button>
+                </Link>
             </HStack>
         </VStack>
     );

@@ -112,10 +112,10 @@ function DisplayResult() {
                     </VStack>
                 ) : (
                     mentors.map(({ firstname, lastname, ...rest }) => (
-                        // <Text key={firstname + lastname}>{`${firstname} ${lastname}`}</Text>
                         <MentorCard
                             key={firstname + lastname}
-                            fullname={`${firstname} ${lastname}`}
+                            firstname={firstname}
+                            lastname={lastname}
                             {...rest}
                             variant="desktop"
                         />
@@ -166,6 +166,7 @@ function ArticleSection() {
 
 export default function MentorListing() {
     const { min } = useScreen();
+    const username = useSelector((state) => state.currentUsername);
 
     const desktopLayout: GridProps = {
         templateAreas: `
@@ -192,7 +193,7 @@ export default function MentorListing() {
         // space. This issue is documented here: https://stackoverflow.com/questions/52861086/who-does-minmax0-1fr-work-for-long-elements-while-1fr-doesnt
         <Grid gridTemplateRows="max-content minmax(0, 1fr)" background="trueGray.100" gap={8}>
             <Box tw="sticky top-0 z-50">
-                <NavBar username="John" />
+                <NavBar username={username ?? ""} />
             </Box>
 
             <Grid {...gridLayout} w="full" maxWidth="container.lg" mx="auto" gap={8}>

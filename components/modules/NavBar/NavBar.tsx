@@ -116,44 +116,16 @@ const userMenuItems = [
     { title: "Help", items: ["Docs", "FAQ", "Log Out"] },
 ];
 
-// const categorie = [
-//     { title: "", items: ["All Categories"] },
-//     { title: "Category", items: ["Design", "Programming", "Business", "Makeup", "Lifestyle"] },
-// ];
-
-type categoryProps = {
-    __typename: string;
-    Category: string;
-};
-
 function Desktop({ username }: NavBarProps) {
-    const { loading, error, data } = useQuery(filterTypes);
-    if (loading) return <Fragment>Loading...</Fragment>;
-    if (error) return <Fragment>`Error! ${error.message}`</Fragment>;
-
-    const { categories } = data;
-
-    const c = categories.map((e: categoryProps) => {
-        return e.Category;
-    });
-    // const cat = [
-    //     { title: "", items: ["All Categories"] },
-    //     { title: "Category", items: c },
-    // ];
     return (
         <HStack {...styleProps}>
             <Heading letterSpacing="wide" size="lg">
-                <NextLink href="/" passHref>
+                <NextLink href="/mentor-listing" passHref>
                     <Link whiteSpace="nowrap">Mentory</Link>
                 </NextLink>
             </Heading>
             <Grid templateColumns="minmax(0, 1fr) max-content" gap={4} maxWidth="800px" w="full">
                 <SearchBar placeholder="Search mentor..." />
-                {/* <NavBarMenuButton
-                    title="All Categories"
-                    itemGroups={cat}
-                    rightIcon={<CaretDown tw="inline" size={24} />}
-                /> */}
             </Grid>
             <List
                 items={navMenuItems}

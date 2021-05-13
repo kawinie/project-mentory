@@ -12,6 +12,9 @@ query UserInfo($categories: [String], $tags: [String], $searchQuery: [String], $
       avgReviewScore_gte: $scores
     }
   ) {
+    user {
+      username
+    }
     firstname
     lastname
     badges {

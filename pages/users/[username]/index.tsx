@@ -52,10 +52,7 @@ function TopSection({
     const fullname = `${capitalize(firstname)} ${capitalize(lastname)}`;
 
     type TagComponent = {
-        index: number;
-        tag: {
-            label: string;
-        };
+        label: string;
     };
 
     return (
@@ -75,7 +72,7 @@ function TopSection({
                 <VStack alignItems="start" w="full" spacing={2}>
                     {/* Tags */}
                     <HStack justify="start" spacing={4}>
-                        {tags.map(({ index, tag }: TagComponent) => (
+                        {tags.map((tag: TagComponent, index: number) => (
                             <Tag
                                 key={tag.label}
                                 variant="text"
@@ -124,9 +121,9 @@ function TopSection({
                     />
                 </HStack>
                 {/* Action Buttons */}
-                <Button textTransform="uppercase" fontWeight="bold">
+                {/* <Button textTransform="uppercase" fontWeight="bold">
                     Book Now
-                </Button>
+                </Button> */}
             </VStack>
         </HStack>
     );
@@ -204,10 +201,7 @@ export type UserPageLayoutProps = {
     };
 
     tags: {
-        index: string;
-        tag: {
-            label: string;
-        };
+        label: string;
     }[];
 
     badges: {

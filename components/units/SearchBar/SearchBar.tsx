@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import composeRefs from "@seznam/compose-react-refs";
 
 import { setSearchQuery } from "redux/actions";
+import router from "next/router";
 
 export const SearchBar = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<"input">>(
     (props, externalRef) => {
@@ -19,6 +20,7 @@ export const SearchBar = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<"
                 setHasValue(ref.current?.value != "");
                 const val = ref.current?.value ? ref.current?.value : "";
                 dispatch(setSearchQuery(val));
+                if (window.location.pathname != "/mentor-listing") router.push("/mentor-listing");
             };
 
             const current = ref.current;
