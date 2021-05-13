@@ -21,7 +21,7 @@ import { useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 
 import { FilterSidebar } from "components/pages/MentorListing";
-import { MentorCard } from "components/modules/MentorCard";
+import { MentorCard, MentorCardProps } from "components/modules/MentorCard";
 import { NavBar } from "components/modules/NavBar";
 import { useScreen } from "hooks";
 import { Mentor, Article } from "models";
@@ -33,7 +33,6 @@ import query from "pages/gql/users.gql";
 
 function DisplayResult() {
     const [mentors, setMentors] = useState<Mentor[] | null>(null);
-
     const checkBoxes = useSelector((state) => state.filterCheckboxes);
     const searchQuery = useSelector((state) => state.searchQuery);
     const searchWords = searchQuery.match(/\S+/g); // match the non-whitespace

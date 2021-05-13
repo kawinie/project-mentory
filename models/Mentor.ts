@@ -7,12 +7,12 @@ export type Mentor = {
     expInYears: number;
     status?: string;
 
-    tags: { label: string }[];
+    tags: string[];
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 
-    profileImg?: { url: string };
+    profileImg?: string;
     profileUrl?: string;
 
     brief: string;
