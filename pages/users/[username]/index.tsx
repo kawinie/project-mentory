@@ -272,6 +272,8 @@ const getStaticProps: GetStaticProps<UserPageLayoutProps, Params> = async ({ par
         return { notFound: true };
     }
 
+    console.log("Data", data);
+
     return {
         props: {
             username,

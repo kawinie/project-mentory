@@ -101,6 +101,8 @@ export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context
     }
 
     const layoutProps = await About.retrievePropsFromLayoutDataRequirement(context);
+
+    console.log("LAYOUT PROPS", layoutProps);
     return {
         props: {
             ...data.users[0],
