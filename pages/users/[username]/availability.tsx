@@ -1,6 +1,6 @@
 import "twin.macro";
 import { GetStaticProps } from "next";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
@@ -12,6 +12,7 @@ import { addApolloState, initializeApollo } from "utils/apollo";
 
 import query from "./gql/availability.gql";
 import mutation from "./gql/transaction.gql";
+import userIdQuery from "./gql/transactionusers.gql";
 
 import { UserPageLayout } from ".";
 
@@ -130,7 +131,7 @@ type TopBarProps = {
 function TopBar(props: TopBarProps) {
     const [createTransaction] = useMutation(mutation);
     const loggedInUsername = useSelector((state) => state.currentUsername);
-
+    const { data } = useQuery(userIdQuery, { variables: loggedInUsername });
     return (
         <HStack spacing={480}>
             <HStack spacing={12}>
@@ -157,7 +158,7 @@ function TopBar(props: TopBarProps) {
                             createTransaction({
                                 variables: {
                                     mentor: props.mentorName,
-                                    user: loggedInUsername,
+                                    user: data.users[0].id,
                                     meeting: formatDateTimes(props.weekTimes),
                                 },
                             });
@@ -288,13 +289,12 @@ export const getStaticProps: GetStaticProps<AvailabilityProps, Params> = async (
     }
 
     const layoutProps = await Availability.retrievePropsFromLayoutDataRequirement(context);
-    return addApolloState(client, {
-        revalidate: 5,
+    return {
         props: {
             ...data.users[0],
             layoutProps,
         },
-    });
+    };
 };
 
 // Use the same static paths as main layout
