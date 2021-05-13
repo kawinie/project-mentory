@@ -19,10 +19,10 @@ import {
     AccordionIcon,
     AccordionPanel,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { Pencil } from "phosphor-react";
-import { floor, padStart, range } from "lodash";
+import { capitalize, floor, padStart, range } from "lodash";
 import { useForm } from "react-hook-form";
 
 import { NavBar } from "components/modules/NavBar";
@@ -30,6 +30,7 @@ import { strapiImgLoader } from "utils/strapi";
 
 import query from "./gql/edit.gql";
 import aboutMutation from "./gql/aboutMutation.gql";
+import availabilityMutation from "./gql/availabilityMutation.gql";
 
 type ActiveTabProps = {
     href: string;
@@ -169,20 +170,25 @@ const TimeCheckbox = memo(({ day, time, isCheck, handleToggle }: TimeCheckboxPro
     );
 });
 
-const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
-const dateKey = (day: string, time: string) => `${day}-${time}`;
+const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+const daytimeKey = (day: string, time: string) => `${day}-${time}`;
 function AvailabilityTab() {
     const username = useSelector((state) => state.currentUsername);
     const { data } = useQuery(query, { variables: { username } });
-    const [schedule, setSchedule] = useState<Record<string, boolean>>({});
+    const { id, weekAvailability } = data.users[0];
+
+    const [schedule, setSchedule] = useState<Record<string, boolean>>(() => {
+        const daytimeKeys = (weekAvailability as Record<string, string>[]).map(
+            (s) => `${s.dayName}-${s.availableAt.substr(0, 5)}`
+        );
+        return daytimeKeys.reduce((prev, curr) => ({ ...prev, [curr]: true }), {});
+    });
+
+    const [updateAvailability] = useMutation(availabilityMutation);
 
     const handleToggle = useCallback((day: string, time: string, isChecked: boolean) => {
-        setSchedule((prev) => ({ ...prev, [dateKey(day, time)]: isChecked }));
+        setSchedule((prev) => ({ ...prev, [daytimeKey(day, time)]: isChecked }));
     }, []);
-
-    useEffect(() => {
-        console.log(schedule);
-    }, [schedule]);
 
     return (
         <Fragment>
@@ -210,10 +216,10 @@ function AvailabilityTab() {
                                 <Grid templateColumns="repeat( auto-fit, minmax(100px, 1fr) )">
                                     {times.map((time) => (
                                         <TimeCheckbox
-                                            key={dateKey(day, time)}
+                                            key={daytimeKey(day, time)}
                                             day={day}
                                             time={time}
-                                            isCheck={schedule[dateKey(day, time)] ?? false}
+                                            isCheck={schedule[daytimeKey(day, time)] ?? false}
                                             handleToggle={handleToggle}
                                         />
                                     ))}
@@ -225,10 +231,17 @@ function AvailabilityTab() {
 
                 <Box alignSelf="flex-end">
                     <Button
-                        type="submit"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            console.log(e);
+                        type="button"
+                        onClick={() => {
+                            const weekAvailability = Object.keys(schedule)
+                                .map((dt) => dt.split("-"))
+                                .map(([d, t]) => ({
+                                    dayName: capitalize(d),
+                                    availableAt: `${padStart(t, 5, "0")}:00.000`,
+                                }));
+
+                            updateAvailability({ variables: { id, data: { weekAvailability } } });
+                            setTimeout(() => window.location.reload(), 50);
                         }}>
                         Save
                     </Button>
