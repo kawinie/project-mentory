@@ -5,7 +5,7 @@ import { GetStaticPropsResult } from "next";
 import deepmerge from "deepmerge";
 import Cookie from "js-cookie";
 
-const CONTENT_SERVER_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+const CONTENT_SERVER_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;

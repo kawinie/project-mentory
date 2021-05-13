@@ -252,6 +252,7 @@ function Tabs() {
 function UserForm() {
     const username = useSelector((state) => state.currentUsername);
     const router = useRouter();
+
     useEffect(() => {
         if (!window.location.hash) {
             router.replace("#about");
@@ -259,6 +260,7 @@ function UserForm() {
     }, [router]);
 
     const { data, loading } = useQuery(query, { variables: { username } });
+
     if (loading) {
         return null;
     }
