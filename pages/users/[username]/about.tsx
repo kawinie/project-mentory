@@ -1,6 +1,6 @@
 import "twin.macro";
 import Image from "next/image";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { Stack, Box, VStack, Text, AspectRatio } from "@chakra-ui/react";
 
 import { withLayout } from "utils/layout";
@@ -87,7 +87,7 @@ export default About;
 /* -------------------------------------------------------------------------- */
 type Params = { username: string };
 
-export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context) => {
+export const getServerSideProps: GetServerSideProps<AboutProps, Params> = async (context) => {
     if (context.params == undefined) {
         return { notFound: true };
     }
@@ -101,8 +101,6 @@ export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context
     }
 
     const layoutProps = await About.retrievePropsFromLayoutDataRequirement(context);
-
-    console.log("LAYOUT PROPS", layoutProps);
     return {
         props: {
             ...data.users[0],
@@ -112,4 +110,4 @@ export const getStaticProps: GetStaticProps<AboutProps, Params> = async (context
 };
 
 // Use the same static paths as main layout
-export { getStaticPaths } from "./index";
+// export { getStaticPaths } from "./index";

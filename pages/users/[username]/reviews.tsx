@@ -10,7 +10,7 @@ import {
     MenuItemOption,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 
 import { withLayout } from "utils/layout";
 import { initializeApollo } from "utils/apollo";
@@ -131,7 +131,7 @@ export default Reviews;
 /* -------------------------------------------------------------------------- */
 type Params = { username: string };
 
-export const getStaticProps: GetStaticProps<ReviewProps, Params> = async (context) => {
+export const getServerSideProps: GetServerSideProps<ReviewProps, Params> = async (context) => {
     if (context.params == undefined) {
         return { notFound: true };
     }
@@ -155,4 +155,4 @@ export const getStaticProps: GetStaticProps<ReviewProps, Params> = async (contex
 };
 
 // Use the same static paths as main layout
-export { getStaticPaths } from "./index";
+// export { getStaticPaths } from "./index";
