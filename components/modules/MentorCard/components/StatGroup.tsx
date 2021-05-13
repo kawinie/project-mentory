@@ -45,8 +45,8 @@ export function makeStats(avgRating: number) {
 export type StatGroupProps = {
     direction: "column" | "row";
     avgReviewScore: number;
-    // noReviews: number;
-    // noEndorsements: number;
+    noReviews: number;
+    noEndorsements: number;
     className?: string;
 };
 

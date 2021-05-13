@@ -1,5 +1,5 @@
 import "twin.macro";
-import { ReactElement } from "react";
+import { ReactElement, Fragment } from "react";
 import { HStack, VStack, Checkbox, Box, Flex, Heading, Badge } from "@chakra-ui/react";
 import { Sliders, DotsNine, Tag, CheckSquare, HourglassHigh, Star } from "phosphor-react";
 import { times } from "lodash";
@@ -97,8 +97,8 @@ function FilterSection({ title, icon, options }: FilterSectionProps) {
 export function FilterSidebar() {
     const dispatch = useDispatch();
     const { loading, error, data } = useQuery(filterTypes);
-    if (loading) return "Loading...";
-    if (error) return `Error! ${error.message}`;
+    if (loading) return <Fragment>Loading...</Fragment>
+    if (error) return <Fragment>Error! ${error.message}</Fragment>
 
     const { categories, tags } = data;
     dispatch(setCategories(categories));
@@ -121,7 +121,7 @@ export function FilterSidebar() {
                     <FilterSection
                         title="Categories"
                         icon={<DotsNine size={24} />}
-                        options={categories.map((cat) => ({
+                        options={categories.map((cat: { Category: string }) => ({
                             inlineElement: <>{cat.Category}</>,
                             count: 12,
                             name: cat.Category,
@@ -131,7 +131,7 @@ export function FilterSidebar() {
                     <FilterSection
                         title="Tags"
                         icon={<Tag size={24} />}
-                        options={tags.map((tag) => ({
+                        options={tags.map((tag: { label: string }) => ({
                             inlineElement: <>{tag.label}</>,
                             count: 12,
                             name: tag.label,

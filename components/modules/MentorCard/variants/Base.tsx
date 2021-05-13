@@ -17,6 +17,14 @@ import { ProfileImage, StatGroup, Badge, AutoScrollText } from "../components";
 
 const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
 
+interface Tags {
+    label: string
+}
+
+interface Image {
+    url: string
+}
+
 export type MentorCardProps = {
     fullname: string;
     badge: string;
@@ -25,12 +33,12 @@ export type MentorCardProps = {
     expInYears: number;
     status?: string;
 
-    tags: JSON;
+    tags: Array<Tags>;
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 
-    profileImg?: JSON;
+    profileImg?: Image;
     profileUrl?: string;
 
     brief: string;
