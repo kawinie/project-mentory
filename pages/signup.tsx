@@ -30,6 +30,8 @@ import { registerUser } from "../lib/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
+const x = "";
+
 const data = [
     { name: "Google", provider: "google", source: "/svg/google.svg" },
     { name: "Facebook", provider: "facebook", source: "/svg/facebook.svg" },
