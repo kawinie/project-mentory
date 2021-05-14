@@ -6,7 +6,7 @@ import { times } from "lodash";
 import { useQuery } from "@apollo/client";
 import { useDispatch } from "react-redux";
 
-import { setTags, setCategories, setCheckboxes } from "redux/actions";
+import { setCheckboxes } from "redux/actions";
 import filterTypes from "pages/gql/filterTypes.gql";
 
 /* -------------------------------------------------------------------------- */
