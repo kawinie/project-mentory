@@ -38,22 +38,19 @@ function DisplayResult() {
     const searchWords = searchQuery.match(/\S+/g); // match the non-whitespace
 
     const categories = useMemo(() => {
-        const categories = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
-        return categories.filter(
+        return Object.keys(checkBoxes).filter(
             (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "categories"
         );
     }, [checkBoxes]);
 
     const tags = useMemo(() => {
-        const tags = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
-        return tags.filter(
+        return Object.keys(checkBoxes).filter(
             (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "tags"
         );
     }, [checkBoxes]);
 
     const scoresQuery = useMemo(() => {
-        const scores = Object.keys(checkBoxes) ? Object.keys(checkBoxes) : [""];
-        return scores.filter(
+        return Object.keys(checkBoxes).filter(
             (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "scores"
         );
     }, [checkBoxes]);

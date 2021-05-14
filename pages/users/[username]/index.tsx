@@ -72,15 +72,16 @@ function TopSection({
                 <VStack alignItems="start" w="full" spacing={2}>
                     {/* Tags */}
                     <HStack justify="start" spacing={4}>
-                        {tags.map((tag: TagComponent, index: number) => (
-                            <Tag
-                                key={tag.label}
-                                variant="text"
-                                color={index == 0 ? "blueGray.700" : "blueGray.500"}
-                                fontWeight={index == 0 ? "semibold" : "normal"}>
-                                {tag.label}
-                            </Tag>
-                        ))}
+                        {tags &&
+                            tags.map((tag: TagComponent, index: number) => (
+                                <Tag
+                                    key={tag.label}
+                                    variant="text"
+                                    color={index == 0 ? "blueGray.700" : "blueGray.500"}
+                                    fontWeight={index == 0 ? "semibold" : "normal"}>
+                                    {tag.label}
+                                </Tag>
+                            ))}
                     </HStack>
                     {/* Name and badge */}
                     <HStack justify="start" mb="2">
@@ -261,12 +262,12 @@ const getStaticProps: GetStaticProps<UserPageLayoutProps, Params> = async ({ par
     const { username } = params;
 
     const client = initializeApollo();
+
     const { data, error } = await client.query({ query, variables: { username } });
+
     if (error || data.users == null || data.users.length == 0) {
         return { notFound: true };
     }
-
-    console.log("Data", data);
 
     return {
         props: {

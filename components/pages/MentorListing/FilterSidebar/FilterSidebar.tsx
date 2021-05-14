@@ -95,14 +95,11 @@ function FilterSection({ title, icon, options }: FilterSectionProps) {
 /* -------------------------------------------------------------------------- */
 
 export function FilterSidebar() {
-    const dispatch = useDispatch();
     const { loading, error, data } = useQuery(filterTypes);
     if (loading) return <Fragment>Loading...</Fragment>;
     if (error) return <Fragment>Error! ${error.message}</Fragment>;
 
     const { categories, tags } = data;
-    dispatch(setCategories(categories));
-    dispatch(setTags(tags));
     return (
         <Box tw="overflow-hidden flex-shrink-0">
             {/* We need to wrap the scrollable content in a div to fix safari bug

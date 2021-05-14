@@ -10,7 +10,7 @@ query User($username: String) {
         }
 
         tags {
-        		label
+        	label
         }
 
         badges {

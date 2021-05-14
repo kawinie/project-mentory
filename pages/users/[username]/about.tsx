@@ -101,6 +101,7 @@ export const getServerSideProps: GetServerSideProps<AboutProps, Params> = async 
     }
 
     const layoutProps = await About.retrievePropsFromLayoutDataRequirement(context);
+
     return {
         props: {
             ...data.users[0],

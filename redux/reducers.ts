@@ -43,24 +43,6 @@ export const currentTransaction = createReducer<TransactionDetails | null>(null,
     builder.addCase(actions.setTransctionDetails, (_, action) => action.payload);
 });
 
-const initialCategories: Record<string, string[]> = {};
-export const categories = createReducer(initialCategories, (builder) => {
-    builder.addCase(actions.setCategories, (currentState, action) => {
-        const payload = action.payload;
-        currentState["categories"] = payload;
-        return currentState;
-    });
-});
-
-const initialTags: Record<string, string[]> = {};
-export const tags = createReducer(initialTags, (builder) => {
-    builder.addCase(actions.setTags, (currentState, action) => {
-        const payload = action.payload;
-        currentState["tags"] = payload;
-        return currentState;
-    });
-});
-
 const initialSearchQuery = "";
 export const searchQuery = createReducer(initialSearchQuery, (builder) => {
     builder.addCase(actions.setSearchQuery, (currentState, action) => {

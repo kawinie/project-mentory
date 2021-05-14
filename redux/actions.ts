@@ -7,10 +7,6 @@ import { AuthStatus } from "redux/models";
 // ────────────────────────────────────────────────────────────────
 //
 
-export const createSession = createAction("CREATE_SESSION", function (text: string) {
-    return { payload: { text } };
-});
-
 function withPayload<K extends unknown[], V>(action: (...args: K) => V) {
     return (...args: K) => ({ payload: action(...args) });
 }
@@ -42,16 +38,6 @@ export const setTransctionDetails = createAction(
 export const setCheckboxes = createAction(
     "filter/checkboxes/set",
     withPayload((object: Record<string, boolean>) => object)
-);
-
-export const setCategories = createAction(
-    "filter/checkboxes/categories",
-    withPayload((object: string[]) => object)
-);
-
-export const setTags = createAction(
-    "filter/checkboxes/tags",
-    withPayload((object: string[]) => object)
 );
 
 export const setSearchQuery = createAction(
