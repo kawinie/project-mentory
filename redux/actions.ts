@@ -25,3 +25,12 @@ export const setAuthStatus = createAction(
     "auth/set",
     withPayload((status: AuthStatus) => status)
 );
+
+export const setTransctionDetails = createAction(
+    "transaction/set",
+    withPayload((mentor: string, user: number, meeting: any[]) => ({
+        mentor,
+        user,
+        meeting,
+    }))
+);

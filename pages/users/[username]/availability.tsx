@@ -1,17 +1,25 @@
 import "twin.macro";
 import { GetServerSideProps } from "next";
-import { useMutation } from "@apollo/client";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
+import {
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
 import { Dispatch, SetStateAction, useEffect, useState, Fragment } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 
 import { withLayout } from "utils/layout";
 import { initializeApollo } from "utils/apollo";
+import { setTransctionDetails } from "redux/actions";
 
 import query from "./gql/availability.gql";
-import mutation from "./gql/transaction.gql";
 
 import { UserPageLayout } from ".";
 
@@ -37,8 +45,8 @@ function Times(props: TimesProps) {
                     <Button
                         key={entry.time}
                         variant={entry.selected ? undefined : "outline"}
-                        width="20"
-                        height="10"
+                        width="100px"
+                        height="44px"
                         onClick={() => {
                             // Toggles "selected" field within week availability object
                             props.weekTimes[props.day][i].selected = !props.weekTimes[props.day][i]
@@ -128,8 +136,10 @@ type TopBarProps = {
 };
 
 function TopBar(props: TopBarProps) {
-    const [createTransaction] = useMutation(mutation);
     const loggedInUserId = useSelector((state) => state.currentUserId);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const dispatch = useDispatch();
 
     return (
         <HStack spacing={480}>
@@ -154,19 +164,38 @@ function TopBar(props: TopBarProps) {
                         } else if (!loggedInUserId) {
                             alert("You must be signed in to book a meeting.");
                         } else {
-                            createTransaction({
-                                variables: {
-                                    mentor: props.mentorName,
-                                    user: loggedInUserId,
-                                    meeting: formatDateTimes(props.weekTimes),
-                                },
-                            });
-                            alert("Woohoo, you booked it!");
+                            dispatch(
+                                setTransctionDetails(
+                                    props.mentorName,
+                                    loggedInUserId,
+                                    formatDateTimes(props.weekTimes)
+                                )
+                            );
+                            onOpen();
                         }
                     }}
                     width="40">
                     Book Now
                 </Button>
+                <Modal isOpen={isOpen} onClose={onClose} isCentered>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Are you sure you want to continue?</ModalHeader>
+                        <ModalFooter>
+                            <Button size="sm" variant="ghost" onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Link
+                                href={{
+                                    pathname: "/checkout",
+                                }}>
+                                <Button size="sm" variant="ghost">
+                                    Continue
+                                </Button>
+                            </Link>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
             </HStack>
         </HStack>
     );
@@ -292,6 +321,7 @@ export const getServerSideProps: GetServerSideProps<AvailabilityProps, Params> =
     const layoutProps = await Availability.retrievePropsFromLayoutDataRequirement(context);
     return {
         props: {
+            username: context.params.username,
             ...data.users[0],
             layoutProps,
         },

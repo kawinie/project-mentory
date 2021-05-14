@@ -32,3 +32,13 @@ export const currentUserId = createReducer<number | null>(null, (builder) => {
 export const authStatus = createReducer<AuthStatus>("ready", (builder) => {
     builder.addCase(actions.setAuthStatus, (_, action) => action.payload);
 });
+
+type TransactionDetails = {
+    mentor: string;
+    user: number;
+    meeting: any[];
+};
+
+export const currentTransaction = createReducer<TransactionDetails | null>(null, (builder) => {
+    builder.addCase(actions.setTransctionDetails, (_, action) => action.payload);
+});
