@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { CaretDown, UserCircle } from "phosphor-react";
 import { omit } from "lodash";
-
 import { useRouter } from "next/router";
 import { ReactElement, Fragment } from "react";
 import { useQuery } from "@apollo/client";

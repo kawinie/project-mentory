@@ -8,12 +8,12 @@ export type Mentor = {
     expInYears: number;
     status?: string;
 
-    tags: { label: string; }[];
+    tags: { label: string }[];
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 
-    profileImg?: { url: string; };
+    profileImg?: { url: string };
     profileUrl?: string;
 
     brief: string;

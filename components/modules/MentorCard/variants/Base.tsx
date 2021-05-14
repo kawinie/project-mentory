@@ -110,7 +110,10 @@ export function MainSection({
     brief,
     location,
 }: TopLevelGridItem<
-    Pick<MentorCardProps, "user" | "firstname" | "lastname" | "location" | "expInYears" | "status" | "brief" | "badge">
+    Pick<
+        MentorCardProps,
+        "user" | "firstname" | "lastname" | "location" | "expInYears" | "status" | "brief" | "badge"
+    >
 >) {
     return (
         <VStack gridArea="main" alignItems="start" spacing={4}>

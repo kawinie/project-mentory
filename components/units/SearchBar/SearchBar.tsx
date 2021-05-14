@@ -1,4 +1,5 @@
 import "twin.macro";
+import router from "next/router";
 import { useRef, forwardRef, ComponentPropsWithoutRef, useState, useEffect } from "react";
 import { IconButton, HStack } from "@chakra-ui/react";
 import { MagnifyingGlass, XCircle } from "phosphor-react";
@@ -6,7 +7,6 @@ import { useDispatch } from "react-redux";
 import composeRefs from "@seznam/compose-react-refs";
 
 import { setSearchQuery } from "redux/actions";
-import router from "next/router";
 
 export const SearchBar = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<"input">>(
     (props, externalRef) => {
