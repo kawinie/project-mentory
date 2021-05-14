@@ -1,5 +1,4 @@
 import "twin.macro";
-import Image from "next/image";
 import { AspectRatio } from "@chakra-ui/react";
 import { UserRectangle } from "phosphor-react";
 
@@ -16,7 +15,7 @@ export function ProfileImage({ url }: { url?: string }) {
 
     return (
         <AspectRatio w="full" ratio={1} rounded="md" overflow="hidden">
-            <Image src={url} sizes="100%" layout="fill" objectFit="cover" />
+            <img src={url} alt={""} />
         </AspectRatio>
     );
 }
