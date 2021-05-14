@@ -112,7 +112,7 @@ function TopSection({
                 </Box>
                 {/* Stat Group  */}
                 {/* TODO: Connect noEndorsements and noReviews */}
-                <HStack justify="center" w="full">
+                <HStack justify="start" w="full">
                     <StatGroup
                         direction="row"
                         avgReviewScore={avgReviewScore ?? 0}

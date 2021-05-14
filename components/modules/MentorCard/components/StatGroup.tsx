@@ -64,9 +64,9 @@ export function StatGroup({ direction, className, ...rest }: StatGroupProps) {
             borderColor="coolGray.200"
             rounded="lg"
             spacing={4}
-            alignItems="center"
+            alignItems="start"
             p={4}
-            justify="space-between"
+            justify="start"
             divider={<StackDivider alignSelf="center" width="50%" />}
             className={className}>
             {stats.map(({ icon: Icon, ...stat }) => (
