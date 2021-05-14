@@ -17,9 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { CaretDown, UserCircle } from "phosphor-react";
 import { omit } from "lodash";
-import { ReactElement } from "react";
 import { useRouter } from "next/router";
+import { ReactElement, Fragment } from "react";
+import { useQuery } from "@apollo/client";
 
+import filterTypes from "pages/gql/filterTypes.gql";
 import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
 import { List } from "components/units/List";
@@ -113,26 +115,16 @@ const userMenuItems = [
     { title: "Help", items: ["Docs", "FAQ", "Log Out"] },
 ];
 
-const categories = [
-    { title: "", items: ["All Categories"] },
-    { title: "Category", items: ["Design", "Programming", "Business", "Makeup", "Lifestyle"] },
-];
-
 function Desktop({ username }: NavBarProps) {
     return (
         <HStack {...styleProps}>
             <Heading letterSpacing="wide" size="lg">
-                <NextLink href="/" passHref>
+                <NextLink href="/mentor-listing" passHref>
                     <Link whiteSpace="nowrap">Mentory</Link>
                 </NextLink>
             </Heading>
             <Grid templateColumns="minmax(0, 1fr) max-content" gap={4} maxWidth="800px" w="full">
                 <SearchBar placeholder="Search mentor..." />
-                <NavBarMenuButton
-                    title="All Categories"
-                    itemGroups={categories}
-                    rightIcon={<CaretDown tw="inline" size={24} />}
-                />
             </Grid>
             <List
                 items={navMenuItems}

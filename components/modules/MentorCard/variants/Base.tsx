@@ -15,20 +15,32 @@ import Link from "next/link";
 
 import { ProfileImage, StatGroup, Badge, AutoScrollText } from "../components";
 
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+
+interface Tags {
+    label: string;
+}
+
+interface Image {
+    url: string;
+}
+
 export type MentorCardProps = {
-    fullname: string;
+    user: { username: string };
+    firstname: string;
+    lastname: string;
     badge: string;
 
     location: string;
     expInYears: number;
     status?: string;
 
-    tags: string[];
+    tags: Tags[];
     avgReviewScore: number;
     noReviews: number;
     noEndorsements: number;
 
-    profileImg?: string;
+    profileImg?: Image;
     profileUrl?: string;
 
     brief: string;
@@ -56,7 +68,7 @@ export function ProfileSection({
 }: TopLevelGridItem<{ img: MentorCardProps["profileImg"] }>) {
     return (
         <VStack gridArea={gridArea} position="relative">
-            <ProfileImage url={img} />
+            {img && <ProfileImage url={REACT_APP_BACKEND_URL + img.url} />}
             {/* alignContent only works with flexWap = "wrap" | "wrap-reverse" */}
             <Checkbox w="full" alignContent="start" justifyContent="center" flexWrap="wrap">
                 <span tw="text-sm text-secondary z-10">Compare</span>
@@ -76,8 +88,8 @@ export function TagSection({
     return (
         <HStack gridArea={gridArea} justify="start" spacing={2} overflow="hidden">
             {tags.map((t) => (
-                <Tag key={t} variant="primary">
-                    {t}
+                <Tag key={t.label} variant="primary">
+                    {t.label}
                 </Tag>
             ))}
         </HStack>
@@ -89,23 +101,28 @@ export function TagSection({
 /* -------------------------------------------------------------------------- */
 
 export function MainSection({
-    fullname,
+    user,
+    firstname,
+    lastname,
     badge,
     expInYears,
     status,
     brief,
     location,
 }: TopLevelGridItem<
-    Pick<MentorCardProps, "fullname" | "location" | "expInYears" | "status" | "brief" | "badge">
+    Pick<
+        MentorCardProps,
+        "user" | "firstname" | "lastname" | "location" | "expInYears" | "status" | "brief" | "badge"
+    >
 >) {
     return (
         <VStack gridArea="main" alignItems="start" spacing={4}>
             {/* Name */}
             <HStack alignItems="center">
                 <Heading as="h2" fontSize="2xl">
-                    {fullname}
+                    {firstname} {lastname}
                 </Heading>
-                <Badge text={badge} />
+                {/* <Badge text={badge} /> */}
             </HStack>
 
             {/* Secondary Info */}
@@ -118,9 +135,9 @@ export function MainSection({
                         <a>{location}</a>
                     </Link>
                 </Tag>
-                <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
+                {/* <Tag bg="transparent" fontWeight="normal" p={0} flexShrink={0}>
                     {`${expInYears < 1 ? "<" : ""} ${expInYears}${expInYears > 1 ? "+" : ""} years`}
-                </Tag>
+                </Tag> */}
             </HStack>
 
             <Tag bg="transparent" fontWeight="normal" p={0} textOverflow="ellipsis">
@@ -138,12 +155,16 @@ export function MainSection({
             {/* Action Buttons */}
             <HStack w="full" justifyContent="end" flexGrow={1} alignContent="end" wrap="wrap">
                 <span tw="text-xs text-secondary underline">Available to meet now</span>
-                <Button minW="100px" variant="outline">
-                    Make Appointment
-                </Button>
-                <Button minW="100px" colorScheme="blueGray">
-                    View
-                </Button>
+                <Link href={"/users/" + user.username + "/availability"} passHref>
+                    <Button minW="100px" variant="outline">
+                        Make Appointment
+                    </Button>
+                </Link>
+                <Link href={"/users/" + user.username} passHref>
+                    <Button minW="100px" colorScheme="blueGray">
+                        View
+                    </Button>
+                </Link>
             </HStack>
         </VStack>
     );

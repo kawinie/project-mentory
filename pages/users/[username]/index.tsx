@@ -52,10 +52,7 @@ function TopSection({
     const fullname = `${capitalize(firstname)} ${capitalize(lastname)}`;
 
     type TagComponent = {
-        index: number;
-        tag: {
-            label: string;
-        };
+        label: string;
     };
 
     return (
@@ -75,15 +72,16 @@ function TopSection({
                 <VStack alignItems="start" w="full" spacing={2}>
                     {/* Tags */}
                     <HStack justify="start" spacing={4}>
-                        {tags.map(({ index, tag }: TagComponent) => (
-                            <Tag
-                                key={tag.label}
-                                variant="text"
-                                color={index == 0 ? "blueGray.700" : "blueGray.500"}
-                                fontWeight={index == 0 ? "semibold" : "normal"}>
-                                {tag.label}
-                            </Tag>
-                        ))}
+                        {tags &&
+                            tags.map((tag: TagComponent, index: number) => (
+                                <Tag
+                                    key={tag.label}
+                                    variant="text"
+                                    color={index == 0 ? "blueGray.700" : "blueGray.500"}
+                                    fontWeight={index == 0 ? "semibold" : "normal"}>
+                                    {tag.label}
+                                </Tag>
+                            ))}
                     </HStack>
                     {/* Name and badge */}
                     <HStack justify="start" mb="2">
@@ -114,7 +112,7 @@ function TopSection({
                 </Box>
                 {/* Stat Group  */}
                 {/* TODO: Connect noEndorsements and noReviews */}
-                <HStack justify="center" w="full">
+                <HStack justify="start" w="full">
                     <StatGroup
                         direction="row"
                         avgReviewScore={avgReviewScore ?? 0}
@@ -124,9 +122,9 @@ function TopSection({
                     />
                 </HStack>
                 {/* Action Buttons */}
-                <Button textTransform="uppercase" fontWeight="bold">
+                {/* <Button textTransform="uppercase" fontWeight="bold">
                     Book Now
-                </Button>
+                </Button> */}
             </VStack>
         </HStack>
     );
@@ -204,10 +202,7 @@ export type UserPageLayoutProps = {
     };
 
     tags: {
-        index: string;
-        tag: {
-            label: string;
-        };
+        label: string;
     }[];
 
     badges: {
@@ -267,12 +262,12 @@ const getStaticProps: GetStaticProps<UserPageLayoutProps, Params> = async ({ par
     const { username } = params;
 
     const client = initializeApollo();
+
     const { data, error } = await client.query({ query, variables: { username } });
+
     if (error || data.users == null || data.users.length == 0) {
         return { notFound: true };
     }
-
-    console.log("Data", data);
 
     return {
         props: {

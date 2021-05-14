@@ -25,3 +25,22 @@ export const setAuthStatus = createAction(
     "auth/set",
     withPayload((status: AuthStatus) => status)
 );
+
+export const setTransctionDetails = createAction(
+    "transaction/set",
+    withPayload((mentor: string, user: number, meeting: any[]) => ({
+        mentor,
+        user,
+        meeting,
+    }))
+);
+
+export const setCheckboxes = createAction(
+    "filter/checkboxes/set",
+    withPayload((object: Record<string, boolean>) => object)
+);
+
+export const setSearchQuery = createAction(
+    "search/set",
+    withPayload((object: string) => object)
+);

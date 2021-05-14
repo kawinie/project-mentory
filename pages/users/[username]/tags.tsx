@@ -11,9 +11,7 @@ import { UserPageLayout } from ".";
 
 type TagsProps = {
     tags: {
-        tag: {
-            label: string;
-        };
+        label: string;
     }[];
 };
 
@@ -42,8 +40,8 @@ const Tags = withLayout(UserPageLayout, function ({ tags }: TagsProps) {
     return (
         <div>
             {tags.map((tag, index: number) => (
-                <Badge ml="3" fontSize="md" colorScheme={Color[index]} key={tag.tag.label}>
-                    {tag.tag.label}
+                <Badge ml="3" fontSize="md" colorScheme={Color[index]} key={tag.label}>
+                    {tag.label}
                 </Badge>
             ))}
         </div>

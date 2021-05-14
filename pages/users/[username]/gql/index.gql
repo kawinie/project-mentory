@@ -10,14 +10,12 @@ query User($username: String) {
         }
 
         tags {
-            index
-            tag {
-                label
-            }
+        	label
         }
 
         badges {
             label
         }
+        avgReviewScore
     }
 }

@@ -2,9 +2,7 @@ query User($username: String) {
     users: userInfos(where: { user: { username: $username } }) {
         firstname
         tags {
-          tag {
-            label
-          }
+          label
         }
     }
 }

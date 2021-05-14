@@ -32,12 +32,13 @@ export function Stat({ icon, value, title }: StatProps) {
  * Render top-level presentation of mentor stats
  */
 
-export function makeStats(avgRating: number, noReviews: number, noEndorsements: number) {
+// export function makeStats(avgRating: number, noReviews: number, noEndorsements: number) {
+export function makeStats(avgRating: number) {
     const $ = <T extends unknown>(t: string, v: number, i: T) => ({ title: t, value: v, icon: i });
     return [
         $("Avg. Rating", avgRating, Star),
-        $("Reviews", noReviews, ChatTeardropText),
-        $("Endorsements", noEndorsements, User),
+        // $("Reviews", noReviews, ChatTeardropText),
+        // $("Endorsements", noEndorsements, User),
     ] as const;
 }
 
@@ -51,7 +52,8 @@ export type StatGroupProps = {
 
 export function StatGroup({ direction, className, ...rest }: StatGroupProps) {
     const stats = useMemo(
-        () => makeStats(rest.avgReviewScore, rest.noReviews, rest.noEndorsements),
+        // () => makeStats(rest.avgReviewScore, rest.noReviews, rest.noEndorsements),
+        () => makeStats(rest.avgReviewScore),
         [rest]
     );
 
@@ -62,9 +64,9 @@ export function StatGroup({ direction, className, ...rest }: StatGroupProps) {
             borderColor="coolGray.200"
             rounded="lg"
             spacing={4}
-            alignItems="center"
+            alignItems="start"
             p={4}
-            justify="space-between"
+            justify="start"
             divider={<StackDivider alignSelf="center" width="50%" />}
             className={className}>
             {stats.map(({ icon: Icon, ...stat }) => (
