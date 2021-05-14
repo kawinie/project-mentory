@@ -17,3 +17,6 @@ Mentory is an innovative online platform where people can get mentored by real i
 10. After a few seconds, you should be able to access the app via the link printed to the terminal.
 
 Note: You will need some environment variables set in your .env file for Strapi to work properly. Contact the devs for that information. 
+
+
+Testing
