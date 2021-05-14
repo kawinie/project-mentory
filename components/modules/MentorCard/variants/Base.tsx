@@ -15,7 +15,7 @@ import Link from "next/link";
 
 import { ProfileImage, StatGroup, Badge, AutoScrollText } from "../components";
 
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:1337";
+const REACT_APP_BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 interface Tags {
     label: string;

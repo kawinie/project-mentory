@@ -1,8 +1,8 @@
 import { ImageLoader } from "next/image";
 
 export const strapiImgLoader: ImageLoader = ({ src, width, quality }) => {
-    if (src) {
-        return "/images/trollface";
+    if (!src || src == "") {
+        return "/images/trollface.jpg";
     }
 
     const regex = /\/(.*)/g;
