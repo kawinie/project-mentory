@@ -2,10 +2,22 @@ import "twin.macro";
 import { GetServerSideProps } from "next";
 import { useMutation } from "@apollo/client";
 import { Divider, Grid, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
+import {
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalBody,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    Input,
+    ModalFooter,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { DotsThree } from "phosphor-react";
 import { Dispatch, SetStateAction, useEffect, useState, Fragment } from "react";
 import { useSelector } from "react-redux";
+import Link from "next/link";
 
 import { withLayout } from "utils/layout";
 import { initializeApollo } from "utils/apollo";
@@ -130,6 +142,12 @@ type TopBarProps = {
 function TopBar(props: TopBarProps) {
     const [createTransaction] = useMutation(mutation);
     const loggedInUserId = useSelector((state) => state.currentUserId);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [open, setOpen] = useState(false);
+
+    function updateFunction(chosenFilter: boolean) {
+        setOpen(chosenFilter);
+    }
 
     return (
         <HStack spacing={480}>
@@ -161,12 +179,34 @@ function TopBar(props: TopBarProps) {
                                     meeting: formatDateTimes(props.weekTimes),
                                 },
                             });
+                            console.log(createTransaction);
+                            updateFunction(true);
                             alert("Woohoo, you booked it!");
                         }
                     }}
                     width="40">
                     Book Now
                 </Button>
+                <Modal isOpen={open} onClose={onClose} isCentered>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Are you sure you want to continue?</ModalHeader>
+                        <ModalFooter>
+                            <Button size="sm" variant="ghost" onClick={() => updateFunction(false)}>
+                                Cancel
+                            </Button>
+                            <Link
+                                href={{
+                                    pathname: "/checkout",
+                                    query: { data: JSON.stringify(props.weekTimes) },
+                                }}>
+                                <Button size="sm" variant="ghost">
+                                    Send Report
+                                </Button>
+                            </Link>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
             </HStack>
         </HStack>
     );

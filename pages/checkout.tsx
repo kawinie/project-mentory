@@ -1,5 +1,6 @@
 import { HStack, VStack, Box, Image, Center, StackDivider, Flex, Button } from "@chakra-ui/react";
 import "twin.macro";
+import { User } from "phosphor-react";
 
 import { NavBar } from "components/modules/NavBar";
 
@@ -41,10 +42,22 @@ const UserDetails = {
     ],
 };
 
-const RenderTimes = () => {
-    let total = 0;
+const RenderTimes = ({ data }: { data: any[] }) => {
+    const total = 180;
 
-    UserDetails.items.forEach((item) => (total += item.price));
+    console.log(UserDetails.items);
+    console.log(data);
+
+    const times = data.map((data: any, index) => (
+        <HStack key={index} w="full" tw=" flex justify-between">
+            <span>
+                {data.day} {data.time}
+            </span>
+            <span>$30</span>
+        </HStack>
+    ));
+
+    console.log(times);
 
     const fees = Math.round(total * 0.1 * 100) / 100;
     return (
@@ -56,14 +69,7 @@ const RenderTimes = () => {
                         <span>Items</span>
                         <span>Price</span>
                     </HStack>
-                    {UserDetails.items.map((items, index) => (
-                        <HStack key={index} w="full" tw=" flex justify-between">
-                            <span>
-                                {items.day} {items.time}
-                            </span>
-                            <span>${items.price}</span>
-                        </HStack>
-                    ))}
+                    {times}
                 </VStack>
             </Box>
             <Box w="full" pl="67%" py={2}>
@@ -82,7 +88,33 @@ const RenderTimes = () => {
     );
 };
 
+const getQueryParams = (query: any) => {
+    return query
+        ? (/^[?#]/.test(query) ? query.slice(1) : query)
+              .split("&")
+              .reduce((params: any, param: any) => {
+                  const [key, value] = param.split("=");
+                  params[key] = value ? decodeURIComponent(value.replace(/\+/g, " ")) : "";
+                  return params;
+              }, {})
+        : {};
+};
+
 export default function Checkout() {
+    const { data } = getQueryParams(window.location.search);
+
+    const newData = JSON.parse(data);
+    console.log(newData);
+    const timesArray: any[] = [];
+
+    for (const key in newData) {
+        newData[key].forEach((time: any) => {
+            if (time.selected) {
+                timesArray.push({ day: key, time: time.time });
+            }
+        });
+    }
+
     return (
         <VStack alignContent="center">
             <Box tw="sticky top-0 z-50" w="full">
@@ -103,7 +135,7 @@ export default function Checkout() {
                             {UserDetails.firstname} {UserDetails.lastname}?
                         </span>
                     </span>
-                    <RenderTimes />
+                    <RenderTimes data={timesArray} />
                     <VStack w="full" tw="items-end" py={14} spacing={4}>
                         <span tw="text-text-primary font-semibold">
                             You will be charged with the transaction fee upon order confirmation
