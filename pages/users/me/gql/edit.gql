@@ -9,6 +9,10 @@ query User($username: String) {
         profession
         brief
         state
+        weekAvailability {
+            dayName
+            availableAt
+        }
         profileImg {
             url
         }
