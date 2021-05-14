@@ -34,3 +34,13 @@ export const setTransctionDetails = createAction(
         meeting,
     }))
 );
+
+export const setCheckboxes = createAction(
+    "filter/checkboxes/set",
+    withPayload((object: Record<string, boolean>) => object)
+);
+
+export const setSearchQuery = createAction(
+    "search/set",
+    withPayload((object: string) => object)
+);

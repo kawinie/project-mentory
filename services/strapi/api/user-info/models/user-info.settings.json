@@ -59,11 +59,6 @@
     "state": {
       "type": "string"
     },
-    "tags": {
-      "type": "component",
-      "repeatable": true,
-      "component": "units.tag-component"
-    },
     "profileSections": {
       "type": "component",
       "repeatable": true,
@@ -73,10 +68,16 @@
       "plugin": "users-permissions",
       "model": "user"
     },
+    "category": {
+      "model": "category"
+    },
     "weekAvailability": {
       "type": "component",
       "repeatable": true,
       "component": "datetime.week-availability"
+    },
+    "tags": {
+      "collection": "tag"
     }
   }
 }

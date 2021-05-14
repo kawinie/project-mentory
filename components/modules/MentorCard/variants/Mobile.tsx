@@ -25,7 +25,17 @@ export function Mobile({ profileImg, tags, ...props }: MentorCardProps) {
         rounded: "md",
     };
 
-    const main = pick(props, "fullname", "location", "badge", "expInYears", "status", "brief");
+    const main = pick(
+        props,
+        "user",
+        "firstname",
+        "lastname",
+        "location",
+        "badge",
+        "expInYears",
+        "status",
+        "brief"
+    );
     const stat = pick(props, "avgReviewScore", "noReviews", "noEndorsements");
 
     return (

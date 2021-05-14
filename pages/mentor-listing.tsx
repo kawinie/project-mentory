@@ -1,5 +1,5 @@
 import "twin.macro";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, Fragment } from "react";
 import {
     Heading,
     Box,
@@ -16,34 +16,77 @@ import {
 } from "@chakra-ui/react";
 import { X } from "phosphor-react";
 import axios from "axios";
-import { times } from "lodash";
+import { first, times } from "lodash";
+import { useQuery } from "@apollo/client";
+import { useSelector } from "react-redux";
 
 import { FilterSidebar } from "components/pages/MentorListing";
-import { MentorCard } from "components/modules/MentorCard";
+import { MentorCard, MentorCardProps } from "components/modules/MentorCard";
 import { NavBar } from "components/modules/NavBar";
 import { useScreen } from "hooks";
 import { Mentor, Article } from "models";
+import query from "pages/gql/users.gql";
 
 /* -------------------------------------------------------------------------- */
 /*                               Mentor Results                               */
 /* -------------------------------------------------------------------------- */
 
-function DisplayResult({ searchQuery }: { searchQuery: string }) {
+function DisplayResult() {
     const [mentors, setMentors] = useState<Mentor[] | null>(null);
+    const checkBoxes = useSelector((state) => state.filterCheckboxes);
+    const searchQuery = useSelector((state) => state.searchQuery);
+    const searchWords = searchQuery.match(/\S+/g); // match the non-whitespace
+
+    const categories = useMemo(() => {
+        return Object.keys(checkBoxes).filter(
+            (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "categories"
+        );
+    }, [checkBoxes]);
+
+    const tags = useMemo(() => {
+        return Object.keys(checkBoxes).filter(
+            (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "tags"
+        );
+    }, [checkBoxes]);
+
+    const scoresQuery = useMemo(() => {
+        return Object.keys(checkBoxes).filter(
+            (element) => checkBoxes[element][0] == true && checkBoxes[element][1] == "scores"
+        );
+    }, [checkBoxes]);
+
+    const scores = scoresQuery.map((element) => {
+        const res = element.match(/\d+/g);
+        if (res) return parseInt(res.toString());
+        return null;
+    });
+
+    const variables = {
+        categories: categories,
+        tags: tags,
+        searchQuery: searchWords,
+        scores: scores,
+    };
+    const { loading, data } = useQuery(query, { variables });
 
     useEffect(() => {
-        axios
-            .get<Mentor[]>("/api/mentors", { params: { searchQuery } })
-            .then((response) => setMentors(response.data));
-    }, [searchQuery]);
+        const users = loading ? [] : data.users;
+        setMentors(users);
+    }, [loading, checkBoxes, searchQuery]);
 
     return (
         <Box tw="h-full w-full">
             <Grid tw="justify-start items-center gap-x-4 gap-y-1" mb={8}>
-                <Text tw="text-xl inline font-semibold">Search Results For “programming”</Text>
-                <Link tw="text-sm flex" href="/mentor" gridColumn={2}>
-                    <X size={20} /> Clear All Filters
-                </Link>
+                {searchQuery && (
+                    <Fragment>
+                        <Text tw="text-xl inline font-semibold">
+                            Search Results For “{searchQuery}”
+                        </Text>
+                        <Link tw="text-sm flex" href="/mentor-listing" gridColumn={2}>
+                            <X size={20} /> Clear All Filters
+                        </Link>
+                    </Fragment>
+                )}
                 <div tw="text-secondary uppercase">{mentors?.length} Results</div>
             </Grid>
             <VStack spacing={8}>
@@ -68,7 +111,8 @@ function DisplayResult({ searchQuery }: { searchQuery: string }) {
                     mentors.map(({ firstname, lastname, ...rest }) => (
                         <MentorCard
                             key={firstname + lastname}
-                            fullname={`${firstname} ${lastname}`}
+                            firstname={firstname}
+                            lastname={lastname}
                             {...rest}
                             variant="desktop"
                         />
@@ -119,6 +163,7 @@ function ArticleSection() {
 
 export default function MentorListing() {
     const { min } = useScreen();
+    const username = useSelector((state) => state.currentUsername);
 
     const desktopLayout: GridProps = {
         templateAreas: `
@@ -145,7 +190,7 @@ export default function MentorListing() {
         // space. This issue is documented here: https://stackoverflow.com/questions/52861086/who-does-minmax0-1fr-work-for-long-elements-while-1fr-doesnt
         <Grid gridTemplateRows="max-content minmax(0, 1fr)" background="trueGray.100" gap={8}>
             <Box tw="sticky top-0 z-50">
-                <NavBar username="John" />
+                <NavBar username={username ?? ""} />
             </Box>
 
             <Grid {...gridLayout} w="full" maxWidth="container.lg" mx="auto" gap={8}>
@@ -163,7 +208,7 @@ export default function MentorListing() {
 
                 {/* Results */}
                 <Box gridArea="results">
-                    <DisplayResult searchQuery={"Get input from user"} />
+                    <DisplayResult />
                 </Box>
             </Grid>
         </Grid>
