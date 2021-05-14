@@ -1,6 +1,10 @@
 import { ImageLoader } from "next/image";
 
 export const strapiImgLoader: ImageLoader = ({ src, width, quality }) => {
+    if (src) {
+        return "/images/trollface";
+    }
+
     const regex = /\/(.*)/g;
     const withoutForwardSlash = src.replace(regex, "$1");
     const domain = process.env.NEXT_PUBLIC_API_URL;

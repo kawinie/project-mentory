@@ -289,7 +289,7 @@ function UserForm() {
                         <AspectRatio w="full" ratio={1} rounded="md" overflow="hidden">
                             <NextImage
                                 loader={strapiImgLoader}
-                                src={profileImg.url}
+                                src={profileImg ? profileImg.url : null}
                                 sizes="100%"
                                 layout="fill"
                                 objectFit="cover"
