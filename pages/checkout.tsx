@@ -1,63 +1,46 @@
-import { HStack, VStack, Box, Image, Center, StackDivider, Flex, Button } from "@chakra-ui/react";
+import { HStack, VStack, Box, StackDivider, Button } from "@chakra-ui/react";
 import "twin.macro";
-import { User } from "phosphor-react";
+import { useSelector } from "react-redux";
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 
 import { NavBar } from "components/modules/NavBar";
 
-const UserDetails = {
-    user: "kawinie",
-    firstname: "Kawin",
-    lastname: "Pechetratanapanit",
-    items: [
-        {
-            day: "Sun 2/14",
-            time: "8:00 AM",
-            price: 30,
-        },
-        {
-            day: "Mon 2/15",
-            time: "8:00 AM",
-            price: 30,
-        },
-        {
-            day: "Tue 2/16",
-            time: "8:00 AM",
-            price: 30,
-        },
-        {
-            day: "Wed 2/17",
-            time: "8:00 AM",
-            price: 30,
-        },
-        {
-            day: "Thu 2/18",
-            time: "8:00 AM",
-            price: 30,
-        },
-        {
-            day: "Fri 2/19",
-            time: "8:00 AM",
-            price: 30,
-        },
-    ],
-};
+import mutation from "./gql/transaction.gql";
+
+function formatTime(time: string) {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const fullDate = new Date(time);
+    const day = days[fullDate.getDay()];
+    const date = fullDate.getDate();
+    const month = fullDate.getMonth();
+    const hours = fullDate.getHours();
+    const minutes = (fullDate.getMinutes() < 10 ? "0" : "") + fullDate.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    let timeValue;
+
+    if (hours > 0 && hours <= 12) {
+        timeValue = "" + hours;
+    } else if (hours > 12) {
+        timeValue = "" + (hours - 12);
+    } else if (hours == 0) {
+        timeValue = "12";
+    }
+
+    return day + " " + month + "/" + date + " @ " + timeValue + ":" + minutes + " " + ampm;
+}
 
 const RenderTimes = ({ data }: { data: any[] }) => {
-    const total = 180;
+    const total = 30 * data.length;
 
-    console.log(UserDetails.items);
-    console.log(data);
-
-    const times = data.map((data: any, index) => (
+    const times = data.map((daytime, index) => (
         <HStack key={index} w="full" tw=" flex justify-between">
-            <span>
-                {data.day} {data.time}
-            </span>
+            <span>{formatTime(daytime.transactionDateTime)}</span>
             <span>$30</span>
         </HStack>
     ));
-
-    console.log(times);
 
     const fees = Math.round(total * 0.1 * 100) / 100;
     return (
@@ -88,59 +71,41 @@ const RenderTimes = ({ data }: { data: any[] }) => {
     );
 };
 
-const getQueryParams = (query: any) => {
-    return query
-        ? (/^[?#]/.test(query) ? query.slice(1) : query)
-              .split("&")
-              .reduce((params: any, param: any) => {
-                  const [key, value] = param.split("=");
-                  params[key] = value ? decodeURIComponent(value.replace(/\+/g, " ")) : "";
-                  return params;
-              }, {})
-        : {};
-};
-
 export default function Checkout() {
-    const { data } = getQueryParams(window.location.search);
+    const [createTransaction] = useMutation(mutation);
+    const currentTransaction = useSelector((state) => state.currentTransaction);
+    const username = useSelector((state) => state.currentUsername);
+    const router = useRouter();
 
-    const newData = JSON.parse(data);
-    console.log(newData);
-    const timesArray: any[] = [];
-
-    for (const key in newData) {
-        newData[key].forEach((time: any) => {
-            if (time.selected) {
-                timesArray.push({ day: key, time: time.time });
-            }
-        });
+    if (currentTransaction == null) {
+        return <Box />;
     }
 
     return (
         <VStack alignContent="center">
             <Box tw="sticky top-0 z-50" w="full">
-                <NavBar username="John" />
+                <NavBar username={username ?? "User"} />
             </Box>
             <Box pt={10}>
-                <VStack>
-                    <Image
-                        my={10}
-                        borderRadius={8}
-                        boxSize="200px"
-                        src="https://bit.ly/sage-adebayo"
-                        alt="Segun Adebayo"
-                    />
+                <VStack pt={20}>
                     <span tw="text-2xl">
                         Confirm your booking with{" "}
-                        <span tw="font-bold">
-                            {UserDetails.firstname} {UserDetails.lastname}?
-                        </span>
+                        <span tw="font-bold">{currentTransaction.mentor}</span>
                     </span>
-                    <RenderTimes data={timesArray} />
+                    <RenderTimes data={currentTransaction.meeting} />
                     <VStack w="full" tw="items-end" py={14} spacing={4}>
                         <span tw="text-text-primary font-semibold">
                             You will be charged with the transaction fee upon order confirmation
                         </span>
-                        <Button width="146px">Book Now</Button>
+                        <Button
+                            width="146px"
+                            onClick={() => {
+                                createTransaction({ variables: currentTransaction });
+                                alert("You have successfully checked out!");
+                                router.push("/mentor-listing");
+                            }}>
+                            Book Now
+                        </Button>
                     </VStack>
                 </VStack>
             </Box>
