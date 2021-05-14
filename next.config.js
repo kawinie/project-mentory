@@ -25,7 +25,7 @@ module.exports = withBundleAnalyzer({
         return config;
     },
     images: {
-        domains: ["localhost"],
+        domains: ["localhost", "https://floating-dusk-99867.herokuapp.com"],
     },
 
     // This is how to do redirections
