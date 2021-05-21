@@ -18,21 +18,23 @@ import {
 import { CaretDown, UserCircle } from "phosphor-react";
 import { omit } from "lodash";
 import { useRouter } from "next/router";
-import { ReactElement, Fragment } from "react";
-import { useQuery } from "@apollo/client";
+import { ReactElement, useCallback } from "react";
 
-import filterTypes from "pages/gql/filterTypes.gql";
 import { SearchBar } from "components/units/SearchBar";
 import { useScreen } from "hooks";
 import { List } from "components/units/List";
-
-import { logout } from "../../../lib/auth";
+import { logout } from "lib/auth";
 
 /* -------------------------------------------------------------------------- */
 /*                             NavBar Menu Button                             */
 /* -------------------------------------------------------------------------- */
 
-type ItemGroup = { title: string; items: string[] };
+type Item = {
+    title: string;
+    action?: () => void;
+};
+
+type ItemGroup = { title: string; items: Item[] };
 type MenuButtonProps = ButtonProps & {
     title: string;
     itemGroups: ItemGroup[];
@@ -40,12 +42,6 @@ type MenuButtonProps = ButtonProps & {
 };
 
 function NavBarMenuButton({ title, itemGroups, mobileIcon, ...props }: MenuButtonProps) {
-    const router = useRouter();
-    function logoutUser() {
-        logout();
-        router.push("/login");
-    }
-
     const { min, max } = useScreen();
     const common = {
         w: "100%",
@@ -75,8 +71,8 @@ function NavBarMenuButton({ title, itemGroups, mobileIcon, ...props }: MenuButto
                     <MenuGroup key={title} title={title}>
                         {items.map((item) => (
                             <MenuItem
-                                onClick={item === "Log Out" ? () => logoutUser() : () => null}
-                                key={item}
+                                onClick={item.action}
+                                key={item.title}
                                 _hover={{ filter: "brightness(95%)" }}>
                                 {item}
                             </MenuItem>
@@ -105,17 +101,37 @@ const styleProps: StackProps = {
     fontWeight: "semibold",
 };
 
-const navMenuItems = [
-    { href: "/join", label: "Become a Mentor" },
-    { href: "/faq", label: "FAQ" },
-];
-
-const userMenuItems = [
-    { title: "Profile", items: ["My Account", "Payments"] },
-    { title: "Help", items: ["Docs", "FAQ", "Log Out"] },
-];
-
 function Desktop({ username }: NavBarProps) {
+    const router = useRouter();
+
+    const navMenuItems = [
+        { href: "/join", label: "Become a Mentor" },
+        { href: "/faq", label: "FAQ" },
+    ];
+
+    const userItemGroups: MenuButtonProps["itemGroups"] = [
+        {
+            title: "Profile",
+            items: [
+                { title: "My Account", action: () => router.push("/users/me") },
+                { title: "Payments" },
+            ],
+        },
+        {
+            title: "Help",
+            items: [
+                { title: "FAQ" },
+                {
+                    title: "Log Out",
+                    action: () => {
+                        logout();
+                        router.push("/login");
+                    },
+                },
+            ],
+        },
+    ];
+
     return (
         <HStack {...styleProps}>
             <Heading letterSpacing="wide" size="lg">
@@ -141,8 +157,8 @@ function Desktop({ username }: NavBarProps) {
                 variant="ghost"
                 leftIcon={<UserCircle tw="inline" size={24} />}
                 rightIcon={<CaretDown tw="inline" size={24} />}
-                title={`Hi, ${username}!`}
-                itemGroups={userMenuItems}
+                title={`Hi ${username}!`}
+                itemGroups={userItemGroups}
             />
         </HStack>
     );
