@@ -287,13 +287,7 @@ function UserForm() {
                 <VStack spacing={4}>
                     <Box w="150px" flexShrink={0}>
                         <AspectRatio w="full" ratio={1} rounded="md" overflow="hidden">
-                            <NextImage
-                                loader={strapiImgLoader}
-                                src={profileImg ? profileImg.url : null}
-                                sizes="100%"
-                                layout="fill"
-                                objectFit="cover"
-                            />
+                            <img src={profileImg ? profileImg.url : null} alt={""} />
                         </AspectRatio>
                     </Box>
                     <Button variant="outline" w="full" rightIcon={<Pencil size={16} />}>

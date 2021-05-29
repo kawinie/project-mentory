@@ -59,13 +59,7 @@ function TopSection({
         <HStack alignItems="start" spacing={8}>
             <Box w="150px" flexShrink={0}>
                 <AspectRatio w="full" ratio={1} rounded="md" overflow="hidden">
-                    <NextImage
-                        loader={strapiImgLoader ?? ""}
-                        src={profileImg.url}
-                        sizes="100%"
-                        layout="fill"
-                        objectFit="cover"
-                    />
+                    <img src={profileImg.url} alt={""} />
                 </AspectRatio>
             </Box>
             <VStack justify="start" alignItems="start" spacing={4}>

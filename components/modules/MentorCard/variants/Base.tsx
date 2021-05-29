@@ -68,7 +68,7 @@ export function ProfileSection({
 }: TopLevelGridItem<{ img: MentorCardProps["profileImg"] }>) {
     return (
         <VStack gridArea={gridArea} position="relative">
-            {img && <ProfileImage url={REACT_APP_BACKEND_URL + img.url} />}
+            {img && <ProfileImage url={img.url} />}
             {/* alignContent only works with flexWap = "wrap" | "wrap-reverse" */}
             <Checkbox w="full" alignContent="start" justifyContent="center" flexWrap="wrap">
                 <span tw="text-sm text-secondary z-10">Compare</span>
