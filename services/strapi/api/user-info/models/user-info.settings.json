@@ -1,83 +1,77 @@
 {
-  "kind": "collectionType",
-  "collectionName": "user_infos",
-  "info": {
-    "name": "UserInfo",
-    "description": ""
-  },
-  "options": {
-    "increments": true,
-    "timestamps": true,
-    "draftAndPublish": true
-  },
-  "attributes": {
-    "firstname": {
-      "type": "string",
-      "required": true
+    "kind": "collectionType",
+    "collectionName": "user_infos",
+    "info": {
+        "name": "UserInfo",
+        "description": ""
     },
-    "lastname": {
-      "type": "string",
-      "required": true
+    "options": {
+        "increments": true,
+        "timestamps": true,
+        "draftAndPublish": true
     },
-    "city": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string"
-    },
-    "profession": {
-      "type": "string"
-    },
-    "about": {
-      "type": "text"
-    },
-    "brief": {
-      "type": "text"
-    },
-    "avgReviewScore": {
-      "type": "decimal",
-      "max": 5,
-      "min": 0
-    },
-    "country": {
-      "type": "string"
-    },
-    "badges": {
-      "collection": "badge"
-    },
-    "profileImg": {
-      "model": "file",
-      "via": "related",
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ],
-      "plugin": "upload",
-      "required": false
-    },
-    "state": {
-      "type": "string"
-    },
-    "profileSections": {
-      "type": "component",
-      "repeatable": true,
-      "component": "profile.profile-section"
-    },
-    "user": {
-      "plugin": "users-permissions",
-      "model": "user"
-    },
-    "category": {
-      "model": "category"
-    },
-    "weekAvailability": {
-      "type": "component",
-      "repeatable": true,
-      "component": "datetime.week-availability"
-    },
-    "tags": {
-      "collection": "tag"
+    "attributes": {
+        "firstname": {
+            "type": "string"
+        },
+        "lastname": {
+            "type": "string"
+        },
+        "city": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string"
+        },
+        "profession": {
+            "type": "string"
+        },
+        "about": {
+            "type": "text"
+        },
+        "brief": {
+            "type": "text"
+        },
+        "avgReviewScore": {
+            "type": "decimal",
+            "max": 5,
+            "min": 0
+        },
+        "country": {
+            "type": "string"
+        },
+        "badges": {
+            "collection": "badge"
+        },
+        "profileImg": {
+            "model": "file",
+            "via": "related",
+            "allowedTypes": ["images", "files", "videos"],
+            "plugin": "upload",
+            "required": false
+        },
+        "state": {
+            "type": "string"
+        },
+        "profileSections": {
+            "type": "component",
+            "repeatable": true,
+            "component": "profile.profile-section"
+        },
+        "user": {
+            "plugin": "users-permissions",
+            "model": "user"
+        },
+        "category": {
+            "model": "category"
+        },
+        "weekAvailability": {
+            "type": "component",
+            "repeatable": true,
+            "component": "datetime.week-availability"
+        },
+        "tags": {
+            "collection": "tag"
+        }
     }
-  }
 }
