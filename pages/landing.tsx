@@ -186,7 +186,7 @@ export default function Landing() {
                             colorScheme="purple"
                             _hover={{ textDecoration: "none" }}
                             tw="mx-auto">
-                            <Text>Sign Up Here</Text>
+                            Sign Up Here
                         </Button>
                     </Link>
                 </Grid>
