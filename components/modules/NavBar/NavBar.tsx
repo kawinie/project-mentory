@@ -74,7 +74,7 @@ function NavBarMenuButton({ title, itemGroups, mobileIcon, ...props }: MenuButto
                                 onClick={item.action}
                                 key={item.title}
                                 _hover={{ filter: "brightness(95%)" }}>
-                                {item}
+                                {item.title}
                             </MenuItem>
                         ))}
                     </MenuGroup>
@@ -113,7 +113,7 @@ function Desktop({ username }: NavBarProps) {
         {
             title: "Profile",
             items: [
-                { title: "My Account", action: () => router.push("/users/me") },
+                { title: "My Account", action: () => router.push("/users/me/edit") },
                 { title: "Payments" },
             ],
         },
