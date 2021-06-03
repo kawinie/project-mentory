@@ -135,7 +135,7 @@ function Desktop({ username }: NavBarProps) {
     return (
         <HStack {...styleProps}>
             <Heading letterSpacing="wide" size="lg">
-                <NextLink href="/mentor-listing" passHref>
+                <NextLink href="/landing" passHref>
                     <Link whiteSpace="nowrap">Mentory</Link>
                 </NextLink>
             </Heading>
