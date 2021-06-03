@@ -122,13 +122,15 @@ const LandingNavBar = () => {
                         <MenuItem>Life</MenuItem>
                     </MenuList>
                 </Menu>
-                <Button
-                    bg="#374151"
-                    color="white"
-                    tw="block h-12 min-w-min"
-                    _hover={{ textDecoration: "none" }}>
-                    Search
-                </Button>
+                <Link href="/mentor-listing" passHref _hover={{ textDecoration: "none" }}>
+                    <Button
+                        bg="#374151"
+                        color="white"
+                        tw="block h-12 min-w-min"
+                        _hover={{ textDecoration: "none" }}>
+                        Search
+                    </Button>
+                </Link>
             </HStack>
         </Flex>
     );
