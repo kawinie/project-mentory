@@ -16,6 +16,7 @@ import {
     VStack,
     Divider,
     Heading,
+    Image,
 } from "@chakra-ui/react";
 import {
     CaretDown,
@@ -28,8 +29,10 @@ import {
     EyeClosed,
     Heartbeat,
 } from "phosphor-react";
+import { useSelector } from "react-redux";
 
 import { SearchBar } from "components/units/SearchBar";
+import { NavBar } from "components/modules/NavBar";
 
 const categories = [
     { name: "Design", picture: <PencilCircle color="#374151" size={64} /> },
@@ -119,38 +122,54 @@ const LandingNavBar = () => {
                         <MenuItem>Life</MenuItem>
                     </MenuList>
                 </Menu>
-                <Button
-                    bg="#374151"
-                    color="white"
-                    tw="block h-12 min-w-min"
-                    _hover={{ textDecoration: "none" }}>
-                    Search
-                </Button>
+                <Link href="/mentor-listing" passHref _hover={{ textDecoration: "none" }}>
+                    <Button
+                        bg="#374151"
+                        color="white"
+                        tw="block h-12 min-w-min"
+                        _hover={{ textDecoration: "none" }}>
+                        Search
+                    </Button>
+                </Link>
             </HStack>
         </Flex>
     );
 };
 
 export default function Landing() {
+    const username = useSelector((state) => state.currentUsername);
     return (
         <Flex tw="p-0 h-screen relative" direction="column">
-            <Heading
-                letterSpacing="wide"
-                color="black"
-                bg="#faf8fc"
-                h="100px"
-                tw="font-medium top-0 px-4 py-2">
-                <Link href="/" whiteSpace="nowrap" _hover={{ textDecoration: "none" }} passHref>
-                    Mentory
-                </Link>
-            </Heading>
+            {username ? (
+                <Box tw="sticky top-0 z-50">
+                    <NavBar username={username} />
+                </Box>
+            ) : (
+                <Heading
+                    letterSpacing="wide"
+                    color="black"
+                    bg="#faf8fc"
+                    h="100px"
+                    tw="font-medium top-0 px-4 py-2">
+                    <Link href="/" whiteSpace="nowrap" _hover={{ textDecoration: "none" }} passHref>
+                        Mentory
+                    </Link>
+                </Heading>
+            )}
             <Box
                 h="450px"
                 w="100%"
                 color="#2f323b"
                 bg="#faf8fc"
-                top="100px"
+                top="70px"
                 tw="absolute align-middle">
+                <Image
+                    src="https://images.pexels.com/photos/917463/pexels-photo-917463.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+                    objectFit="cover"
+                    alt="Landing Background Image"
+                    w="full"
+                    h="full"
+                />
                 <Grid
                     top="50%"
                     fontSize="3.5vw"
@@ -179,16 +198,29 @@ export default function Landing() {
                             </UnorderedList>
                         </div>
                     </Text>
-                    <Link href="/signup" passHref _hover={{ textDecoration: "none" }}>
-                        <Button
-                            size="lg"
-                            aria-label="sign-up"
-                            colorScheme="purple"
-                            _hover={{ textDecoration: "none" }}
-                            tw="mx-auto">
-                            Sign Up Here
-                        </Button>
-                    </Link>
+                    {username ? (
+                        <Link href="/mentor-listing" passHref _hover={{ textDecoration: "none" }}>
+                            <Button
+                                size="lg"
+                                aria-label="sign-up"
+                                colorScheme="purple"
+                                _hover={{ textDecoration: "none" }}
+                                tw="mx-auto">
+                                <Text>View Available Mentors</Text>
+                            </Button>
+                        </Link>
+                    ) : (
+                        <Link href="/signup" passHref _hover={{ textDecoration: "none" }}>
+                            <Button
+                                size="lg"
+                                aria-label="sign-up"
+                                colorScheme="purple"
+                                _hover={{ textDecoration: "none" }}
+                                tw="mx-auto">
+                                <Text>Sign Up Here</Text>
+                            </Button>
+                        </Link>
+                    )}
                 </Grid>
             </Box>
             <LandingNavBar />
