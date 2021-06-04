@@ -24,11 +24,13 @@ import { InputField } from "components/units/InputField";
 
 import { login } from "../lib/auth";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+
 const data = [
-    { name: "Google", source: "/svg/google.svg" },
-    { name: "Facebook", source: "/svg/facebook.svg" },
-    { name: "Twitter", source: "/svg/twitter.svg" },
-    { name: "LinkedIn", source: "/svg/linkedin.svg" },
+    { name: "Google", provider: "google", source: "/svg/google.svg" },
+    { name: "Facebook", provider: "facebook", source: "/svg/facebook.svg" },
+    { name: "Twitter", provider: "twitter", source: "/svg/twitter.svg" },
+    { name: "LinkedIn", provider: "linkedin", source: "/svg/linkedin.svg" },
 ] as const;
 
 const SocialSignIn = () => {
@@ -43,27 +45,34 @@ const SocialSignIn = () => {
     return (
         <VStack justify="start" spacing={8}>
             <Grid tw="w-full gap-4" autoFlow={["column", "row"]} as="ul">
-                {data.map(({ name, source }) => (
+                {data.map(({ name, provider, source }) => (
                     <li key={name}>
                         {max`sm` && (
-                            <IconButton
-                                {...buttonProps}
-                                aria-label={name}
-                                icon={
-                                    <Image src={source} style={{ height: "35px", width: "auto" }} />
-                                }
-                            />
+                            <Link href={API_URL + "/connect/" + provider}>
+                                <IconButton
+                                    {...buttonProps}
+                                    aria-label={name}
+                                    icon={
+                                        <Image
+                                            src={source}
+                                            style={{ height: "35px", width: "auto" }}
+                                        />
+                                    }
+                                />
+                            </Link>
                         )}
                         {min`sm` && (
-                            <Button {...buttonProps} aria-label={name} display="block">
-                                <HStack spacing={6} alignItems="center" h="full">
-                                    <Image
-                                        src={source}
-                                        style={{ height: "35px", marginLeft: "15%" }}
-                                    />
-                                    <Text>Sign In with {name}</Text>
-                                </HStack>
-                            </Button>
+                            <Link href={API_URL + "/connect/" + provider} passHref>
+                                <Button as="a" {...buttonProps} aria-label={name} display="block">
+                                    <HStack spacing={6} alignItems="center" h="full">
+                                        <Image
+                                            src={source}
+                                            style={{ height: "35px", marginLeft: "15%" }}
+                                        />
+                                        <Text>Sign In with {name}</Text>
+                                    </HStack>
+                                </Button>
+                            </Link>
                         )}
                     </li>
                 ))}
