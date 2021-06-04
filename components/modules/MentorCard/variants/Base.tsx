@@ -160,7 +160,7 @@ export function MainSection({
                         Make Appointment
                     </Button>
                 </Link>
-                <Link href={"/users/" + user.username} passHref>
+                <Link href={"/users/" + user.username + "/about"} passHref>
                     <Button minW="100px" colorScheme="blueGray">
                         View
                     </Button>

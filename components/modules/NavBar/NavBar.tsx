@@ -104,23 +104,13 @@ const styleProps: StackProps = {
 function Desktop({ username }: NavBarProps) {
     const router = useRouter();
 
-    const navMenuItems = [
-        { href: "/join", label: "Become a Mentor" },
-        { href: "/faq", label: "FAQ" },
-    ];
+    const navMenuItems = [{ href: "/signup", label: "Become a Mentor" }];
 
     const userItemGroups: MenuButtonProps["itemGroups"] = [
         {
             title: "Profile",
             items: [
                 { title: "My Account", action: () => router.push("/users/me/edit") },
-                { title: "Payments" },
-            ],
-        },
-        {
-            title: "Help",
-            items: [
-                { title: "FAQ" },
                 {
                     title: "Log Out",
                     action: () => {
